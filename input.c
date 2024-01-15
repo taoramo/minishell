@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+void	ft_error(void)
+{
+	printf("Error\n");
+}
+
 int	check_line_parentheses(const char *line)
 {
 	int	i;
@@ -23,41 +28,19 @@ int	check_line_parentheses(const char *line)
 		return (open_parentheses + 1);
 }
 
-int	line_to_cmd_line_group(t_vec *cmd_line_groups, const char *line)
-{
-	int					start;
-	int					end;
-	int					i;
-	t_cmd_line_group	current;
-
-	start = 0;
-	end = 0;
-	i = 0;
-	while (line[start] && line[end] && check_line_parentheses(&line[start]))
-	{
-		while (line[start] != '(')
-			start++;
-		while (line[end] != ')')
-			end++;
-		current.str = ft_substr(line, 1, end - 2);
-		if (!current.str)
-			return (ft_error());
-		vec_push(cmd_line_groups, &current);
-		start = end;
-	}
-}
-
-t_vec	*parse_line(const char *line)
+void	parse_line(const char *line)
 {
 	t_vec	*cmd_line_groups;
 
 	if (!check_line_parentheses(line))
-		return (0);
+		ft_error();
 	cmd_line_groups = ft_calloc(1, sizeof(t_vec));
 	if (!cmd_line_groups)
-		return (0);
-	vec_new(cmd_line_groups, check_line_parentheses(line), sizeof(t_cmd_line_group));
-	line_to_cmd_line_group(cmd_line_groups, line);
+		ft_error();
+	vec_new(cmd_line_groups, check_line_parentheses(line),
+		sizeof(t_cmd_line_group));
+	line_to_cmd_line_groups(cmd_line_groups, line);
+	parse_cmd_line_groups(cmd_line_groups);
 }
 
 int	main(void)
@@ -66,7 +49,7 @@ int	main(void)
 
 	while (1)
 	{
-		line = readline("blaa");
+		line = readline("minishell>");
 		parse_line(line);
 		free(line);
 	}

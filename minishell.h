@@ -44,11 +44,14 @@ typedef struct t_cmd_line
 	int		execute;
 }	t_cmd_line;
 
-t_vec	*parse_line(const char *line);
+void	parse_line(const char *line);
 int		check_line_parentheses(const char *line);
-void	parse_cmd_line_group(char *str);
+void	parse_cmd_line_groups(t_vec *cmd_line_groups);
 void	parse_cmd_line(char *str);
 void	parse_cmd(char *str);
 void	parse_param(char *str);
+int		line_to_cmd_line_groups(t_vec *cmd_line_groups, const char *line);
+int		next_cmd_line_length(const char *line);
+void	ft_error(void);
 
 #endif

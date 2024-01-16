@@ -39,8 +39,8 @@ void	parse_line(const char *line)
 		ft_error();
 	vec_new(cmd_line_groups, check_line_parentheses(line),
 		sizeof(t_cmd_line_group));
-	line_to_cmd_line_groups(cmd_line_groups, line);
-	parse_cmd_line_groups(cmd_line_groups);
+	make_cmd_line_groups(cmd_line_groups, line, 0);
+//	parse_cmd_line_groups(cmd_line_groups);
 }
 
 int	main(void)

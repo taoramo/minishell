@@ -34,15 +34,22 @@ typedef struct s_token
 typedef struct s_cmd_line_group
 {
 	char	*str;
-	t_vec	*cmd_lines;
-	int		first_return_value;
+	int		index;
 }	t_cmd_line_group;
 
-typedef struct t_cmd_line
+typedef struct s_cmd_line
 {
 	t_vec	*cmds;
 	int		execute;
 }	t_cmd_line;
+
+typedef struct s_group_tree
+{
+	char				*group;
+	struct s_group_tree	*left;
+	struct s_group_tree	*right;
+	struct s_group_tree	*parent;
+}	t_group_tree;
 
 void	parse_line(const char *line);
 int		check_line_parentheses(const char *line);
@@ -50,7 +57,8 @@ void	parse_cmd_line_groups(t_vec *cmd_line_groups);
 void	parse_cmd_line(char *str);
 void	parse_cmd(char *str);
 void	parse_param(char *str);
-int		line_to_cmd_line_groups(t_vec *cmd_line_groups, const char *line);
+int		make_cmd_line_groups(t_vec *cmd_line_groups,
+			const char *line, int index);
 int		next_cmd_line_length(const char *line);
 void	ft_error(void);
 

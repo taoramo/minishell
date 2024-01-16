@@ -52,7 +52,8 @@ int	handle_supergroup(t_vec *cmd_line_groups, int i, int *group_index)
 	vec_remove(cmd_line_groups, i);
 	while (j < temp.len)
 	{
-		vec_insert(cmd_line_groups, vec_get(&temp, i), i);
+		if (vec_insert(cmd_line_groups, vec_get(&temp, i), i) < 0)
+			ft_error();
 		j++;
 	}
 	vec_iter(&temp, free_cmd_line_group_str);

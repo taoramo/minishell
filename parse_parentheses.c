@@ -87,7 +87,8 @@ int	make_cmd_line_groups(t_vec *cmd_line_groups, const char *line, int index)
 			return (-1);
 		current.index = index;
 		printf("%s\n", current.str);
-		vec_push(cmd_line_groups, &current);
+		if (vec_push(cmd_line_groups, &current) < 0)
+			ft_error();
 		i = start + length + 1;
 	}
 	return (0);

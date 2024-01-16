@@ -65,5 +65,6 @@ int		next_cmd_line_length(const char *line);
 void	ft_error(void);
 int		check_parenthesis_count(const char *line);
 void	set_group_types(void *arg);
+int		expand_supergroups(t_vec *cmd_line_groups);
 
 #endif

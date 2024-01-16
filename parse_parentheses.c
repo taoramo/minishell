@@ -84,7 +84,7 @@ int	make_cmd_line_groups(t_vec *cmd_line_groups, const char *line, int index)
 		ft_memset(&current, 0, sizeof(t_cmd_line_group));
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
-			return (1);
+			return (-1);
 		current.index = index;
 		printf("%s\n", current.str);
 		vec_push(cmd_line_groups, &current);

@@ -30,19 +30,16 @@ int	check_parenthesis_count(const char *line)
 
 void	parse_line(const char *line)
 {
-	t_vec	*cmd_line_groups;
+	t_vec	cmd_line_groups;
 
 	if (!check_parenthesis_count(line))
 		ft_error();
-	cmd_line_groups = ft_calloc(1, sizeof(t_vec));
-	if (!cmd_line_groups)
+	if (vec_new(&cmd_line_groups, 16,
+		sizeof(t_cmd_line_group)) < 0)
 		ft_error();
-	vec_new(cmd_line_groups, 16,
-		sizeof(t_cmd_line_group));
-	if (make_cmd_line_groups(cmd_line_groups, line, 0) != 0)
+	if (make_cmd_line_groups(&cmd_line_groups, line, 0) < 0)
 		ft_error();
-	vec_iter(cmd_line_groups, set_group_types);
-	expand_super_groups(cmd_line_groups);
+	expand_supergroups(&cmd_line_groups);
 }
 
 int	main(void)

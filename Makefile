@@ -2,7 +2,7 @@ NAME = minishell
 CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -o3 -g3
 HEADERS = -I ./include
 LIBS = $(LIBFT) -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
-SRCS = input.c parse_parentheses.c
+SRCS = input.c parse_parentheses.c expand_supergroups.c
 OBJS = $(SRCS:.c=.o)
 LIBFT = ./libft/libft.a
 

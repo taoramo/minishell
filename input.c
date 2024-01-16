@@ -5,7 +5,7 @@ void	ft_error(void)
 	printf("Error\n");
 }
 
-int	check_line_parentheses(const char *line)
+int	check_parenthesis_count(const char *line)
 {
 	int	i;
 	int	open_parentheses;
@@ -25,22 +25,24 @@ int	check_line_parentheses(const char *line)
 	if (open_parentheses != closed_parentheses)
 		return (0);
 	else
-		return (open_parentheses + 1);
+		return (open_parentheses);
 }
 
 void	parse_line(const char *line)
 {
 	t_vec	*cmd_line_groups;
 
-	if (!check_line_parentheses(line))
+	if (!check_parenthesis_count(line))
 		ft_error();
 	cmd_line_groups = ft_calloc(1, sizeof(t_vec));
 	if (!cmd_line_groups)
 		ft_error();
-	vec_new(cmd_line_groups, check_line_parentheses(line),
+	vec_new(cmd_line_groups, 16,
 		sizeof(t_cmd_line_group));
-	make_cmd_line_groups(cmd_line_groups, line, 0);
-//	parse_cmd_line_groups(cmd_line_groups);
+	if (make_cmd_line_groups(cmd_line_groups, line, 0) != 0)
+		ft_error();
+	vec_iter(cmd_line_groups, set_group_types);
+	expand_super_groups(cmd_line_groups);
 }
 
 int	main(void)

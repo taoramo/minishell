@@ -2,6 +2,7 @@
 # define MINISHELL_H
 # include <readline/history.h>
 # include <readline/readline.h>
+#include <string>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -18,12 +19,20 @@
 
 typedef enum e_syntax
 {
-	line,
-	cmd_line_group,
-	cmd_line,
-	cmd,
-	param
+	string,
+	greater,
+	greatergreater,
+	smaller,
+	smallersmaller,
+	pipechar,
+	asterisk
 }	t_syntax;
+
+typedef enum e_group_type
+{
+	group,
+	supergroup
+}	t_group_type;
 
 typedef struct s_token
 {
@@ -33,8 +42,9 @@ typedef struct s_token
 
 typedef struct s_cmd_line_group
 {
-	char	*str;
-	int		index;
+	char			*str;
+	int				index;
+	t_group_type	type;
 }	t_cmd_line_group;
 
 typedef struct s_cmd_line
@@ -42,14 +52,6 @@ typedef struct s_cmd_line
 	t_vec	*cmds;
 	int		execute;
 }	t_cmd_line;
-
-typedef struct s_group_tree
-{
-	char				*group;
-	struct s_group_tree	*left;
-	struct s_group_tree	*right;
-	struct s_group_tree	*parent;
-}	t_group_tree;
 
 void	parse_line(const char *line);
 int		check_line_parentheses(const char *line);
@@ -61,5 +63,7 @@ int		make_cmd_line_groups(t_vec *cmd_line_groups,
 			const char *line, int index);
 int		next_cmd_line_length(const char *line);
 void	ft_error(void);
+int		check_parenthesis_count(const char *line);
+void	set_group_types(void *arg);
 
 #endif

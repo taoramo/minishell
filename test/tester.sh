@@ -9,32 +9,21 @@ CYAN='\033[0;36m'
 LCYAN='\033[1;36m'
 YELLOW='\033[0;33m'
 
-# while read -r line; do
-# 	echo $line
-# 	$line
-# done < "and_or_tests.txt"
+HEADER_COLOR=$LCYAN
+COMMAND_COLOR=$CYAN
 
-echo "./true 1 && ./true 2"
-./true 1 && ./true 2
-echo "./true 1 || ./true 2"
-./true 1 || ./true 2
-echo "./false 1 && ./true 2"
-./false 1 && ./true 2
-echo "./false 1 || ./true 2"
-./false 1 || ./true 2
+#------ BASIC ------#
 
-echo "./true 1 && ./true 2 || ./true 3"
-./true 1 && ./true 2 || ./true 3
-echo "./true 1 && ./false 2 || ./true 3"
-./true 1 && ./false 2 || ./true 3
-echo "./false 1 && ./true 2 || ./true 3"
-./false 1 && ./true 2 || ./true 3
-echo "./false 1 && ./false 2 || ./true 3"
-./false 1 && ./false 2 || ./true 3
+printf $HEADER_COLOR"\n#------ BASIC ------#\n\n"$NC
 
-echo "./true 1 && ./true 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6"
-./true 1 && ./true 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6
-echo "./true 1 && ./true 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6"
-./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6
-echo "./false 1 && ./true 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6"
-./false 1 && ./true 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6
+echo -e $COMMAND_COLOR"echo hello"$NC
+echo hello
+
+#------ && AND || ------#
+
+printf $HEADER_COLOR"\n#------ && AND || ------#\n\n"$NC
+
+while read -r line; do
+	echo -e $COMMAND_COLOR $line $NC
+	eval $line
+done < "and_or_tests.txt"

@@ -46,13 +46,15 @@ int	handle_supergroup(t_vec *cmd_lines, int i, int *group_index)
 
 	if (vec_new(&temp, 16, sizeof(t_cmd_line)) < 0)
 		ft_error();
+	ptr = vec_get(cmd_lines, i);
+	remove_parentheses(ptr);
 	if (make_cmd_line_groups(&temp, ptr->str, *group_index) < 0)
 		ft_error();
 	*group_index = *group_index + 1;
 	vec_remove(cmd_lines, i);
 	while (j < temp.len)
 	{
-		if (vec_insert(cmd_lines, vec_get(&temp, i), i) < 0)
+		if (vec_insert(cmd_lines, vec_get(&temp, j), i) < 0)
 			ft_error();
 		j++;
 	}

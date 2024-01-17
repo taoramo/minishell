@@ -2,7 +2,7 @@
 # define MINISHELL_H
 # include <readline/history.h>
 # include <readline/readline.h>
-# include <string>
+# include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>

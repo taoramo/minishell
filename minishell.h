@@ -2,7 +2,7 @@
 # define MINISHELL_H
 # include <readline/history.h>
 # include <readline/readline.h>
-#include <string>
+# include <string>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -31,7 +31,8 @@ typedef enum e_syntax
 typedef enum e_group_type
 {
 	group,
-	supergroup
+	supergroup,
+	cmd_line
 }	t_group_type;
 
 typedef struct s_token
@@ -40,17 +41,11 @@ typedef struct s_token
 	t_syntax	type;
 }	t_token;
 
-typedef struct s_cmd_line_group
+typedef struct s_cmd_line
 {
 	char			*str;
 	int				index;
 	t_group_type	type;
-}	t_cmd_line_group;
-
-typedef struct s_cmd_line
-{
-	t_vec	*cmds;
-	int		execute;
 }	t_cmd_line;
 
 void	parse_line(const char *line);

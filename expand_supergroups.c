@@ -2,8 +2,8 @@
 
 void	set_group_types(void *arg)
 {
-	t_cmd_line_group	*ptr;
-	int					i;
+	t_cmd_line	*ptr;
+	int			i;
 
 	ptr = arg;
 	i = 0;
@@ -21,7 +21,7 @@ void	set_group_types(void *arg)
 
 int	contains_supergroup(void *arg)
 {
-	t_cmd_line_group	*ptr;
+	t_cmd_line	*ptr;
 
 	ptr = arg;
 	if (ptr->type == supergroup)
@@ -32,27 +32,27 @@ int	contains_supergroup(void *arg)
 
 void	free_cmd_line_group_str(void *arg)
 {
-	t_cmd_line_group	*ptr;
+	t_cmd_line	*ptr;
 
 	ptr = arg;
 	free(ptr->str);
 }
 
-int	handle_supergroup(t_vec *cmd_line_groups, int i, int *group_index)
+int	handle_supergroup(t_vec *cmd_lines, int i, int *group_index)
 {
-	t_vec				temp;
-	t_cmd_line_group	*ptr;
-	int					j;
+	t_vec		temp;
+	t_cmd_line	*ptr;
+	int			j;
 
-	if (vec_new(&temp, 16, sizeof(t_cmd_line_group)) < 0)
+	if (vec_new(&temp, 16, sizeof(t_cmd_line)) < 0)
 		ft_error();
 	if (make_cmd_line_groups(&temp, ptr->str, *group_index) < 0)
 		ft_error();
 	*group_index = *group_index + 1;
-	vec_remove(cmd_line_groups, i);
+	vec_remove(cmd_lines, i);
 	while (j < temp.len)
 	{
-		if (vec_insert(cmd_line_groups, vec_get(&temp, i), i) < 0)
+		if (vec_insert(cmd_lines, vec_get(&temp, i), i) < 0)
 			ft_error();
 		j++;
 	}
@@ -60,22 +60,22 @@ int	handle_supergroup(t_vec *cmd_line_groups, int i, int *group_index)
 	vec_free(&temp);
 }
 
-int	expand_supergroups(t_vec *cmd_line_groups)
+int	expand_supergroups(t_vec *cmd_lines)
 {
 	int					group_index;
 	int					i;
 
 	group_index = 1;
-	vec_iter(cmd_line_groups, set_group_types);
-	while (vec_find(cmd_line_groups, contains_supergroup))
+	vec_iter(cmd_lines, set_group_types);
+	while (vec_find(cmd_lines, contains_supergroup))
 	{
 		i = 0;
-		while (i < cmd_line_groups->len)
+		while (i < cmd_lines->len)
 		{
-			if (contains_supergroup(vec_get(cmd_line_groups, i)))
-				handle_supergroup(cmd_line_groups, i, &group_index);
+			if (contains_supergroup(vec_get(cmd_lines, i)))
+				handle_supergroup(cmd_lines, i, &group_index);
 			i++;
 		}
-		vec_iter(cmd_line_groups, set_group_types);
+		vec_iter(cmd_lines, set_group_types);
 	}
 }

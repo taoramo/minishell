@@ -53,7 +53,7 @@ int	next_length(const char *line, int index)
 	i = 0;
 	if (line[index + i] == 0)
 		return (0);
-	if (index)
+	if (index || (index == 0 && (line[0] == '&' || line[0] == '|')))
 	{
 		while (ft_isspace(line[index + i]) && line[index + i])
 			i++;

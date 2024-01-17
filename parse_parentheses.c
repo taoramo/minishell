@@ -69,25 +69,25 @@ int	next_length(const char *line, int index)
 		return (length_next_outside_parenth(line, index, i));
 }
 
-int	make_cmd_line_groups(t_vec *cmd_line_groups, const char *line, int index)
+int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int index)
 {
-	int					i;
-	int					start;
-	int					length;
-	t_cmd_line_group	current;
+	int			i;
+	int			start;
+	int			length;
+	t_cmd_line	current;
 
 	i = 0;
-	while (line[i] != 0)
+	while (i == 0 || line[i - 1] != 0)
 	{
 		start = next_start(line, i);
 		length = next_length(line, start);
-		ft_memset(&current, 0, sizeof(t_cmd_line_group));
+		ft_memset(&current, 0, sizeof(t_cmd_line));
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
 			return (-1);
 		current.index = index;
 		printf("%s\n", current.str);
-		if (vec_push(cmd_line_groups, &current) < 0)
+		if (vec_push(cmd_lines, &current) < 0)
 			ft_error();
 		i = start + length + 1;
 	}

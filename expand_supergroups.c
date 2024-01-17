@@ -3,7 +3,7 @@
 void	set_group_types(void *arg)
 {
 	t_cmd_line	*ptr;
-	int			i;
+	size_t		i;
 
 	ptr = arg;
 	i = 0;
@@ -19,30 +19,39 @@ void	set_group_types(void *arg)
 	ptr->type = group;
 }
 
-int	contains_supergroup(void *arg)
+void	remove_parentheses(t_cmd_line *cmd_line)
 {
-	t_cmd_line	*ptr;
+	size_t	i;
+	size_t	open_parentheses;
+	size_t	start;
+	size_t	end;
 
-	ptr = arg;
-	if (ptr->type == supergroup)
-		return (1);
-	else
-		return (0);
+	open_parentheses = 0;
+	i = 0;
+	while (cmd_line->str[i] && cmd_line->str[i] != '(')
+		i++;
+	open_parentheses++;
+	start = i;
+	while (cmd_line->str[i] && !(open_parentheses == 0
+			&& cmd_line->str[i] == ')'))
+	{
+		i++;
+		if (cmd_line->str[i] == '(')
+			open_parentheses++;
+		if (cmd_line->str[i] == ')')
+			open_parentheses--;
+	}
+	end = i;
+	ft_memmove(&cmd_line->str[start], &cmd_line->str[start + 1],
+		ft_strlen(&cmd_line->str[start + 1]));
+	cmd_line->str[end - 1] = 0;
 }
 
-void	free_cmd_line_group_str(void *arg)
-{
-	t_cmd_line	*ptr;
-
-	ptr = arg;
-	free(ptr->str);
-}
-
-int	handle_supergroup(t_vec *cmd_lines, int i, int *group_index)
+void	handle_supergroup(t_vec *cmd_lines, int i, int *group_index)
 {
 	t_vec		temp;
 	t_cmd_line	*ptr;
-	int			j;
+	size_t		j;
 
 	if (vec_new(&temp, 16, sizeof(t_cmd_line)) < 0)
 		ft_error();
@@ -52,20 +61,21 @@ int	handle_supergroup(t_vec *cmd_lines, int i, int *group_index)
 		ft_error();
 	*group_index = *group_index + 1;
 	vec_remove(cmd_lines, i);
+	j = 0;
 	while (j < temp.len)
 	{
 		if (vec_insert(cmd_lines, vec_get(&temp, j), i) < 0)
 			ft_error();
 		j++;
 	}
-	vec_iter(&temp, free_cmd_line_group_str);
+	vec_iter(&temp, free_cmd_line_str);
 	vec_free(&temp);
 }
 
-int	expand_supergroups(t_vec *cmd_lines)
+void	expand_supergroups(t_vec *cmd_lines)
 {
 	int					group_index;
-	int					i;
+	size_t				i;
 
 	group_index = 1;
 	vec_iter(cmd_lines, set_group_types);

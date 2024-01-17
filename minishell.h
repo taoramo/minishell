@@ -50,16 +50,18 @@ typedef struct s_cmd_line
 
 void	parse_line(const char *line);
 int		check_line_parentheses(const char *line);
-void	parse_cmd_line_groups(t_vec *cmd_line_groups);
+void	parse_cmd_line_groups(t_vec *cmd_lines);
 void	parse_cmd_line(char *str);
 void	parse_cmd(char *str);
 void	parse_param(char *str);
-int		make_cmd_line_groups(t_vec *cmd_line_groups,
+int		make_cmd_line_groups(t_vec *cmd_lines,
 			const char *line, int index);
 int		next_cmd_line_length(const char *line);
 void	ft_error(void);
 int		check_parenthesis_count(const char *line);
 void	set_group_types(void *arg);
-int		expand_supergroups(t_vec *cmd_line_groups);
+void	expand_supergroups(t_vec *cmd_lines);
+int		contains_supergroup(void *arg);
+void	free_cmd_line_str(void *arg);
 
 #endif

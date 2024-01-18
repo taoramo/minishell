@@ -1,0 +1,45 @@
+START
+
+if unpaired parentheses, ", '
+	error
+
+if unallowed special characters not in " " or ' '
+	error
+
+split string based on && and ||
+
+handle first section
+
+
+
+
+
+FOR EACH SECTION
+
+
+if at parentheses:
+	call start with whatever is in parentheses
+else:
+	if section has pipe command:
+		split by pipes
+		prepare each command
+		run pipex
+	else:
+		prepare command
+		execute
+	
+if $? == 0:
+	go to next && section
+else:
+	go to next || section
+
+
+
+
+
+PREPARING COMMANDS
+
+
+if at env variable or wildcard:
+	if not in ' ':
+		expand

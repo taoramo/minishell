@@ -1,0 +1,11 @@
+cat infile | wc
+
+/bin/cat infile | /usr/bin/wc
+
+ls -la | grep x
+
+cat < infile | wc
+
+ls -la | grep x > tmp/outfile
+
+cat < tmp/outfile | wc >> tmp/outfile | cat tmp/outfile

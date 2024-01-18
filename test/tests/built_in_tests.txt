@@ -1,0 +1,25 @@
+echo hello
+echo hello "hello"
+echo "hello" "hello"
+echo 'hello' 'hello'
+echo $HOME
+echo '$HOME'
+echo "$HOME"
+echo $?
+
+pwd
+cd tests
+pwd
+cd ..
+pwd
+
+echo $TEST
+export TEST=test100
+echo $TEST
+
+x=3
+echo $x
+unset x
+echo $x
+
+env

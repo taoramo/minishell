@@ -4,7 +4,9 @@ int	next_start(const char *line, int i)
 {
 	if (i == 0)
 		return (0);
-	while (line[i] && line[i] != '&' && line[i] != '|')
+	while (line[i]
+		&& ft_strncmp(&line[i], "&&", 2)
+		&& ft_strncmp(&line[i], "||", 2))
 		i++;
 	return (i);
 }
@@ -33,7 +35,9 @@ int	length_next_outside_parenth(const char *line, int index)
 	int	i;
 
 	i = 0;
-	while (line[index + i] && line[index + i] != '&' && line[index + i] != '|')
+	while (line[index + i]
+		&& ft_strncmp(&line[index + i], "&&", 2)
+		&& ft_strncmp(&line[index + i], "||", 2))
 		i++;
 	return (i);
 }
@@ -82,7 +86,6 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
 			return (-1);
-		printf("%s\n", current.str);
 		if (vec_push(cmd_lines, &current) < 0)
 			ft_error();
 		i = start + length;

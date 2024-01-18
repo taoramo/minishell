@@ -1,3 +1,7 @@
 cat infile
 
 wc infile
+
+/bin/cat infile
+
+/usr/bin/wc infile

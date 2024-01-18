@@ -33,6 +33,15 @@ while read -r line; do
 	eval $line
 done < $TEST_DIR/basic_tests.txt
 
+#------ INPUT ------#
+
+printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
+
+while read -r line; do
+	echo -e $COMMAND_COLOR $line $NC
+	eval $line
+done < $TEST_DIR/input_tests.txt
+
 #------ PIPES ------#
 
 printf $HEADER_COLOR"\n#------ PIPES ------#\n\n"$NC

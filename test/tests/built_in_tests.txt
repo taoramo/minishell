@@ -1,4 +1,6 @@
 echo hello
+echo spaces      ignored
+echo tabs		ignored
 echo hello "hello"
 echo "hello" "hello"
 echo 'hello' 'hello'
@@ -6,6 +8,8 @@ echo $HOME
 echo '$HOME'
 echo "$HOME"
 echo $?
+echo -n nonewline:
+echo newline:
 
 pwd
 cd tests

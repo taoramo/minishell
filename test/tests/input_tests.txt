@@ -1,0 +1,25 @@
+echo hi1 > tmp/outfile hi2
+
+echo > tmp/outfile hi1 hi2
+
+echo '>' $PATH ‘$PATH’ $?
+
+grep i < infile > tmp/outfile
+
+> tmp/outfile grep i < infile
+
+< infile >tmp/outfile grep i
+
+grep <infile >tmp/outfile i
+
+echo *
+
+grep "x" ./*
+
+awk '{print $1}' infile
+
+awk '{print NR " - " $1 }' infile
+
+awk '{ if (length($0) > max) max = length($0) } END { print max }' infile
+
+awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'

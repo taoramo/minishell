@@ -23,7 +23,7 @@ int	check_parenthesis_count(const char *line)
 		i++;
 	}
 	if (open_parentheses != closed_parentheses)
-		return (0);
+		return (-1);
 	else
 		return (open_parentheses);
 }
@@ -32,25 +32,22 @@ void	parse_line(const char *line)
 {
 	t_vec	cmd_lines;
 
-	if (!check_parenthesis_count(line))
+	if (check_parenthesis_count(line) < 0)
 		ft_error();
 	if (vec_new(&cmd_lines, 16, sizeof(t_cmd_line)) < 0)
 		ft_error();
-	if (make_cmd_line_groups(&cmd_lines, line, 0) < 0)
+	if (make_cmd_line_groups(&cmd_lines, line) < 0)
 		ft_error();
-	expand_supergroups(&cmd_lines);
 }
 
-int	main(int argc, char **argv)
+int	main(void)
 {
-	/* char	*line;
+	char	*line;
 
 	while (1)
 	{
 		line = readline("minishell>");
 		parse_line(line);
 		free(line);
-	} */
-	(void)argc;
-	parse_line(argv[1]);
+	}
 }

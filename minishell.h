@@ -31,7 +31,6 @@ typedef enum e_syntax
 typedef enum e_group_type
 {
 	group,
-	supergroup,
 	cmd_line
 }	t_group_type;
 
@@ -44,8 +43,8 @@ typedef struct s_token
 typedef struct s_cmd_line
 {
 	char			*str;
-	int				index;
 	t_group_type	type;
+	int				return_value;
 }	t_cmd_line;
 
 void	parse_line(const char *line);
@@ -55,7 +54,7 @@ void	parse_cmd_line(char *str);
 void	parse_cmd(char *str);
 void	parse_param(char *str);
 int		make_cmd_line_groups(t_vec *cmd_lines,
-			const char *line, int index);
+			const char *lin);
 int		next_cmd_line_length(const char *line);
 void	ft_error(void);
 int		check_parenthesis_count(const char *line);

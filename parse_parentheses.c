@@ -1,19 +1,20 @@
 #include "minishell.h"
 
-int	next_start(const char *line, int index)
+int	next_start(const char *line, int i)
 {
-	int	i;
-
-	i = index;
-	while (ft_isspace(line[i]) && line[i])
+	if (i == 0)
+		return (0);
+	while (line[i] && line[i] != '&' && line[i] != '|')
 		i++;
 	return (i);
 }
 
-int	length_next_in_parenth(const char *line, int index, int i)
+int	length_next_in_parenth(const char *line, int index)
 {
+	int	i;
 	int	open_parentheses;
 
+	i = 0;
 	open_parentheses = 0;
 	while (line[index + i] && !(open_parentheses == 0
 			&& line[index + i - 1] == ')'))
@@ -27,22 +28,13 @@ int	length_next_in_parenth(const char *line, int index, int i)
 	return (i);
 }
 
-int	length_next_outside_parenth(const char *line, int index, int i)
+int	length_next_outside_parenth(const char *line, int index)
 {
-	while (line[index + i] && line[index + i] != '(')
+	int	i;
+
+	i = 0;
+	while (line[index + i] && line[index + i] != '&' && line[index + i] != '|')
 		i++;
-	if (line[index + i] == '(')
-	{
-		i--;
-		while (ft_isspace(line[index + i]) && line[i])
-			i--;
-		if (!ft_strncmp(&line[index + i - 2], " && ", 4)
-			|| !ft_strncmp(&line[index + i -2], " || ", 4))
-			i = i - 2;
-		while (ft_isspace(line[index + i]) && line[i])
-			i--;
-		i++;
-	}
 	return (i);
 }
 
@@ -51,25 +43,30 @@ int	next_length(const char *line, int index)
 	int	i;
 
 	i = 0;
-	if (line[index + i] == 0)
+	if (line[index] == 0)
 		return (0);
-	if (index || (index == 0 && (line[0] == '&' || line[0] == '|')))
+	if (index == 0)
 	{
-		while (ft_isspace(line[index + i]) && line[index + i])
-			i++;
-		if (!ft_strncmp(&line[index + i], "&&", 2)
-			|| !ft_strncmp(&line[index + i -2], "||", 2))
-			i = i + 2;
-		while (ft_isspace(line[index + i]) && line[index + i])
-			i++;
+		if (line[0] == '(')
+			return (length_next_in_parenth(line, index));
+		else
+			return (length_next_outside_parenth(line, index));
 	}
-	if (line[index + i] == '(')
-		return (length_next_in_parenth(line, index, i));
 	else
-		return (length_next_outside_parenth(line, index, i));
+	{
+		while (ft_isspace(line[index + i]))
+			i++;
+		i = i + 2;
+		while (ft_isspace(line[index + i]))
+			i++;
+		if (line[index + i] == '(')
+			return (length_next_in_parenth(line, index + i) + i);
+		else
+			return (length_next_outside_parenth(line, index + i) + i);
+	}
 }
 
-int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int index)
+int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
 {
 	int			i;
 	int			start;
@@ -77,7 +74,7 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int index)
 	t_cmd_line	current;
 
 	i = 0;
-	while (i == 0 || line[i - 1] != 0)
+	while (line[i])
 	{
 		start = next_start(line, i);
 		length = next_length(line, start);
@@ -85,11 +82,10 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int index)
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
 			return (-1);
-		current.index = index;
 		printf("%s\n", current.str);
 		if (vec_push(cmd_lines, &current) < 0)
 			ft_error();
-		i = start + length + 1;
+		i = start + length;
 	}
 	return (0);
 }

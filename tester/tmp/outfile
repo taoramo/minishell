@@ -1,0 +1,9 @@
+total 16
+drwxr-xr-x   7 hpatsi  2020   238 Jan 18 15:57 .
+drwxr-xr-x  16 hpatsi  2020   544 Jan 18 15:21 ..
+-rw-r--r--   1 hpatsi  2020    16 Jan 18 09:44 infile
+drwxr-xr-x   4 hpatsi  2020   136 Jan 18 09:00 srcs
+-rwxr-xr-x   1 hpatsi  2020  1674 Jan 18 15:57 tester.sh
+drwxr-xr-x   8 hpatsi  2020   272 Jan 18 15:33 tests
+drwxr-xr-x   4 hpatsi  2020   136 Jan 18 14:15 tmp
+       8      65     375

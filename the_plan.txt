@@ -44,17 +44,19 @@ skip any number of isspace
 expand all env variables not in ' '
 expand all * not in ' ' or " "
 
-while > left:
+while > or >> left:
 	if outfile open:
 		close outfile
-	open new outfile (truncate)
-	remove ">" and "outfile"
+	open new outfile (truncate if > append if >>)
+	remove ">" or ">>" and "outfile"
 
 while < left:
 	if infile open:
 		close last infile
 	open new infile
 	remove "<" and "infile"
+
+# TODO figure out how here doc and redirect in work together
 
 save first word as command
 

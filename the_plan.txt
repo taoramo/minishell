@@ -39,7 +39,26 @@ else:
 
 PREPARING COMMANDS
 
+skip any number of isspace
 
-if at env variable or wildcard:
-	if not in ' ':
-		expand
+expand all env variables not in ' '
+expand all * not in ' ' or " "
+
+while > left:
+	if outfile open:
+		close outfile
+	open new outfile (truncate)
+	remove ">" and "outfile"
+
+while < left:
+	if infile open:
+		close last infile
+	open new infile
+	remove "<" and "infile"
+
+save first word as command
+
+save split string as argv:
+	split by any amount of isspace
+	keep anything in ' ' or " " as its own arg
+		(ignore anything inside quotes)

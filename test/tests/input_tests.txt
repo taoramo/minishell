@@ -12,6 +12,10 @@ grep i < infile > tmp/outfile
 
 grep <infile >tmp/outfile i
 
+grep i < infile < tmp/outfile
+
+cat infile >tmp/outfile >tmp/outfile2
+
 echo *
 
 grep "x" ./*

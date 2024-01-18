@@ -17,6 +17,7 @@ pwd
 cd ..
 pwd
 
+export
 echo $TEST
 export TEST=test100
 echo $TEST

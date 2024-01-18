@@ -35,6 +35,8 @@ int	execute_parentheses(char *line, void (*f)(char *line))
 
 void	handle_input(char *line)
 {
+	if (line == 0)
+		return ;
 	int i = 0;
 	int skip = 0;
 	while (line[i] != 0)

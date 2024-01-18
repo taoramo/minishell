@@ -42,6 +42,28 @@ while read -r line; do
 	eval $line
 done < $TEST_DIR/input_tests.txt
 
+#------ REDIRECT ------#
+
+printf $HEADER_COLOR"\n#------ REDIRECT ------#\n\n"$NC
+
+echo "aaaaa" > ./tmp/outfile
+echo "bbbbb" > ./tmp/outfile2
+cat ./tmp/outfile
+cat ./tmp/outfile2
+echo ""
+
+while read -r line; do
+	echo "aaaaa" > ./tmp/outfile
+	echo "bbbbb" > ./tmp/outfile2
+	echo -e $COMMAND_COLOR $line $NC
+	eval $line
+	echo -e cat ./tmp/outfile
+	cat ./tmp/outfile
+	echo -e cat ./tmp/outfile2
+	cat ./tmp/outfile2
+	echo ""
+done < $TEST_DIR/redirect_tests.txt
+
 #------ PIPES ------#
 
 printf $HEADER_COLOR"\n#------ PIPES ------#\n\n"$NC

@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strsfree.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/18 16:30:03 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/16 11:04:10 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/16 11:05:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPE_H
-# define PIPE_H
+#include "libft.h"
 
-# include <stdio.h>
+int	ft_strsfree(char **strs)
+{
+	int	i;
 
-# include "libft.h"
-
-int	pipe_commands(char ***commands, int *file_fds, int **process_ids);
-
-#endif
+	i = 0;
+	while (strs[i] != 0)
+	{
+		free(strs[i]);
+		i++;
+	}
+	free(strs);
+	return (0);
+}

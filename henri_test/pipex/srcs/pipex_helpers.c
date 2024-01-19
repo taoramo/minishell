@@ -1,44 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helpers.c                                          :+:      :+:    :+:   */
+/*   pipex_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/13 16:17:11 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/03 12:05:10 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/19 13:29:15 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/19 13:48:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	ft_strsfree(char **strs)
-{
-	int	i;
-
-	i = 0;
-	while (strs[i] != 0)
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-	return (0);
-}
-
-int	free_commands(char ***commands)
-{
-	int	i;
-
-	i = 0;
-	while (commands[i] != 0)
-	{
-		ft_strsfree(commands[i]);
-		i++;
-	}
-	free(commands);
-	return (0);
-}
 
 int	count_commands(char ***commands)
 {
@@ -50,23 +22,28 @@ int	count_commands(char ***commands)
 	return (i);
 }
 
-char	**strs_add_str(char **strs, char *str)
+void	print_command_fd(char **command, int fd)
 {
-	int		i;
-	char	*tmp;
+	int	i;
 
 	i = 0;
-	while (strs[i] != 0)
+	while (command[i] != 0)
 	{
-		tmp = ft_strjoin(strs[i], str);
-		if (tmp == 0)
-		{
-			ft_strsfree(strs);
-			return (0);
-		}
-		free(strs[i]);
-		strs[i] = tmp;
+		ft_putstr_fd(command[i], fd);
+		ft_putstr_fd(" ", fd);
 		i++;
 	}
-	return (strs);
+	ft_putstr_fd("\n", fd);
+}
+
+void	print_commands_fd(char ***commands, int fd)
+{
+		int	i;
+
+	i = 0;
+	while (commands[i] != 0)
+	{
+		print_command_fd(commands[i], fd);
+		i++;
+	}
 }

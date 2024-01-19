@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/18 16:16:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/19 14:06:43 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	run_command(int input_fd, int output_fd, char **command)
 {
+	int ret;
+
 	if (command[0] == 0)
 		return (-1);
 	if (dup2(input_fd, 0) == -1 || dup2(output_fd, 1) == -1)
@@ -21,7 +23,11 @@ int	run_command(int input_fd, int output_fd, char **command)
 		perror("dup failed");
 		return (-1);
 	}
-	return (execve(command[0], command, NULL));
+	ft_putstr_fd("Executing command: ", 2);
+	print_command_fd(command, 2);
+	ret = execve(command[0], command, NULL);
+	perror(command[0]);
+	return (ret);
 }
 
 int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
@@ -113,17 +119,20 @@ int	pipe_commands(char ***commands, int *file_fds, int **process_ids)
 		return (-1);
 	}
 	i = 0;
+	ft_putstr_fd("Running file to pipe\n", 2);
 	(*process_ids)[i] = file_to_pipe(file_fds, pipe_fds, commands[i]);
 	if ((*process_ids)[i] == -1)
 		return (-1);
 	i++;
 	while (commands[i + 1] != 0)
 	{
+		ft_putstr_fd("Running pipe to pipe\n", 2);
 		(*process_ids)[i] = pipe_to_pipe(pipe_fds, commands[i]);
 		if ((*process_ids)[i] == -1)
 			return (-1);
 		i++;
 	}
+	ft_putstr_fd("Running pipe to file\n", 2);
 	(*process_ids)[i] = pipe_to_file(file_fds, pipe_fds, commands[i]);
 	if ((*process_ids)[i] == -1)
 		return (-1);

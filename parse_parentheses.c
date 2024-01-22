@@ -6,7 +6,10 @@ int	next_start(const char *line, int i)
 		return (0);
 	while (line[i]
 		&& ft_strncmp(&line[i], "&&", 2)
-		&& ft_strncmp(&line[i], "||", 2))
+		&& ft_strncmp(&line[i], "||", 2)
+		&& !ft_is_inside(line, i, '(')
+		&& !ft_is_inside(line, i, '"')
+		&& !ft_is_inside(line, i, 39))
 		i++;
 	return (i);
 }
@@ -37,7 +40,10 @@ int	length_next_outside_parenth(const char *line, int index)
 	i = 0;
 	while (line[index + i]
 		&& ft_strncmp(&line[index + i], "&&", 2)
-		&& ft_strncmp(&line[index + i], "||", 2))
+		&& ft_strncmp(&line[index + i], "||", 2)
+		&& !ft_is_inside(line, i, '(')
+		&& !ft_is_inside(line, i, '"')
+		&& !ft_is_inside(line, i, 39))
 		i++;
 	return (i);
 }

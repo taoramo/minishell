@@ -63,5 +63,6 @@ void	expand_supergroups(t_vec *cmd_lines);
 int		contains_supergroup(void *arg);
 void	free_cmd_line_str(void *arg);
 void	print_cmd_line(void *arg);
+int		ft_is_inside(const char *line, int i, int open_char);
 
 #endif

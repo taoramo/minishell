@@ -6,7 +6,7 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 14:48:17 by hpatsi            #+#    #+#              #
-#    Updated: 2024/01/19 15:04:33 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/01/23 15:24:22 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = test
 
 LIBFT = libft/libft.a
 
-SOURCES = test_pipex.c $(addprefix ./pipex/, pipex.c pipe_commands.c pipex_helpers.c)
+SOURCES = test_pipex_vec.c split_command.c $(addprefix ./pipex/, pipex.c pipe_commands.c pipex_helpers.c)
 
 OBJECTS = $(SOURCES:.c=.o)
 

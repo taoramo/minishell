@@ -6,11 +6,24 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/19 15:04:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/19 16:24:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	ft_strsfree(char **strs)
+{
+	int	i;
+
+	i = 0;
+	while (strs[i] != 0)
+	{
+		free(strs[i]);
+		i++;
+	}
+	free(strs);
+}
 
 int	main(void)
 {
@@ -19,7 +32,6 @@ int	main(void)
 	char	**command2;
 
 	int		file_fds[2];
-
 	int		exit_code;
 
 	command1 = ft_split("/usr/bin/cat", ' ');

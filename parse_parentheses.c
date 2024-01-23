@@ -6,7 +6,10 @@ int	next_start(const char *line, int i)
 		return (0);
 	while (line[i]
 		&& ft_strncmp(&line[i], "&&", 2)
-		&& ft_strncmp(&line[i], "||", 2))
+		&& ft_strncmp(&line[i], "||", 2)
+		&& !ft_is_inside(line, i, '(')
+		&& !ft_is_inside(line, i, '"')
+		&& !ft_is_inside(line, i, 39))
 		i++;
 	return (i);
 }
@@ -19,11 +22,17 @@ int	length_next_in_parenth(const char *line, int index)
 	i = 0;
 	open_parentheses = 0;
 	while (line[index + i] && !(open_parentheses == 0
-			&& line[index + i - 1] == ')'))
+			&& line[index + i - 1] == ')'
+			&& ft_is_inside(line, index + i, 39)
+			&& ft_is_inside(line, index + i '"')))
 	{
-		if (line[index + i] == '(')
+		if (line[index + i] == '('
+			&& ft_is_inside(line, index + i, 39)
+			&& ft_is_inside(line, index + i '"'))
 			open_parentheses++;
-		if (line[index + i] == ')' && open_parentheses)
+		if (line[index + i] == ')'
+			&& open_parentheses && ft_is_inside(line, index + i, 39)
+			&& ft_is_inside(line, index + i '"'))
 			open_parentheses--;
 		i++;
 	}
@@ -37,7 +46,10 @@ int	length_next_outside_parenth(const char *line, int index)
 	i = 0;
 	while (line[index + i]
 		&& ft_strncmp(&line[index + i], "&&", 2)
-		&& ft_strncmp(&line[index + i], "||", 2))
+		&& ft_strncmp(&line[index + i], "||", 2)
+		&& !ft_is_inside(line, i, '(')
+		&& !ft_is_inside(line, i, '"')
+		&& !ft_is_inside(line, i, 39))
 		i++;
 	return (i);
 }
@@ -63,7 +75,8 @@ int	next_length(const char *line, int index)
 		i = i + 2;
 		while (ft_isspace(line[index + i]))
 			i++;
-		if (line[index + i] == '(')
+		if (line[index + i] == '(' && ft_is_inside(line, index + i, 39)
+			&& ft_is_inside(line, index + i '"'))
 			return (length_next_in_parenth(line, index + i) + i);
 		else
 			return (length_next_outside_parenth(line, index + i) + i);

@@ -1,15 +1,5 @@
 #include "includes/minishell.h"
 
-int	ft_error(char *str)
-{
-	if (ft_strlen(str))
-	{
-		printf("error: %s\n", str);
-		rl_on_new_line();
-	}
-	return (-1);
-}
-
 int	check_parenthesis_count(const char *line)
 {
 	int	i;
@@ -75,11 +65,11 @@ int	parse_line(const char *line)
 	t_vec	cmd_lines;
 
 	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
-		return (ft_error(""));
+		return (-1);
 	if (vec_new(&cmd_lines, 16, sizeof(t_cmd_line)) < 0)
 		return (ft_error("malloc"));
 	if (make_cmd_line_groups(&cmd_lines, line) < 0)
-		return (ft_error(""));
+		return (-1);
 	return (0);
 }
 

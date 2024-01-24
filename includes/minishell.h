@@ -43,7 +43,6 @@ typedef struct s_token
 typedef struct s_cmd_line
 {
 	char			*str;
-	t_group_type	type;
 	int				return_value;
 }	t_cmd_line;
 
@@ -56,7 +55,6 @@ void	parse_param(char *str);
 int		make_cmd_line_groups(t_vec *cmd_lines,
 			const char *lin);
 int		next_cmd_line_length(const char *line);
-int		ft_error(char *str);
 int		check_parenthesis_count(const char *line);
 void	set_group_types(void *arg);
 void	expand_supergroups(t_vec *cmd_lines);
@@ -66,5 +64,6 @@ void	print_cmd_line(void *arg);
 int		ft_is_inside(const char *line, int i, int open_char);
 void	signal_interactive(void);
 void	signal_non_interactive(void);
-
+int		ft_error(char *str);
+int		cmd_line_error(t_vec *cmd_lines);
 #endif

@@ -79,8 +79,7 @@ int	next_length(const char *line, int index)
 		i = i + 2;
 		while (ft_isspace(line[index + i]))
 			i++;
-		if (line[index + i] == '(' 
-			&& !ft_is_inside(line, index + i, 39)
+		if (line[index + i] == '(' && !ft_is_inside(line, index + i, 39)
 			&& !ft_is_inside(line, index + i, '"'))
 			return (length_next_in_parenth(line, index + i) + i);
 		else
@@ -103,9 +102,9 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
 		ft_memset(&current, 0, sizeof(t_cmd_line));
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
-			return (-1);
+			return (cmd_line_error(cmd_lines));
 		if (vec_push(cmd_lines, &current) < 0)
-			return (ft_error("malloc"));
+			return (cmd_line_error(cmd_lines));
 		i = start + length;
 	}
 	vec_iter(cmd_lines, print_cmd_line);

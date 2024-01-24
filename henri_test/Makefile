@@ -6,15 +6,15 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 14:48:17 by hpatsi            #+#    #+#              #
-#    Updated: 2024/01/23 15:24:22 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/01/24 09:57:10 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = test
 
-LIBFT = libft/libft.a
+LIBFT = ../libft/libft.a
 
-SOURCES = test_pipex_vec.c split_command.c $(addprefix ./pipex/, pipex.c pipe_commands.c pipex_helpers.c)
+SOURCES = test_pipex.c split_command.c $(addprefix ./pipex/, pipex.c pipe_commands.c pipex_helpers.c)
 
 OBJECTS = $(SOURCES:.c=.o)
 
@@ -28,10 +28,10 @@ $(NAME): $(LIBFT) $(OBJECTS)
 	cc $(CFLAGS) $(OBJECTS) $(LIBFT) -o $(NAME)
 
 $(LIBFT):
-	make -C ./libft/
+	make -C ../libft/
 
 clean:
-	make clean -C ./libft/
+	make clean -C ../libft/
 	rm -f $(OBJECTS)
 
 fclean: clean

@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-t_vec	*split_command(char *str);
+int	split_command(t_vec *strs, char *str);
 
 void	print_commands(void *src)
 {
@@ -38,18 +38,23 @@ int	main(void)
 {
 	// t_vec	commands;
 
-	t_vec	*command1;
-	t_vec	*command2;
+	t_vec	command1;
+	t_vec	command2;
+
+	vec_new(&command1, 1, sizeof(char *));
+	vec_new(&command2, 1, sizeof(char *));
 
 	ft_printf("Splitting:\n");
-	command1 = split_command("/usr/bin/cat  hi ok \"hello world\"");
-	command2 = split_command("/usr/bin/wc -l");
+	split_command(&command1, "echo hi ok \"hello\" hi \"hello \'world\' \"");
+	split_command(&command2, "/usr/bin/wc -l");
 
 	ft_printf("Printing:\n");
-	vec_iter(command1, print_command);
+	vec_iter(&command1, print_command);
 	ft_printf("\n");
-	vec_iter(command2, print_command);
+	vec_iter(&command2, print_command);
 	ft_printf("\n");
+
+	//ft_printf("%s\n", *(char **)vec_get(&command1, 0));
 
 	// vec_new(&commands, 2, sizeof(char **));
 	// vec_push(&commands, &command1);

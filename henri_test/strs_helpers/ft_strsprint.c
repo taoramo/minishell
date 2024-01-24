@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   ft_strsprint.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 10:39:06 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/24 10:42:37 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/24 10:44:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPE_H
-# define PIPE_H
+#include "strs_helpers.h"
 
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
+void	ft_strsprint(char **strs)
+{
+	int	i;
 
-# include "libft.h"
-
-int		pipex(char ***commands, int file_fds[]);
-int		pipe_commands(char ***commands, int *file_fds, int **process_ids);
-
-#endif
+	i = 0;
+	while (strs[i] != 0)
+	{
+		ft_printf("[%s]", strs[i]);
+		i++;
+	}
+	ft_printf("\n");
+}

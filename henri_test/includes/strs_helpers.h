@@ -1,25 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   strs_helpers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 10:39:06 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/24 10:40:57 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/24 10:44:52 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPE_H
-# define PIPE_H
-
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
+#ifndef STRS_HELPERS_H
+# define STRS_HELPERS_H
 
 # include "libft.h"
 
-int		pipex(char ***commands, int file_fds[]);
-int		pipe_commands(char ***commands, int *file_fds, int **process_ids);
+void	ft_strsfree(char **strs);
+void	ft_strsprint(char **strs);
 
 #endif

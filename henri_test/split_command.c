@@ -6,24 +6,12 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 10:25:57 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:14:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
-static void	ft_strsfree(char **strs)
-{
-	int	i;
-
-	i = 0;
-	while (strs[i] != 0)
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-}
+#include "strs_helpers.h"
 
 int	quote_length(char *str)
 {
@@ -59,52 +47,49 @@ int	count_splits(char *str)
 	return (count);
 }
 
-int	try_add_str(char **strs, char *str, int end)
+int	try_add_str(char ***strs, char **str, char **end)
 {
-	static int	i;
-	static int	start;
 	char		*substr;
 
-	if (end == 1)
+	if (**end == '\"' || **end == '\'')
+		*end += quote_length(*end);
+	if (**end == ' ' || **end == 0)
 	{
-		start = 0;
-		i = 0;
-	}
-	if (str[end] == '\"' || str[end] == '\'')
-		end += quote_length(&str[end]);
-	if (str[end] == ' ' || str[end] == 0)
-	{
-		if (start < end)
+		if (*str < *end)
 		{
-			substr = ft_substr(str, start, end - start);
+			if (*(*end - 1) == '\"' || *(*end - 1) == '\'')
+				substr = ft_substr((*str + 1), 0, (*end - 1) - (*str + 1));
+			else
+				substr = ft_substr(*str, 0, *end - *str);
 			if (substr == 0)
 				return (-1);
-			strs[i] = substr;
-			i++;
+			**strs = substr;
+			*strs += 1;
 		}
-		start = end + 1;
+		*str = *end + 1;
 	}
-	return (end);
+	return (1);
 }
 
 char	**split_command(char *str)
 {
 	char	**strs;
-	int		end;
+	char	**tab;
+	char	*end;
 
 	strs = ft_calloc(count_splits(str) + 1, sizeof(char *));
 	if (strs == NULL)
 		return (0);
-	end = 0;
-	while (str[end] != 0)
+	tab = strs;
+	end = str;
+	while (*end != 0)
 	{
 		end++;
-		end = try_add_str(strs, str, end);
-		if (end == -1)
+		if (try_add_str(&strs, &str, &end) == -1)
 		{
 			ft_strsfree(strs);
 			return (0);
 		}
 	}
-	return (strs);
+	return (tab);
 }

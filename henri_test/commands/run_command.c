@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 11:36:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 14:33:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	execute_command(int input_fd, int output_fd, char **command)
 	return (ret);
 }
 
-int	run_command(int file_fds[], char **command)
+int	run_command(int input_fd, int output_fd, char **command)
 {
 	int	process_id;
 
@@ -39,6 +39,6 @@ int	run_command(int file_fds[], char **command)
 		return (-1);
 	}
 	else if (process_id == 0)
-		return (execute_command(file_fds[0], file_fds[1], command));
+		return (execute_command(input_fd, output_fd, command));
 	return (process_id);
 }

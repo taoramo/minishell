@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 11:14:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:23:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	count_splits(char *str)
 		end++;
 		if (str[end] == '\"' || str[end] == '\'')
 			end += quote_length(&str[end]);
-		if (str[end] == ' ' || str[end] == 0)
+		if (ft_isspace(str[end]) || str[end] == 0)
 		{
 			if (start < end)
 				count++;
@@ -53,7 +53,7 @@ int	try_add_str(char ***strs, char **str, char **end)
 
 	if (**end == '\"' || **end == '\'')
 		*end += quote_length(*end);
-	if (**end == ' ' || **end == 0)
+	if (ft_isspace(**end) || **end == 0)
 	{
 		if (*str < *end)
 		{

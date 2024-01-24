@@ -2,8 +2,8 @@
 # define MINISHELL_H
 # include <stdio.h>
 # include <termios.h>
-# include "readline.h"
-# include "history.h"
+# include "../readline/readline.h"
+# include "../readline/history.h"
 # include <string.h>
 # include <unistd.h>
 # include <stdlib.h>

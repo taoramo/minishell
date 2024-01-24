@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "include/minishell.h"
 
 /* void	set_group_types(void *arg)
 {

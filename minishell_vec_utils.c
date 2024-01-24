@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "include/minishell.h"
 
 int	contains_supergroup(void *arg)
 {

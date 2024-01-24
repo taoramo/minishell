@@ -1,18 +1,20 @@
 NAME = minishell
-CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3 
-HEADERS = -I ./include
-LIBS = $(LIBFT) -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
-SRCS = input.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c
+CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3
+HEADERS = include/minishell.h
+LIBS = $(LIBFT)
+SRCS = main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c
 OBJS = $(SRCS:.c=.o)
 LIBFT = ./libft/libft.a
+READLINE_TAAVI = -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include
+READLINE = -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
 
 all: $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(HEADERS)
+	$(CC) $(CFLAGS) -o $@ -c $<
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) $(HEADERS) -o $(NAME)
+	$(CC) $(READLINE) $(OBJS) $(LIBS) -o $(NAME)
 
 $(LIBFT):
 	make -C ./libft/
@@ -26,5 +28,8 @@ fclean: clean
 	make fclean -C ./libft/
 
 re: fclean all
+
+taavi: $(OBJS) $(LIBFT)
+	$(CC) $(READLINE_TAAVI) $(OBJS) $(LIBS) -o $(NAME)
 
 .PHONY: all, clean, fclean, re

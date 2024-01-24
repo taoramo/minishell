@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 15:34:15 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 16:27:48 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,17 @@ int	test_pipex(void)
 
 int	test_commmands(void)
 {
-	run_command(0, 1, split_command("/bin/cat \"infile\""));
-	run_command(0, 1, split_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\""));
-	run_command(0, 1, split_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'"));
+	int	process_id;
+	int	ret;
+	
+	process_id = run_command(0, 1, split_command("/bin/cat \"infile\""));
+	waitpid(process_id, &ret, 0);
+	process_id = run_command(0, 1, split_command("/bin/cat	\"infile\""));
+	waitpid(process_id, &ret, 0);
+	process_id = run_command(0, 1, split_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\""));
+	waitpid(process_id, &ret, 0);
+	process_id = run_command(0, 1, split_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'"));
+	waitpid(process_id, &ret, 0);
 	return (0);
 }
 
@@ -104,15 +112,13 @@ int	main(int argc, char **argv, char *envp[])
 		ft_printf("give at least one arg");
 		return (1);
 	}
-	if (ft_strncmp(argv[1], "pipex", ft_strlen(argv[1])) == 0)
+	if (ft_strncmp(argv[1], "pipex", 6) == 0)
 		return (test_pipex());
-	if (ft_strncmp(argv[1], "commands", ft_strlen(argv[1])) == 0)
+	if (ft_strncmp(argv[1], "commands", 9) == 0)
 		return (test_commmands());
-	
 	command_argv = &argv[1];
 	paths = get_paths(envp);
 	command_argv[0] = add_path(command_argv[0], paths);
 	run_command(0, 1, command_argv);
-
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 15:10:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:56:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,5 @@ char	*add_path(char *command, char **paths)
 		free(path_command);
 		i++;
 	}
-	ft_putstr_fd(command, 2);
-	ft_putstr_fd(": command not found\n", 2);
 	return (ft_strdup(command));
 }

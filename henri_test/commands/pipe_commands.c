@@ -6,29 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 10:35:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:36:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "commands.h"
 
-int	run_command(int input_fd, int output_fd, char **command)
-{
-	int ret;
-
-	if (command[0] == 0)
-		return (-1);
-	if (dup2(input_fd, 0) == -1 || dup2(output_fd, 1) == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	ret = execve(command[0], command, NULL);
-	perror(command[0]);
-	return (ret);
-}
-
-int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
+static int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
 {
 	int	process_id;
 
@@ -48,14 +32,14 @@ int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
 	{
 		close(pipe_fds[0]);
 		if (file_fds[0] != -1)
-			run_command(file_fds[0], pipe_fds[1], command);
+			execute_command(file_fds[0], pipe_fds[1], command);
 		close(pipe_fds[1]);
 		return (-1);
 	}
 	return (process_id);
 }
 
-int	pipe_to_file(int *file_fds, int *pipe_fds, char **command)
+static int	pipe_to_file(int *file_fds, int *pipe_fds, char **command)
 {
 	int	process_id;
 
@@ -73,12 +57,12 @@ int	pipe_to_file(int *file_fds, int *pipe_fds, char **command)
 	else
 	{
 		close(pipe_fds[1]);
-		return (run_command(pipe_fds[0], file_fds[1], command));
+		return (execute_command(pipe_fds[0], file_fds[1], command));
 	}
 	return (process_id);
 }
 
-int	pipe_to_pipe(int *pipe_fds, char **command)
+static int	pipe_to_pipe(int *pipe_fds, char **command)
 {
 	int	pipe2_fds[2];
 	int	process_id;
@@ -101,7 +85,7 @@ int	pipe_to_pipe(int *pipe_fds, char **command)
 	else
 	{
 		close(pipe2_fds[0]);
-		return (run_command(pipe_fds[0], pipe2_fds[1], command));
+		return (execute_command(pipe_fds[0], pipe2_fds[1], command));
 	}
 	return (process_id);
 }

@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 10:38:32 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 11:37:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "commands.h"
 
-int	count_commands(char ***commands)
+static int	count_commands(char ***commands)
 {
 	int	i;
 
@@ -22,7 +22,7 @@ int	count_commands(char ***commands)
 	return (i);
 }
 
-int	wait_for_children(int *process_ids)
+static int	wait_for_children(int *process_ids)
 {
 	int	i;
 	int	ret;

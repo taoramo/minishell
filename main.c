@@ -16,19 +16,11 @@ int	check_parenthesis_count(const char *line)
 		if (line[i] == ')' && open_parentheses)
 			closed_parentheses++;
 		if (line[i] == ')' && !open_parentheses)
-		{
-			ft_printf("syntax error near unexpected token `)'\n");
-			rl_on_new_line();
-			return (-1);
-		}
+			return (ft_error("syntax error near unexpected token `)'\n"));
 		i++;
 	}
 	if (open_parentheses != closed_parentheses)
-	{
-		ft_printf("syntax error: unclosed parentheses\n");
-		rl_on_new_line();
-		return (-1);
-	}
+		return (ft_error("syntax error: unclosed parentheses\n"));
 	else
 		return (open_parentheses);
 }
@@ -51,11 +43,7 @@ int	check_open_quotes(const char *line)
 		i++;
 	}
 	if (singles % 2 || doubles % 2)
-	{
-		ft_printf("syntax error: unclosed quotes\n");
-		rl_on_new_line();
-		return (-1);
-	}
+		return (ft_error("syntax error: unclosed quotes\n"));
 	else 
 		return (0);
 }

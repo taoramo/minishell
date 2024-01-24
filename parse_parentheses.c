@@ -1,4 +1,4 @@
-#include "include/minishell.h"
+#include "includes/minishell.h"
 
 int	next_start(const char *line, int i)
 {
@@ -100,7 +100,7 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
 		if (!current.str)
 			return (-1);
 		if (vec_push(cmd_lines, &current) < 0)
-			ft_error();
+			return (ft_error("malloc"));
 		i = start + length;
 	}
 	return (1);

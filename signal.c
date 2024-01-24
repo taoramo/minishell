@@ -1,4 +1,4 @@
-#include "include/minishell.h"
+#include "includes/minishell.h"
 
 void	new_prompt(int signal)
 {

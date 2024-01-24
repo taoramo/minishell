@@ -1,4 +1,4 @@
-#include "include/minishell.h"
+#include "includes/minishell.h"
 
 int	is_inside_parenth(const char *line, int i, int open_char)
 {

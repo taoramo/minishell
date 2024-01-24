@@ -1,5 +1,4 @@
-#include "include/minishell.h"
-#include "include/readline.h"
+#include "includes/minishell.h"
 
 int	ft_error(char *str)
 {

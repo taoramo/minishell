@@ -1,4 +1,4 @@
-#include "include/minishell.h"
+#include "includes/minishell.h"
 
 /* void	set_group_types(void *arg)
 {
@@ -47,28 +47,29 @@ void	remove_parentheses(t_cmd_line *cmd_line)
 	cmd_line->str[end - 1] = 0;
 }
 
-void	handle_supergroup(t_vec *cmd_lines, int i)
+int	handle_supergroup(t_vec *cmd_lines, int i)
 {
 	t_vec		temp;
 	t_cmd_line	*ptr;
 	size_t		j;
 
 	if (vec_new(&temp, 16, sizeof(t_cmd_line)) < 0)
-		ft_error();
+		return (ft_error("malloc"));
 	ptr = vec_get(cmd_lines, i);
 	remove_parentheses(ptr);
 	if (make_cmd_line_groups(&temp, ptr->str) < 0)
-		ft_error();
+		return (ft_error(""));
 	vec_remove(cmd_lines, i);
 	j = 0;
 	while (j < temp.len)
 	{
 		if (vec_insert(cmd_lines, vec_get(&temp, j), i) < 0)
-			ft_error();
+			return (ft_error("malloc"));
 		j++;
 	}
 	vec_iter(&temp, free_cmd_line_str);
 	vec_free(&temp);
+	return (1);
 }
 
 void	expand_supergroups(t_vec *cmd_lines)

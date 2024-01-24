@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 11:35:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/24 15:10:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@
 
 # include "libft.h"
 
-int		run_command(int file_fds[], char **command);
+char	**split_command(char *str);
+char	*add_path(char *command, char **paths);
+int		run_command(int input_fd, int output_fd, char **command);
 int		execute_command(int input_fd, int output_fd, char **command);
 
 int		pipex(char ***commands, int file_fds[]);

@@ -6,7 +6,7 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 14:48:17 by hpatsi            #+#    #+#              #
-#    Updated: 2024/01/24 11:37:11 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/01/24 15:07:12 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = test
 LIBFT = ../libft/libft.a
 
 SOURCES = test.c \
-		  $(addprefix ./commands/, run_command.c split_command.c pipex.c pipe_commands.c) \
+		  $(addprefix ./commands/, split_command.c add_path.c run_command.c pipex.c pipe_commands.c) \
 		  $(addprefix ./strs_helpers/, ft_strsfree.c ft_strsprint.c)
 
 OBJECTS = $(SOURCES:.c=.o)

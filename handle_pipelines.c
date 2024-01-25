@@ -1,11 +1,33 @@
 #include "includes/minishell.h"
 
-int	prepare_cmd(t_cmd_line *cmd_line, int *last_return)
+int	prepare_cmds(t_cmd_line *cmd_line, int *last_return)
 {
 	(void)cmd_line;
 	(void)last_return;
 	return (0);
 }
+
+int	check_parenth_syntax(t_cmd_line *cmd_line)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (cmd_line->str[i])
+	{
+		if (i != 0 && cmd_line->str[i] == '(')
+		{
+			j = i - 1;
+			while (ft_isspace(cmd_line->str[j]))
+				j--;
+			if (cmd_line->str[j] != '&' && cmd_line->str[j] != '|')
+				return (ft_error("syntax error near unexpected token `(’"));
+		}
+		i++;
+	}
+	return (1);
+}
+	
 
 int	check_cmd_line_syntax(t_cmd_line *cmd_line)
 {
@@ -32,7 +54,7 @@ int	cmd_line_lexer(t_cmd_line *cmd_line, int *last_return)
 {
 	if (check_cmd_line_syntax(cmd_line) < 0)
 		return (-1);
-	if (prepare_cmd(cmd_line, last_return) < 0)
+	if (prepare_cmds(cmd_line, last_return) < 0)
 	 	return (-1);
 	return (0);
 }
@@ -48,6 +70,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 	while (i < cmd_lines->len)
 	{
 		cmd_line = vec_get(cmd_lines, i);
+		check_parenth_syntax(cmd_line);
 		if (cmd_line->str[0] == '&' || cmd_line->str[0] == '|')
 			j = j + 2;
 		while (ft_isspace(cmd_line->str[j]))

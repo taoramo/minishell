@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   test_vec.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 13:06:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 13:09:16 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,23 +67,25 @@ int	test_commmands(void)
 
 int	main(int argc, char **argv)
 {
-	char	**command_argv;
-	int		file_fds[2];
+	t_vec	command_argv;
+	// int		file_fds[2];
 
-	if (argc != 2)
-	{
-		ft_printf("give one arg with a command (or 'pipex' or 'commands' for tests)\n");
-		return (1);
-	}
-	if (ft_strncmp(argv[1], "pipex", 6) == 0)
-		return (test_pipex());
-	if (ft_strncmp(argv[1], "commands", 9) == 0)
-		return (test_commmands());
+	// if (argc != 2)
+	// {
+	// 	ft_printf("give one arg with a command (or 'pipex' or 'commands' for tests)\n");
+	// 	return (1);
+	// }
+	// if (ft_strncmp(argv[1], "pipex", 6) == 0)
+	// 	return (test_pipex());
+	// if (ft_strncmp(argv[1], "commands", 9) == 0)
+	// 	return (test_commmands());
 
-	extract_files(file_fds, argv[1]);
-	remove_redirects(&argv[1]);
-	command_argv = split_command(argv[1]);
-	command_argv[0] = add_path(command_argv[0]);
-	run_command(file_fds, command_argv);
-	return (0);
+	
+
+	// extract_files(file_fds, argv[1]);
+	// remove_redirects(&argv[1]);
+	// command_argv = split_command(argv[1]);
+	// command_argv[0] = add_path(command_argv[0]);
+	// run_command(file_fds, command_argv);
+	// return (0);
 }

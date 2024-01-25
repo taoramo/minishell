@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 16:25:54 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 11:15:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 # include <fcntl.h>
 
 # include "libft.h"
+
+int		extract_files(int file_fds[], char *str);
+
+void	remove_redirects(char **str);
+
+int		quote_length(char *str);
 
 /**
  * Splits command by whitespaces outside quotations.
@@ -39,12 +45,11 @@ char	*add_path(char *command, char **paths);
 /**
  * Creates a child process and runs the given command, with the option to overwrite stdin and stdout.
  * 
- * @param[in] input_fd The file descriptor to replace stdin.
- * @param[in] output_fd The file descriptor to replace stdout.
+ * @param[in] file_fds The file descriptors to replace stdin (index 0) and stdout (index 1).
  * @param[in] command The command in argv format.
  * @returns Process id of the child process created to run the command or -1 on fail.
  */
-int		run_command(int input_fd, int output_fd, char **command);
+int		run_command(int file_fds[], char **command);
 int		execute_command(int input_fd, int output_fd, char **command);
 
 /**

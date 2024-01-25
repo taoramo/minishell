@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 16:27:48 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 11:21:41 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,18 @@ int	test_commmands(void)
 {
 	int	process_id;
 	int	ret;
+	int	file_fds[2];
 	
-	process_id = run_command(0, 1, split_command("/bin/cat \"infile\""));
+	ft_printf("TESTING COMMANDS");
+	file_fds[0] = 0;
+	file_fds[1] = 1;
+	process_id = run_command(file_fds, split_command("/bin/cat \"infile\""));
 	waitpid(process_id, &ret, 0);
-	process_id = run_command(0, 1, split_command("/bin/cat	\"infile\""));
+	process_id = run_command(file_fds, split_command("/bin/cat	\"infile\""));
 	waitpid(process_id, &ret, 0);
-	process_id = run_command(0, 1, split_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\""));
+	process_id = run_command(file_fds, split_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\""));
 	waitpid(process_id, &ret, 0);
-	process_id = run_command(0, 1, split_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'"));
+	process_id = run_command(file_fds, split_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'"));
 	waitpid(process_id, &ret, 0);
 	return (0);
 }
@@ -106,19 +110,23 @@ int	main(int argc, char **argv, char *envp[])
 {
 	char	**command_argv;
 	char	**paths;
+	int		file_fds[2];
 
-	if (argc < 2)
+	if (argc != 2)
 	{
-		ft_printf("give at least one arg");
+		ft_printf("give one arg with a command (or 'pipex' or 'commands' for tests)\n");
 		return (1);
 	}
 	if (ft_strncmp(argv[1], "pipex", 6) == 0)
 		return (test_pipex());
 	if (ft_strncmp(argv[1], "commands", 9) == 0)
 		return (test_commmands());
-	command_argv = &argv[1];
+
+	extract_files(file_fds, argv[1]);
+	remove_redirects(&argv[1]);
+	command_argv = split_command(argv[1]);
 	paths = get_paths(envp);
 	command_argv[0] = add_path(command_argv[0], paths);
-	run_command(0, 1, command_argv);
+	run_command(file_fds, command_argv);
 	return (0);
 }

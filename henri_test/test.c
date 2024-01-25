@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 15:59:51 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 17:58:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,16 @@ int	main(int argc, char **argv)
 	// 	return (test_commmands());
 
 	vec_new(&command.argv, 1, sizeof(char *));
+	ft_printf("Split:\n");
 	if (split_command(&command.argv, argv[1]) == -1)
 		return (1);
-
-	ft_printf("Split:\n");
 	vec_iter(&command.argv, print_string_vec);
 	ft_printf("\n");
-	// ft_printf("Extract files:\n");
-	// extract_files(file_fds, argv[1]);
+	ft_printf("Extract files:\n");
+	if (extract_files(&command) == -1)
+		return (1);
+	vec_iter(&command.argv, print_string_vec);
+	ft_printf("\n");
 	// remove_redirects(&argv[1]);
 	// command_argv = split_command(argv[1]);
 	// command_argv[0] = add_path(command_argv[0]);

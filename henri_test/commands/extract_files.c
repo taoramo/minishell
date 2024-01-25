@@ -3,86 +3,52 @@
 /*                                                        :::      ::::::::   */
 /*   extract_files.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 15:59:49 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 19:50:58 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	unquoted_strlen(char *str)
-{
-	int	i;
-	int	len;
+// int	set_file(t_command command, char *filename)
+// {
+// 	unquoted_strcpy(filename, str);
+// 	if (index == 0)
+// 		*fd = open(filename, O_RDONLY);
+// 	if (index == 1)
+// 		*fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+// 	if (*fd == -1)
+// 		perror(filename);
+// 	return (*fd);
+// 	return (1);
+// }
 
-	i = 0;
-	while (ft_isspace(str[i]))
-		i++;
-	len = 0;
-	while (str[i] != 0 && !ft_isspace(str[i]))
-	{
-		if (str[i] == '\"' || str[i] == '\'')
-			i++;
-		i++;
-		len++;
-	}
-	return (len);
-}
-void	unquoted_strcpy(char *dst, char *src)
+int	is_redirect(char *str)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (ft_isspace(src[i]))
-		i++;
-	j = 0;
-	while (src[i] != 0 && !ft_isspace(src[i]))
-	{
-		if (src[i] == '\"' || src[i] == '\'')
-			i++;
-		dst[j] = src[i];
-		j++;
-		i++;
-	}
+	ft_printf("%s\n", str);
+	if (*str == '>' || *str == '<' || !ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
+		return (1);
+	return (0);
 }
 
-int	set_file(int index, int *fd, char *str)
-{
-	char	*filename;
-
-	filename = ft_calloc(unquoted_strlen(str) + 1, sizeof(char));
-	if (filename == 0)
-		return (-1);
-	unquoted_strcpy(filename, str);
-	if (index == 0)
-		*fd = open(filename, O_RDONLY);
-	if (index == 1)
-		*fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (*fd == -1)
-		perror(filename);
-	return (*fd);
-}
-
-int	extract_files(int file_fds[], char *str)
+int	extract_files(t_command *command)
 {	
-	int	i;
+	char	**strs;
+	size_t	i;
 
-	file_fds[0] = 0;
-	file_fds[1] = 1;
+	strs = *(char ***) &command->argv;
 	i = 0;
-	while (str[i] != 0)
+	while (i < command->argv.len)
 	{
-		if (str[i] == '\"' || str[i] == '\'')
-			i += quote_length(&str[i]);
-		if (str[i] == '<')
-			set_file(0, &file_fds[0], &str[i+1]);
-		if (str[i] == '>')
-			set_file(1, &file_fds[1], &str[i+1]);
+		if(is_redirect(strs[i]))
+		{
+			vec_remove(&command->argv, i);
+			set_file(command, strs[i]);
+			i--;
+		}
 		i++;
 	}
-	ft_printf("fd1 = %d, fd2 = %d\n", file_fds[0], file_fds[1]);
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 15:58:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 17:58:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_command
  * @param[in] str The string to search.
  * @returns On fail returns -1.
  */
-int		extract_files(int file_fds[], char *str);
+int		extract_files(t_command *command);
 
 /**
  * Removes redirects from a command string by replacing them with spaces.

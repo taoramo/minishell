@@ -1,6 +1,6 @@
 #include "includes/minishell.h"
 
-int	prepare_cmds(t_cmd_line *cmd_line, int *last_return)
+int	prepare_cmd_line(t_cmd_line *cmd_line, int *last_return)
 {
 	(void)cmd_line;
 	(void)last_return;
@@ -50,15 +50,6 @@ int	check_cmd_line_syntax(t_cmd_line *cmd_line)
 	return (1);
 }
 
-int	cmd_line_lexer(t_cmd_line *cmd_line, int *last_return)
-{
-	if (check_cmd_line_syntax(cmd_line) < 0)
-		return (-1);
-	if (prepare_cmds(cmd_line, last_return) < 0)
-	 	return (-1);
-	return (0);
-}
-
 int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 {
 	size_t		i;
@@ -81,13 +72,25 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 			remove_parentheses(cmd_line);
 			parse_line(cmd_line->str, last_return);
 		}
-		if (cmd_line_lexer(cmd_line, last_return) < 0)
+		else if (check_cmd_line_syntax(cmd_line) < 0)
 		{
 			vec_iter(cmd_lines, free_cmd_line_str);
 			vec_free(cmd_lines);
 			return (-1);
 		}
+		else
+			*last_return = prepare_cmd_line(cmd_line, last_return);
 		i++;
+		if (*last_return == 1)
+		{
+			while (ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "||", 2))
+				i++;
+		}
+		if (*last_return == 0)
+		{
+			while (ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "&&", 2))
+				i++;
+		}
 	}
-	return (0);
+	return (*last_return);
 }

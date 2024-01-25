@@ -14,5 +14,5 @@ int	cmd_line_error(t_vec *cmd_lines)
 {
 	vec_iter(cmd_lines, free_cmd_line_str);
 	vec_free(cmd_lines);
-	return (ft_error("malloc"));
+	return (ft_error("error allocating memory\n"));
 }

@@ -46,19 +46,14 @@ typedef struct s_cmd_line
 	int				return_value;
 }	t_cmd_line;
 
-int		parse_line(const char *line);
+int		parse_line(const char *line, int *last_return);
 int		check_line_parentheses(const char *line);
-void	parse_cmd_line_groups(t_vec *cmd_lines);
-void	parse_cmd_line(char *str);
-void	parse_cmd(char *str);
-void	parse_param(char *str);
 int		make_cmd_line_groups(t_vec *cmd_lines,
-			const char *lin);
+			const char *line, int *last_return);
 int		next_cmd_line_length(const char *line);
+int		handle_pipelines(t_vec *cmd_lines, int *last_return);
 int		check_parenthesis_count(const char *line);
-void	set_group_types(void *arg);
-void	expand_supergroups(t_vec *cmd_lines);
-int		contains_supergroup(void *arg);
+void	remove_parentheses(t_cmd_line *cmd_line);
 void	free_cmd_line_str(void *arg);
 void	print_cmd_line(void *arg);
 int		ft_is_inside(const char *line, int i, int open_char);
@@ -66,4 +61,5 @@ void	signal_interactive(void);
 void	signal_non_interactive(void);
 int		ft_error(char *str);
 int		cmd_line_error(t_vec *cmd_lines);
+int		prepare_cmd(t_cmd_line *cmd_line, int *last_return);
 #endif

@@ -87,7 +87,7 @@ int	next_length(const char *line, int index)
 	}
 }
 
-int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
+int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return)
 {
 	int			i;
 	int			start;
@@ -108,5 +108,5 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line)
 		i = start + length;
 	}
 	vec_iter(cmd_lines, print_cmd_line);
-	return (1);
+	return (handle_pipelines(cmd_lines, last_return));
 }

@@ -47,7 +47,7 @@ void	remove_parentheses(t_cmd_line *cmd_line)
 	cmd_line->str[end - 1] = 0;
 }
 
-int	handle_supergroup(t_vec *cmd_lines, int i)
+/* int	handle_supergroup(t_vec *cmd_lines, int i)
 {
 	t_vec		temp;
 	t_cmd_line	*ptr;
@@ -86,6 +86,5 @@ void	expand_supergroups(t_vec *cmd_lines)
 				handle_supergroup(cmd_lines, i);
 			i++;
 		}
-//		vec_iter(cmd_lines, set_group_types);
 	}
-}
+} */

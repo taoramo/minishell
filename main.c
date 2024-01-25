@@ -48,7 +48,7 @@ int	check_open_quotes(const char *line)
 		return (0);
 }
 
-int	parse_line(const char *line)
+int	parse_line(const char *line, int *last_return)
 {
 	t_vec	cmd_lines;
 
@@ -56,14 +56,15 @@ int	parse_line(const char *line)
 		return (-1);
 	if (vec_new(&cmd_lines, 16, sizeof(t_cmd_line)) < 0)
 		return (ft_error("malloc"));
-	if (make_cmd_line_groups(&cmd_lines, line) < 0)
+	if (make_cmd_line_groups(&cmd_lines, line, last_return) < 0)
 		return (-1);
 	return (0);
 }
 
 int	interactive(void)
 {
-	char				*line;
+	char	*line;
+	int		last_return;
 
 	using_history();
 	read_history(0);
@@ -76,7 +77,7 @@ int	interactive(void)
 			signal_non_interactive();
 			add_history(line);
 			write_history(0);
-			parse_line(line);
+			parse_line(line, &last_return);
 		}
 		else if (!line)
 			break ;
@@ -90,7 +91,7 @@ int	interactive(void)
 int	main(int argc, char **argv)
 {
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
-		parse_line(argv[2]);
+		parse_line(argv[2], 0);
 	if (argc == 1)
 		interactive();
 }

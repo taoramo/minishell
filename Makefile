@@ -2,7 +2,7 @@ NAME = minishell
 CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3
 HEADERS = include/minishell.h
 LIBS = $(LIBFT)
-SRCS = main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c
+SRCS = main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c
 OBJS = $(SRCS:.c=.o)
 LIBFT = ./libft/libft.a
 READLINE_TAAVI = -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include

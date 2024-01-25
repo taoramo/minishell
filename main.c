@@ -61,15 +61,15 @@ int	parse_line(const char *line, int *last_return)
 	return (0);
 }
 
-int	interactive(void)
+int	interactive(int *last_return)
 {
 	char	*line;
-	int		last_return;
 
 	using_history();
 	read_history(0);
 	while (1)
 	{
+		*last_return = 0;
 		signal_interactive();
 		line = readline("minishell> ");
 		if (line && ft_strlen(line) > 0)
@@ -77,7 +77,7 @@ int	interactive(void)
 			signal_non_interactive();
 			add_history(line);
 			write_history(0);
-			parse_line(line, &last_return);
+			parse_line(line, last_return);
 		}
 		else if (!line)
 			break ;
@@ -90,8 +90,11 @@ int	interactive(void)
 
 int	main(int argc, char **argv)
 {
+	int		last_return;
+
+	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
-		parse_line(argv[2], 0);
+		parse_line(argv[2], &last_return);
 	if (argc == 1)
-		interactive();
+		interactive(&last_return);
 }

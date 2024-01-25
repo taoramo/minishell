@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 13:04:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 15:58:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 
 # include "libft.h"
 # include "strs_helpers.h"
+
+typedef struct s_command
+{
+	t_vec	argv;
+	int		stdin_fd;
+	int		stdout_fd;
+	int		stderr_fd;
+}	t_command;
 
 /**
  * Tries to open any redirected infiles or outfiles and sets the infile and outfile fds.
@@ -50,7 +58,7 @@ int		quote_length(char *str);
  * @param[in] str The string to be split.
  * @returns A list of strings or a null pointer on fail.
  */
-char	**split_command(char *str);
+int		split_command(t_vec *strs, char *str);
 
 /**
  * Tries to add a valid path to a command based on env paths.

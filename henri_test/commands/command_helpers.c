@@ -1,40 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   remove_redirects.c                                 :+:      :+:    :+:   */
+/*   command_helpers.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/25 10:32:44 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 14:35:32 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/25 13:14:53 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/25 13:16:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-void	remove_redirect(char **str, int i)
+int	quote_length(char *str)
 {
-	(*str)[i] = ' ';
-	while (ft_isspace((*str)[i]))
-		i++;
-	while ((*str)[i] != 0 && !ft_isspace((*str)[i]))
-	{
-		(*str)[i] = ' ';
-		i++;
-	}
-}
+	char	*end_ptr;
 
-void	remove_redirects(char **str)
-{
-	int		i;
-
-	i = 0;
-	while ((*str)[i] != 0)
-	{
-		if ((*str)[i] == '\"' || (*str)[i] == '\'')
-			i += quote_length(&((*str)[i]));
-		if ((*str)[i] == '<' || (*str)[i] == '>')
-			remove_redirect(str, i);
-		i++;
-	}
+	end_ptr = ft_memchr(str + 1, *str, ft_strlen(str + 1));
+	if (end_ptr == 0)
+		return (-1);
+	return (end_ptr - str);
 }

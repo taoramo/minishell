@@ -1,22 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strs_helpers.h                                     :+:      :+:    :+:   */
+/*   ft_strsaddstr.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 10:40:57 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 13:05:30 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/01/25 13:03:37 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/01/25 13:05:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRS_HELPERS_H
-# define STRS_HELPERS_H
+#include "libft.h"
 
-# include "libft.h"
+char	**ft_strsaddstr(char **strs, char *str)
+{
+	int		i;
+	char	*tmp;
 
-void	ft_strsfree(char **strs);
-void	ft_strsprint(char **strs);
-char	**ft_strsaddstr(char **strs, char *str);
-
-#endif
+	i = 0;
+	while (strs[i] != 0)
+	{
+		tmp = ft_strjoin(strs[i], str);
+		if (tmp == 0)
+			return (0);
+		free(strs[i]);
+		strs[i] = tmp;
+		i++;
+	}
+	return (strs);
+}

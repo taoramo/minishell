@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 11:15:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/25 13:04:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,30 @@
 # include <fcntl.h>
 
 # include "libft.h"
+# include "strs_helpers.h"
 
+/**
+ * Tries to open any redirected infiles or outfiles and sets the infile and outfile fds.
+ * 
+ * @param[in] file_fds The file fds for input and output files. Set to stdin and stdout if no redirects.
+ * @param[in] str The string to search.
+ * @returns On fail returns -1.
+ */
 int		extract_files(int file_fds[], char *str);
 
+/**
+ * Removes redirects from a command string by replacing them with spaces.
+ * 
+ * @param[in] str A pointer to the string to modify.
+ */
 void	remove_redirects(char **str);
 
+/**
+ * Finds the length of the string inside quotations.
+ * 
+ * @param[in] str A pointer to the start of the quote.
+ * @returns The length of the string inside quotations or -1 on unclosed quote.
+ */
 int		quote_length(char *str);
 
 /**
@@ -34,13 +53,12 @@ int		quote_length(char *str);
 char	**split_command(char *str);
 
 /**
- * Tries to add a valid path to a command.
+ * Tries to add a valid path to a command based on env paths.
  * 
  * @param[in] command The command name without a path.
- * @param[in] paths A list of paths to search.
  * @returns The command with a valid path or a copy of the original command if no path found.
  */
-char	*add_path(char *command, char **paths);
+char	*add_path(char *command);
 
 /**
  * Creates a child process and runs the given command, with the option to overwrite stdin and stdout.

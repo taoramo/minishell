@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 13:06:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:29:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**get_paths(void)
 	return (0);
 }
 
-char	*add_path(char *command)
+int	add_path(char **command_ptr)
 {
 	char	**paths;
 	char	*path_command;
@@ -35,17 +35,21 @@ char	*add_path(char *command)
 
 	paths = get_paths();
 	i = 0;
-	if (access(command, X_OK) != -1)
-		return (ft_strdup(command));
+	if (access(*command_ptr, X_OK) != -1)
+		return (1);
 	while (paths[i] != 0)
 	{
-		path_command = ft_strjoin(paths[i], command);
+		path_command = ft_strjoin(paths[i], *command_ptr);
 		if (path_command == 0)
-			return (0);
+			return (-1);
 		if (access(path_command, X_OK) != -1)
-			return (path_command);
+		{
+			free(*command_ptr);
+			*command_ptr = path_command;
+			return (1);
+		}
 		free(path_command);
 		i++;
 	}
-	return (ft_strdup(command));
+	return (-1);
 }

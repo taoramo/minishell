@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 13:28:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:26:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,14 @@ int	main(int argc, char **argv)
 	ft_printf("\n");
 	vec_iter(&command.redirects, print_redirects_vec);
 	
-	// remove_redirects(&argv[1]);
-	// command_argv = split_command(argv[1]);
-	// command_argv[0] = add_path(command_argv[0]);
+	// if not built in command
+	ft_printf("Adding path:\n");
+	add_path((char **) vec_get(&command.argv, 0));
+	vec_iter(&command.argv, print_string_vec);
+	ft_printf("\n");
 	// run_command(file_fds, command_argv);
+	
+	// if built in command
+	
 	// return (0);
 }

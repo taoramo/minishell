@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 13:16:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:26:55 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int		split_command(t_vec *strs, char *str);
  * @param[in] command The command name without a path.
  * @returns The command with a valid path or a copy of the original command if no path found.
  */
-char	*add_path(char *command);
+int		add_path(char **command_ptr);
 
 /**
  * Creates a child process and runs the given command, with the option to overwrite stdin and stdout.

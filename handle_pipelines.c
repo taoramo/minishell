@@ -83,12 +83,12 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 		i++;
 		if (*last_return == 1)
 		{
-			while (ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "||", 2))
+			while (i < cmd_lines->len && ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "||", 2))
 				i++;
 		}
 		if (*last_return == 0)
 		{
-			while (ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "&&", 2))
+			while (i < cmd_lines->len && ft_strncmp(cmd_lines->memory[cmd_lines->elem_size * i]->str, "&&", 2))
 				i++;
 		}
 	}

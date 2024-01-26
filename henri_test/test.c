@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:26:46 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:43:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,26 +95,29 @@ int	main(int argc, char **argv)
 	// 	return (test_commmands());
 
 	vec_new(&command.argv, 0, sizeof(char *));
-	ft_printf("Split:\n");
+	ft_printf("\nSplit:\n");
 	if (split_command(&command.argv, argv[1]) == -1)
 		return (1);
 	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n");
+	ft_printf("\n\n");
 
 	vec_new(&command.redirects, 0, sizeof(t_redirect));
 	ft_printf("Extract files:\n");
 	if (extract_files(&command) == -1)
 		return (1);
-	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n");
 	vec_iter(&command.redirects, print_redirects_vec);
+	vec_iter(&command.argv, print_string_vec);
+	ft_printf("\n\n");
 	
 	// if not built in command
 	ft_printf("Adding path:\n");
 	add_path((char **) vec_get(&command.argv, 0));
 	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n");
-	// run_command(file_fds, command_argv);
+	ft_printf("\n\n");
+
+	ft_printf("Running command:\n");
+	if (run_command(command) == -1)
+		return (-1);
 	
 	// if built in command
 	

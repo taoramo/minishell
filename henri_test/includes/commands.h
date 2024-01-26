@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:26:55 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:51:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef struct s_command
 {
 	t_vec	argv;
 	t_vec	redirects;
+	int		process_id;
 }	t_command;
 
 typedef struct s_redirect
@@ -40,13 +41,6 @@ typedef struct s_redirect
  * @returns On fail returns -1.
  */
 int		extract_files(t_command *command);
-
-/**
- * Removes redirects from a command string by replacing them with spaces.
- * 
- * @param[in] str A pointer to the string to modify.
- */
-void	remove_redirects(char **str);
 
 /**
  * Finds the length of the string inside quotations.
@@ -79,8 +73,8 @@ int		add_path(char **command_ptr);
  * @param[in] command The command in argv format.
  * @returns Process id of the child process created to run the command or -1 on fail.
  */
-int		run_command(int file_fds[], char **command);
-int		execute_command(int input_fd, int output_fd, char **command);
+int		run_command(t_command command);
+int		execute_command(t_vec argv);
 
 /**
  * Runs all the given commands through a pipe.

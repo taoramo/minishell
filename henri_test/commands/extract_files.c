@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:12:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/26 14:37:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 	else if (ft_strncmp(red_comm_file[0], "<<", 2) == 0)
 		ft_printf("TODO HERE_DOC\n");
 	if (new_fd == -1)
+	{
+		perror(red_comm_file[1]);
 		return (-1);
+	}
 	redirect = malloc(sizeof(t_redirect));
 	if (redirect == 0)
 		return (-1);

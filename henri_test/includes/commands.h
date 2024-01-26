@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 17:58:14 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/26 13:16:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@
 typedef struct s_command
 {
 	t_vec	argv;
-	int		stdin_fd;
-	int		stdout_fd;
-	int		stderr_fd;
+	t_vec	redirects;
 }	t_command;
+
+typedef struct s_redirect
+{
+	int	origial_fd;
+	int	new_fd;
+}	t_redirect;
 
 /**
  * Tries to open any redirected infiles or outfiles and sets the infile and outfile fds.

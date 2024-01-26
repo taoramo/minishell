@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/25 17:58:02 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/26 13:28:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ void	print_string_vec(void	*param)
 	ft_printf("[%s]", str);
 }
 
+void	print_redirects_vec(void *param)
+{
+	t_redirect	redirect;
+
+	redirect = *(t_redirect *) param;
+	ft_printf("redirecting %d to %d\n", redirect.origial_fd, redirect.new_fd);
+}
+
 int	main(int argc, char **argv)
 {
 	t_command	command;
@@ -86,17 +94,21 @@ int	main(int argc, char **argv)
 	// if (ft_strncmp(argv[1], "commands", 9) == 0)
 	// 	return (test_commmands());
 
-	vec_new(&command.argv, 1, sizeof(char *));
+	vec_new(&command.argv, 0, sizeof(char *));
 	ft_printf("Split:\n");
 	if (split_command(&command.argv, argv[1]) == -1)
 		return (1);
 	vec_iter(&command.argv, print_string_vec);
 	ft_printf("\n");
+
+	vec_new(&command.redirects, 0, sizeof(t_redirect));
 	ft_printf("Extract files:\n");
 	if (extract_files(&command) == -1)
 		return (1);
 	vec_iter(&command.argv, print_string_vec);
 	ft_printf("\n");
+	vec_iter(&command.redirects, print_redirects_vec);
+	
 	// remove_redirects(&argv[1]);
 	// command_argv = split_command(argv[1]);
 	// command_argv[0] = add_path(command_argv[0]);

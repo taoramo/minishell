@@ -6,11 +6,29 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:40:40 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:49:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+char	**strs_addstr(char **strs, char *str)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (strs[i] != 0)
+	{
+		tmp = ft_strjoin(strs[i], str);
+		if (tmp == 0)
+			return (0);
+		free(strs[i]);
+		strs[i] = tmp;
+		i++;
+	}
+	return (strs);
+}
 
 char	**get_paths(void)
 {
@@ -23,7 +41,7 @@ char	**get_paths(void)
 	paths = ft_split(path_str, ':');
 	if (paths == 0)
 		return (0);
-	return (ft_strsaddstr(paths, "/"));
+	return (strs_addstr(paths, "/"));
 	return (0);
 }
 

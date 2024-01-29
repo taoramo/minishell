@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 14:06:17 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:54:52 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,15 @@ static int	wait_for_children(int *process_ids)
 	return (WEXITSTATUS(ret));
 }
 
-int	split_pipe(t_vec *commands, char *pipe_str)
+int	prepare_pipe(t_vec *commands, char *pipe_str)
 {
 	char 		**strs;
 	t_command	*command;
 	int			i;
 
 	strs = ft_split(pipe_str, '|');
+	if (strs == 0)
+		return (0);
 	i = 0;
 	while (strs[i] != 0)
 	{
@@ -52,7 +54,7 @@ int	pipex(char *pipe_str)
 	int		exit_code;
 
 	vec_new(&commands, 1, sizeof(t_command));
-	if (split_pipe(&commands, pipe_str) == -1)
+	if (prepare_pipe(&commands, pipe_str) == -1)
 		return (-1);
 	process_ids = ft_calloc(commands.len + 1, sizeof(int));
 	if (process_ids == 0)

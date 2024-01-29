@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:43:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:50:56 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	test_pipex(void)
 	int		exit_code;
 
 	ft_printf("TESTING PIPEX\n\n");
-	exit_code = pipex("/bin/cat < infile > outfile | /usr/bin/wc \"-l\"");
-	exit_code = pipex("cat /dev/random | head -1");
+	exit_code = run_command("/bin/cat < infile > outfile | /usr/bin/wc \"-l\"");
+	exit_code = run_command("cat /dev/random | head -1");
 	return (exit_code);
 }
 
@@ -54,8 +54,5 @@ int	main(int argc, char **argv)
 		return (test_pipex());
 	if (ft_strncmp(argv[1], "commands", 9) == 0)
 		return (test_commmands());
-	if (ft_strchr(argv[1], '|') != 0)
-		pipex(argv[1]);
-	else
-		run_command(argv[1]);
+	run_command(argv[1]);
 }

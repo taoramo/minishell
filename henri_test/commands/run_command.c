@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:43:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:53:56 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	prepare_command(t_command *command, char *command_str)
 	return (1);
 }
 
-int	run_command(char *command_str)
+int	run_single_command(char *command_str)
 {
 	t_command	command;
 	int			process_id;
@@ -72,4 +72,15 @@ int	run_command(char *command_str)
 	}
 	command.process_id = process_id;
 	return (process_id);
+}
+
+int	run_command(char *command_str)
+{
+	int	ret;
+
+	if (ft_strchr(command_str, '|') != 0)
+		ret = pipex(command_str);
+	else
+		ret = run_single_command(command_str);
+	return (ret);
 }

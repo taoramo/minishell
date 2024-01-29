@@ -6,11 +6,21 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 12:32:38 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:46:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+int	quote_length(char *str)
+{
+	char	*end_ptr;
+
+	end_ptr = ft_memchr(str + 1, *str, ft_strlen(str + 1));
+	if (end_ptr == 0)
+		return (-1);
+	return (end_ptr - str);
+}
 
 int	redirect_length(char *str)
 {

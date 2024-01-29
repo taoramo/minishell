@@ -6,11 +6,26 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 14:06:03 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:38:25 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+static void	apply_pipe_redirect(t_command *command, int	in_fd, int out_fd)
+{
+	if (in_fd != 0)
+	{
+		if (dup2(in_fd, 0) == -1)
+			perror("dup failed");
+	}
+	if (out_fd != 1)
+	{
+		if (dup2(out_fd, 1) == -1)
+			perror("dup failed");
+	}
+	vec_iter(&command->redirects, apply_redirect);
+}
 
 static int	file_to_pipe(t_command *command, int pipe_fds[])
 {
@@ -27,9 +42,7 @@ static int	file_to_pipe(t_command *command, int pipe_fds[])
 	else
 	{
 		close(pipe_fds[0]);
-		if (dup2(pipe_fds[1], 1) == -1)
-			perror("dup failed");
-		vec_iter(&command->redirects, apply_redirect);
+		apply_pipe_redirect(command, 0, pipe_fds[1]);
 		execute_command(command->argv);
 		close(pipe_fds[1]);
 		return (-1);
@@ -52,9 +65,7 @@ static int	pipe_to_file(t_command *command, int pipe_fds[])
 	else
 	{
 		close(pipe_fds[1]);
-		if (dup2(pipe_fds[0], 0) == -1)
-			perror("dup failed");
-		vec_iter(&command->redirects, apply_redirect);
+		apply_pipe_redirect(command, pipe_fds[0], 1);
 		execute_command(command->argv);
 		close(pipe_fds[0]);
 		return (-1);
@@ -85,11 +96,7 @@ static int	pipe_to_pipe(t_command *command, int *pipe_fds)
 	else
 	{
 		close(pipe2_fds[0]);
-		vec_iter(&command->redirects, apply_redirect);
-		if (dup2(pipe_fds[0], 0) == -1)
-			perror("dup failed");
-		if (dup2(pipe2_fds[1], 1) == -1)
-			perror("dup failed");
+		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 		return (execute_command(command->argv));
 	}
 	return (process_id);

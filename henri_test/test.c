@@ -6,27 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 10:37:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:53:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
-
-void	print_string_vec(void	*param)
-{
-	char	*str;
-
-	str = *(char **) param;
-	ft_printf("[%s]", str);
-}
-
-void	print_redirects_vec(void *param)
-{
-	t_redirect	redirect;
-
-	redirect = *(t_redirect *) param;
-	ft_printf("redirecting %d to %d\n", redirect.origial_fd, redirect.new_fd);
-}
 
 // int	test_pipex(void)
 // {
@@ -60,51 +44,19 @@ void	print_redirects_vec(void *param)
 // 	return (exit_code);
 // }
 
-int	handle_command(char *command_str)
-{
-	t_command	command;
-	int			process_id;
-
-	vec_new(&command.argv, 0, sizeof(char *));
-	ft_printf("\nSplit:\n");
-	if (split_command(&command.argv, command_str) == -1)
-		return (1);
-	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n\n");
-
-	vec_new(&command.redirects, 0, sizeof(t_redirect));
-	ft_printf("Extract files:\n");
-	if (extract_files(&command) == -1)
-		return (1);
-	vec_iter(&command.redirects, print_redirects_vec);
-	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n\n");
-	
-	// if not built in command
-	ft_printf("Adding path:\n");
-	add_path((char **) vec_get(&command.argv, 0));
-	vec_iter(&command.argv, print_string_vec);
-	ft_printf("\n\n");
-
-	ft_printf("Running command\n");
-	process_id = run_command(command);
-	ft_printf("Finished\n");
-	return (process_id);
-}
-
 int	test_commmands(void)
 {
 	int	process_id;
 	int	ret;
 	
-	ft_printf("TESTING COMMANDS");
-	process_id = handle_command("cat \"infile\"");
+	ft_printf("TESTING COMMANDS\n\n");
+	process_id = run_command("cat \"infile\"");
 	waitpid(process_id, &ret, 0);
-	process_id = handle_command("/bin/cat	\"infile\"");
+	process_id = run_command("/bin/cat	\"infile\"");
 	waitpid(process_id, &ret, 0);
-	process_id = handle_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\"");
+	process_id = run_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\"");
 	waitpid(process_id, &ret, 0);
-	process_id = handle_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'");
+	process_id = run_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'");
 	waitpid(process_id, &ret, 0);
 	return (0);
 }
@@ -120,7 +72,7 @@ int	main(int argc, char **argv)
 	// 	return (test_pipex());
 	if (ft_strncmp(argv[1], "commands", 9) == 0)
 		return (test_commmands());
-	handle_command(argv[1]);
+	run_command(argv[1]);
 	
 	// if built in command
 	

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 10:36:36 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:53:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,26 @@ void	redirect_file(void	*param)
 		perror("dup failed");
 }
 
-int	run_command(t_command command)
+int	prepare_command(t_command *command, char *command_str)
 {
-	int	process_id;
+	vec_new(&command->argv, 0, sizeof(char *));
+	if (split_command(&command->argv, command_str) == -1)
+		return (-1);
+	vec_new(&command->redirects, 0, sizeof(t_redirect));
+	if (extract_files(command) == -1)
+		return (-1);
+	if (add_path((char **) vec_get(&command->argv, 0)) == -1)
+		return (-1);
+	return (1);
+}
 
+int	run_command(char *command_str)
+{
+	t_command	command;
+	int			process_id;
+
+	if (prepare_command(&command, command_str) == -1)
+		return (-1);
 	process_id = fork();
 	if (process_id < 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:51:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:53:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_redirect
 	int	new_fd;
 }	t_redirect;
 
+int	handle_command(char *command_str);
+
 /**
  * Tries to open any redirected infiles or outfiles and sets the infile and outfile fds.
  * 
@@ -49,6 +51,8 @@ int		extract_files(t_command *command);
  * @returns The length of the string inside quotations or -1 on unclosed quote.
  */
 int		quote_length(char *str);
+void	print_string_vec(void	*param);
+void	print_redirects_vec(void *param);
 
 /**
  * Splits command by whitespaces outside quotations.
@@ -73,7 +77,7 @@ int		add_path(char **command_ptr);
  * @param[in] command The command in argv format.
  * @returns Process id of the child process created to run the command or -1 on fail.
  */
-int		run_command(t_command command);
+int		run_command(char *command_str);
 int		execute_command(t_vec argv);
 
 /**

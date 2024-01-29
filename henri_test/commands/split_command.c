@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 14:46:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 15:06:55 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	quote_length(char *str)
 int	redirect_length(char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i] == '>' || str[i] == '<')
 		i++;
@@ -64,7 +64,8 @@ int	split_command(t_vec *strs, char *str)
 		end++;
 		if (*end == '\"' || *end == '\'')
 			end += quote_length(end);
-		if (*end == '>' || *end == '<' || !ft_strncmp(end, "<<", 2) || !ft_strncmp(end, ">>", 2))
+		if (*end == '>' || *end == '<'
+			|| !ft_strncmp(end, "<<", 2) || !ft_strncmp(end, ">>", 2))
 			end += redirect_length(end);
 		if (ft_isspace(*end) || *end == 0)
 		{

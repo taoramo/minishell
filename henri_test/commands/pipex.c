@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 14:54:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 15:05:48 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	wait_for_children(int *process_ids)
 
 int	prepare_pipe(t_vec *commands, char *pipe_str)
 {
-	char 		**strs;
+	char		**strs;
 	t_command	*command;
 	int			i;
 

@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 14:38:25 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 15:05:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-static void	apply_pipe_redirect(t_command *command, int	in_fd, int out_fd)
+static void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd)
 {
 	if (in_fd != 0)
 	{
@@ -102,7 +102,7 @@ static int	pipe_to_pipe(t_command *command, int *pipe_fds)
 	return (process_id);
 }
 
-int	pipe_commands(t_vec commands, int **process_ids)
+int	pipe_commands(t_vec comms, int **p_ids)
 {
 	int		pipe_fds[2];
 	size_t	i;
@@ -113,20 +113,20 @@ int	pipe_commands(t_vec commands, int **process_ids)
 		return (-1);
 	}
 	i = 0;
-	(*process_ids)[i] = file_to_pipe((t_command *) vec_get(&commands, 0), pipe_fds);
-	if ((*process_ids)[i] == -1)
+	(*p_ids)[i] = file_to_pipe((t_command *) vec_get(&comms, 0), pipe_fds);
+	if ((*p_ids)[i] == -1)
 		return (-1);
 	i++;
-	while (i < commands.len - 1)
+	while (i < comms.len - 1)
 	{
-		(*process_ids)[i] = pipe_to_pipe((t_command *) vec_get(&commands, i), pipe_fds);
-		if ((*process_ids)[i] == -1)
+		(*p_ids)[i] = pipe_to_pipe((t_command *) vec_get(&comms, i), pipe_fds);
+		if ((*p_ids)[i] == -1)
 			return (-1);
 		i++;
 	}
-	(*process_ids)[i] = pipe_to_file((t_command *) vec_get(&commands, i), pipe_fds);
-	if ((*process_ids)[i] == -1)
+	(*p_ids)[i] = pipe_to_file((t_command *) vec_get(&comms, i), pipe_fds);
+	if ((*p_ids)[i] == -1)
 		return (-1);
-	(*process_ids)[++i] = 0;
+	(*p_ids)[++i] = 0;
 	return (0);
 }

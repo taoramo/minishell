@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:21:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:06:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	file_to_pipe(t_command *command, int pipe_fds[])
 		close(pipe_fds[0]);
 		if (dup2(pipe_fds[1], 1) == -1)
 			perror("dup failed");
+		vec_iter(&command->redirects, apply_redirect);
 		execute_command(command->argv);
 		close(pipe_fds[1]);
 		return (-1);
@@ -53,6 +54,7 @@ static int	pipe_to_file(t_command *command, int pipe_fds[])
 		close(pipe_fds[1]);
 		if (dup2(pipe_fds[0], 0) == -1)
 			perror("dup failed");
+		vec_iter(&command->redirects, apply_redirect);
 		execute_command(command->argv);
 		close(pipe_fds[0]);
 		return (-1);
@@ -83,6 +85,11 @@ static int	pipe_to_pipe(t_command *command, int *pipe_fds)
 	else
 	{
 		close(pipe2_fds[0]);
+		vec_iter(&command->redirects, apply_redirect);
+		if (dup2(pipe_fds[0], 0) == -1)
+			perror("dup failed");
+		if (dup2(pipe2_fds[1], 1) == -1)
+			perror("dup failed");
 		return (execute_command(command->argv));
 	}
 	return (process_id);

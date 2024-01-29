@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:38:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 14:06:17 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int	split_pipe(t_vec *commands, char *pipe_str)
 		if (prepare_command(command, strs[i]) == -1)
 			return (-1);
 		vec_push(commands, command);
-		vec_iter(&command->redirects, apply_redirect);
 		i++;
 	}
 	return (1);

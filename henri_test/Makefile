@@ -6,7 +6,7 @@
 #    By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/19 14:48:17 by hpatsi            #+#    #+#              #
-#    Updated: 2024/01/29 12:55:52 by hpatsi           ###   ########.fr        #
+#    Updated: 2024/01/29 13:40:02 by hpatsi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJECTS = $(SOURCES:.c=.o)
 
 INCLUDES_DIR = ./includes/
 
-CFLAGS += -Wall -Wextra -Werror -I $(INCLUDES_DIR)
+CFLAGS += -Wall -Wextra -Werror -Wunreachable-code -Wpedantic -Wtype-limits -I $(INCLUDES_DIR)
 
 all: $(NAME)
 

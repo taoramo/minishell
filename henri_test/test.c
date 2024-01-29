@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 14:22:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 13:38:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:43:23 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ int	test_commmands(void)
 	process_id = run_command("/bin/echo \"hello \" amazing \" > tmp/outfile \'wow\' \" \'$?\' \"    a\"");
 	waitpid(process_id, &ret, 0);
 	process_id = run_command("/usr/bin/awk \'BEGIN { for(i=1;i<=5;i++) print \"10 x\", i, \"is\",10*i; }\'");
+	waitpid(process_id, &ret, 0);
+	process_id = run_command("cat infile > outfile");
+	waitpid(process_id, &ret, 0);
+	process_id = run_command("cat infile");
 	waitpid(process_id, &ret, 0);
 	return (0);
 }

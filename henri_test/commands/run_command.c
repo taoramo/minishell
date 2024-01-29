@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:53:54 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 10:36:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,13 @@ int	execute_command(t_vec argv)
 {
 	int 	ret;
 	char	**strs;
-
+	char	*nulterm;
+	
+	nulterm = ft_calloc(1, sizeof(char *));;
+	if (nulterm == 0)
+		return (-1);
+	if (vec_push(&argv, nulterm) == -1)
+		return (-1);
 	strs = (char **) argv.memory;
 	ret = execve(strs[0], strs, NULL);
 	perror(strs[0]);

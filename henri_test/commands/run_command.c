@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 10:53:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:37:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	execute_command(t_vec argv)
 	return (ret);
 }
 
-void	redirect_file(void	*param)
+void	apply_redirect(void	*param)
 {
 	t_redirect	redirect;
 
@@ -67,7 +67,7 @@ int	run_command(char *command_str)
 	}
 	else if (process_id == 0)
 	{
-		vec_iter(&command.redirects, redirect_file);
+		vec_iter(&command.redirects, apply_redirect);
 		return (execute_command(command.argv));
 	}
 	command.process_id = process_id;

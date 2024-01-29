@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/26 14:51:37 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:21:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-static int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
+static int	file_to_pipe(t_command *command, int pipe_fds[])
 {
 	int	process_id;
 
@@ -23,23 +23,20 @@ static int	file_to_pipe(int *file_fds, int *pipe_fds, char **command)
 		return (-1);
 	}
 	else if (process_id > 0)
-	{
-		if (file_fds[0] != -1)
-			close(file_fds[0]);
 		close(pipe_fds[1]);
-	}
 	else
 	{
 		close(pipe_fds[0]);
-		if (file_fds[0] != -1)
-			execute_command(file_fds[0], pipe_fds[1], command);
+		if (dup2(pipe_fds[1], 1) == -1)
+			perror("dup failed");
+		execute_command(command->argv);
 		close(pipe_fds[1]);
 		return (-1);
 	}
 	return (process_id);
 }
 
-static int	pipe_to_file(int *file_fds, int *pipe_fds, char **command)
+static int	pipe_to_file(t_command *command, int pipe_fds[])
 {
 	int	process_id;
 
@@ -50,19 +47,20 @@ static int	pipe_to_file(int *file_fds, int *pipe_fds, char **command)
 		return (-1);
 	}
 	else if (process_id > 0)
-	{
 		close(pipe_fds[0]);
-		close(file_fds[1]);
-	}
 	else
 	{
 		close(pipe_fds[1]);
-		return (execute_command(pipe_fds[0], file_fds[1], command));
+		if (dup2(pipe_fds[0], 0) == -1)
+			perror("dup failed");
+		execute_command(command->argv);
+		close(pipe_fds[0]);
+		return (-1);
 	}
 	return (process_id);
 }
 
-static int	pipe_to_pipe(int *pipe_fds, char **command)
+static int	pipe_to_pipe(t_command *command, int *pipe_fds)
 {
 	int	pipe2_fds[2];
 	int	process_id;
@@ -85,15 +83,15 @@ static int	pipe_to_pipe(int *pipe_fds, char **command)
 	else
 	{
 		close(pipe2_fds[0]);
-		return (execute_command(pipe_fds[0], pipe2_fds[1], command));
+		return (execute_command(command->argv));
 	}
 	return (process_id);
 }
 
-int	pipe_commands(char ***commands, int *file_fds, int **process_ids)
+int	pipe_commands(t_vec commands, int **process_ids)
 {
-	int	pipe_fds[2];
-	int	i;
+	int		pipe_fds[2];
+	size_t	i;
 
 	if (pipe(pipe_fds) < 0)
 	{
@@ -101,18 +99,18 @@ int	pipe_commands(char ***commands, int *file_fds, int **process_ids)
 		return (-1);
 	}
 	i = 0;
-	(*process_ids)[i] = file_to_pipe(file_fds, pipe_fds, commands[i]);
+	(*process_ids)[i] = file_to_pipe((t_command *) vec_get(&commands, 0), pipe_fds);
 	if ((*process_ids)[i] == -1)
 		return (-1);
 	i++;
-	while (commands[i + 1] != 0)
+	while (i < commands.len - 1)
 	{
-		(*process_ids)[i] = pipe_to_pipe(pipe_fds, commands[i]);
+		(*process_ids)[i] = pipe_to_pipe((t_command *) vec_get(&commands, i), pipe_fds);
 		if ((*process_ids)[i] == -1)
 			return (-1);
 		i++;
 	}
-	(*process_ids)[i] = pipe_to_file(file_fds, pipe_fds, commands[i]);
+	(*process_ids)[i] = pipe_to_file((t_command *) vec_get(&commands, i), pipe_fds);
 	if ((*process_ids)[i] == -1)
 		return (-1);
 	(*process_ids)[++i] = 0;

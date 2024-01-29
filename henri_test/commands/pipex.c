@@ -6,21 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/24 11:37:19 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:38:30 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
-
-static int	count_commands(char ***commands)
-{
-	int	i;
-
-	i = 0;
-	while (commands[i] != 0)
-		i++;
-	return (i);
-}
 
 static int	wait_for_children(int *process_ids)
 {
@@ -36,15 +26,39 @@ static int	wait_for_children(int *process_ids)
 	return (WEXITSTATUS(ret));
 }
 
-int	pipex(char ***commands, int file_fds[])
+int	split_pipe(t_vec *commands, char *pipe_str)
 {
-	int	*process_ids;
-	int	exit_code;
+	char 		**strs;
+	t_command	*command;
+	int			i;
 
-	process_ids = ft_calloc(count_commands(commands) + 1, sizeof(int));
+	strs = ft_split(pipe_str, '|');
+	i = 0;
+	while (strs[i] != 0)
+	{
+		command = ft_calloc(1, sizeof(t_command));
+		if (prepare_command(command, strs[i]) == -1)
+			return (-1);
+		vec_push(commands, command);
+		vec_iter(&command->redirects, apply_redirect);
+		i++;
+	}
+	return (1);
+}
+
+int	pipex(char *pipe_str)
+{
+	t_vec	commands;
+	int		*process_ids;
+	int		exit_code;
+
+	vec_new(&commands, 1, sizeof(t_command));
+	if (split_pipe(&commands, pipe_str) == -1)
+		return (-1);
+	process_ids = ft_calloc(commands.len + 1, sizeof(int));
 	if (process_ids == 0)
 		return (-1);
-	if (pipe_commands(commands, file_fds, &process_ids) == -1)
+	if (pipe_commands(commands, &process_ids) == -1)
 	{
 		free(process_ids);
 		return (-1);

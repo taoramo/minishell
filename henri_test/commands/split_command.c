@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 10:35:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 12:32:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	split_command(t_vec *strs, char *str)
 {
 	char	*end;
 
+	while (ft_isspace(*str))
+		str++;
 	end = str;
 	while (*end != 0)
 	{

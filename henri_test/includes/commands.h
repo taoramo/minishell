@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 10:53:03 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/29 13:26:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ typedef struct s_redirect
 	int	new_fd;
 }	t_redirect;
 
-int	handle_command(char *command_str);
+int		handle_command(char *command_str);
+int		prepare_command(t_command *command, char *command_str);
 
 /**
  * Tries to open any redirected infiles or outfiles and sets the infile and outfile fds.
@@ -79,6 +80,7 @@ int		add_path(char **command_ptr);
  */
 int		run_command(char *command_str);
 int		execute_command(t_vec argv);
+void	apply_redirect(void	*param);
 
 /**
  * Runs all the given commands through a pipe.
@@ -87,7 +89,7 @@ int		execute_command(t_vec argv);
  * @param[in] file_fds An array of file descriptors, replace stdin at index 0 and replace stdout at index 1.
  * @returns Returns the exit code of the final command or -1 on fail.
  */
-int		pipex(char ***commands, int file_fds[]);
-int		pipe_commands(char ***commands, int *file_fds, int **process_ids);
+int		pipex(char *command_str);
+int		pipe_commands(t_vec commands, int **process_ids);
 
 #endif

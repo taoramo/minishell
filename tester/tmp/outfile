@@ -1,10 +1,10 @@
-total 24
-drwxr-xr-x   8 hpatsi  2020   272 Jan 30 13:51 .
-drwxr-xr-x  15 hpatsi  2020   510 Jan 30 13:39 ..
+total 16
+drwxr-xr-x   7 hpatsi  2020   238 Jan 30 15:32 .
+drwxr-xr-x  15 hpatsi  2020   510 Jan 30 15:37 ..
 -rw-r--r--   1 hpatsi  2020    16 Jan 18 09:44 infile
--rw-r--r--   1 hpatsi  2020    16 Jan 30 13:57 outfile
 drwxr-xr-x   4 hpatsi  2020   136 Jan 18 09:00 srcs
--rwxr-xr-x   1 hpatsi  2020  2232 Jan 30 13:01 tester.sh
-drwxr-xr-x   8 hpatsi  2020   272 Jan 18 15:33 tests
-drwxr-xr-x   6 hpatsi  2020   204 Jan 30 11:30 tmp
-       9      74     430
+-rwxr-xr-x   1 hpatsi  2020  2440 Jan 30 15:32 tester.sh
+drwxr-xr-x   8 hpatsi  2020   272 Jan 30 14:20 tests
+drwxr-xr-x   6 hpatsi  2020   204 Jan 30 15:37 tmp
+       8      65     375
+       9      68     400

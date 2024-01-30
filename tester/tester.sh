@@ -30,6 +30,8 @@ check_output()
 		eval $line
 		echo -e ${COMMAND_COLOR}"minishell:"${NC}
 		eval $MINISHELL"\"$line\"")
+	rm ${BASH_OUTPUT}
+	rm ${MINISHELL_OUTPUT}
 }
 
 #------ BASIC ------#
@@ -58,7 +60,9 @@ printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
+	# comment out $ and " for -c input
 	line_commneted=${line//\$/\\\$}
+	line_commneted=${line_commneted//\"/\\\"}
 	eval $MINISHELL"\"$line_commneted\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/input_tests.txt
@@ -90,8 +94,9 @@ done < $TEST_DIR/redirect_tests.txt
 printf $HEADER_COLOR"\n#------ PIPES ------#\n\n"$NC
 
 while read -r line; do
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
+	eval $line > $BASH_OUTPUT
+	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	check_output
 done < $TEST_DIR/pipe_tests.txt
 
 #------ && AND || ------#
@@ -102,8 +107,9 @@ cc $SRCS_DIR/true.c -o true
 cc $SRCS_DIR/false.c -o false
 
 while read -r line; do
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
+	eval $line > $BASH_OUTPUT
+	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	check_output
 done < $TEST_DIR/and_or_tests.txt
 
 rm true

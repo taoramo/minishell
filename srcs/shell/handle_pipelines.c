@@ -1,11 +1,12 @@
 #include "minishell.h"
 
-// int	prepare_cmd_line(t_cmd_line *cmd_line, int *last_return)
-// {
-// 	(void)cmd_line;
-// 	(void)last_return;
-// 	return (0);
-// }
+int	prepare_cmd_line(t_cmd_line *cmd_line, int *last_return)
+{
+	while (ft_isspace(*cmd_line->str) || *cmd_line->str == '&' || *cmd_line->str == '|')
+		cmd_line->str++;
+	*last_return = run_command(cmd_line->str);
+	return (*last_return);
+}
 
 int	check_parenth_syntax(t_cmd_line *cmd_line)
 {
@@ -80,19 +81,25 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 			return (-1);
 		}
 		else
-			*last_return = run_command(cmd_line->str);//prepare_cmd_line(cmd_line, last_return);
+			*last_return = prepare_cmd_line(cmd_line, last_return);
 		i++;
 		if (*last_return == 1)
 		{
 			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
 			while (i < cmd_lines->len && ft_strncmp(curr_cmd_line->str, "||", 2))
+			{
 				i++;
+				curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
+			}
 		}
 		if (*last_return == 0)
 		{
 			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
 			while (i < cmd_lines->len && ft_strncmp(curr_cmd_line->str, "&&", 2))
+			{
 				i++;
+				curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
+			}
 		}
 	}
 	return (*last_return);

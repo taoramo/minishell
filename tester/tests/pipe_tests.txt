@@ -1,23 +1,13 @@
 cat infile | wc
-
 /bin/cat infile | /usr/bin/wc
-
 ls -la | grep x
-
 cat < infile | wc
-
 who | awk '{print $2}' | sort -u
-
 cat /dev/random | head -3 | wc -l
-
 < infile cat | wc
-
 cat < infile | wc
-
 ls -la | grep 5 > tmp/outfile
 cat tmp/outfile
-
 ls -la > tmp/outfile | grep infile
 cat tmp/outfile
-
 cat < tmp/outfile | wc >> tmp/outfile | cat tmp/outfile

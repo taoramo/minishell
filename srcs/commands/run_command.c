@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/30 12:26:57 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/30 15:24:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,13 @@ int	run_single_command(char *command_str)
 	return (WEXITSTATUS(ret));
 }
 
-int	run_command(char *command_str)
+int	run_command(char *str)
 {
-	int	ret;
+	int		ret;
 
-	if (ft_strchr(command_str, '|') != 0)
-		ret = pipex(command_str);
+	if (ft_strchr(str, '|') != 0)
+		ret = pipex(str);
 	else
-		ret = run_single_command(command_str);
+		ret = run_single_command(str);
 	return (ret);
 }

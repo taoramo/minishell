@@ -1,20 +1,27 @@
 NAME = minishell
-CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3
-HEADERS = include/minishell.h
-LIBS = $(LIBFT)
-SRCS = main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c
-OBJS = $(SRCS:.c=.o)
+
 LIBFT = ./libft/libft.a
+
+READLINE = -lreadline -L ~/.brew/opt/readline/lib
 READLINE_TAAVI = -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include
-READLINE = -lreadline -L ~/.brew/opt/readline/lib -I ~/.brew/opt/readline/include
+
+LIBS = $(LIBFT) $(READLINE)
+
+INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/
+
+SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c) \
+	   $(addprefix commands/, extract_files.c here_doc.c split_command.c add_path.c run_command.c pipex.c pipe_commands.c))
+
+OBJS = $(SRCS:.c=.o)
+
+CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $<
+$(OBJS): $(SRCS)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(READLINE) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) -o $(NAME)
 
 $(LIBFT):
 	make -C ./libft/
@@ -30,6 +37,6 @@ fclean: clean
 re: fclean all
 
 taavi: $(OBJS) $(LIBFT)
-	$(CC) $(READLINE_TAAVI) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(READLINE_TAAVI) $(OBJS) $(LIBFT) -o $(NAME)
 
 .PHONY: all, clean, fclean, re

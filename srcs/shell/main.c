@@ -1,4 +1,4 @@
-#include "includes/minishell.h"
+#include "minishell.h"
 
 int	check_parenthesis_count(const char *line)
 {

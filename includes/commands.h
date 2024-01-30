@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 15:37:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/01/30 10:07:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-# include "libft.h"
+# include "../libft/libft.h"
 
 typedef struct s_command
 {
 	t_vec	argv;
 	t_vec	redirects;
-	int		process_id;
+	pid_t	process_id;
 }	t_command;
 
 typedef struct s_redirect

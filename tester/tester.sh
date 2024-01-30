@@ -14,32 +14,53 @@ COMMAND_COLOR=$CYAN
 
 TEST_DIR=./tests
 SRCS_DIR=./srcs
+OUTPUT_DIR=./tmp
 
-#------ BUILT-IN ------#
+BASH_OUTPUT=$OUTPUT_DIR/bash.out
+MINISHELL_OUTPUT=$OUTPUT_DIR/mini.out
 
-printf $HEADER_COLOR"\n#------ BUILT-IN ------#\n\n"$NC
+MINISHELL="../minishell -c "
 
-while read -r line; do
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
-done < $TEST_DIR/built_in_tests.txt
+check_output()
+{
+	cmp ${BASH_OUTPUT} ${MINISHELL_OUTPUT} && 
+		echo -e ${GREEN}"$line: [OK]"${NC} || 
+		(echo -e ${RED}"$line: [KO]"${NC}
+		echo -e ${COMMAND_COLOR}"bash:"${NC}
+		eval $line
+		echo -e ${COMMAND_COLOR}"minishell:"${NC}
+		eval $MINISHELL"\"$line\"")
+}
 
 #------ BASIC ------#
 
 printf $HEADER_COLOR"\n#------ BASIC ------#\n\n"$NC
 
 while read -r line; do
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
+	eval $line > $BASH_OUTPUT
+	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	check_output
 done < $TEST_DIR/basic_tests.txt
+
+#------ BUILT-IN ------#
+
+printf $HEADER_COLOR"\n#------ BUILT-IN ------#\n\n"$NC
+
+while read -r line; do
+	eval $line > $BASH_OUTPUT
+	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	check_output
+done < $TEST_DIR/built_in_tests.txt
 
 #------ INPUT ------#
 
 printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
 
 while read -r line; do
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
+	eval $line > $BASH_OUTPUT
+	line_commneted=${line//\$/\\\$}
+	eval $MINISHELL"\"$line_commneted\"" > $MINISHELL_OUTPUT
+	check_output
 done < $TEST_DIR/input_tests.txt
 
 #------ REDIRECT ------#

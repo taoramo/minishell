@@ -1,0 +1,45 @@
+
+Features:
+	✔ Display a prompt when waiting for a new command. @done(24-01-30 13:47)
+	✔ Have a working history. @done(24-01-30 13:47)
+	✔ Search and launch the right executable @done(24-01-30 13:47)
+		✔ based on the PATH variable @done(24-01-30 13:46)
+		✔ using a relative or an absolute path @done(24-01-30 13:47)
+	☐ Avoid using more than one global variable to indicate a received signal.
+	☐ Not interpret unclosed quotes or special characters which are not required by the subject such as \ (backslash) or ; (semicolon).
+	☐ Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence.
+	☐ Handle " (double quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence except for $ (dollar sign).
+	✔ Implement redirections @done(24-01-30 13:51)
+		✔ < should redirect input @done(24-01-30 13:51)
+		✔ > should redirect output @done(24-01-30 13:51)
+		✔ << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history! @done(24-01-30 13:51)
+		✔ >> should redirect output in append mode @done(24-01-30 13:51)
+	✔ Implement pipes (| character). @done(24-01-30 13:52)
+	☐ Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
+	☐ Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
+	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH
+		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
+		✔ ctrl-D exits the shell @done(24-01-30 13:55)
+		✔ ctrl-\ does nothing @done(24-01-30 13:56)
+
+Bonus:
+	✔ && and || with parenthesis for priorities. @done(24-01-30 13:59)
+	☐ Wildcards * should work for the current working directory.
+
+Built-in functions:
+	☐ echo with option -n
+	☐ cd with only a relative or absolute path
+	☐ pwd with no options
+	☐ export with no options
+	☐ unset with no options
+	☐ env with no options or arguments
+	☐ exit with no options
+
+Fixes:
+	☐ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'"
+	☐ ctrl-C should not print "^C"
+	☐ ctrl-D should print "exit" before exiting
+
+Unsure:
+	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
+	☐ On special character such as \ (backslash) or ; (semicolon), error or just treat special characters as normal?

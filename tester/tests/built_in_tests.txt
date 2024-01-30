@@ -10,21 +10,13 @@ echo "$HOME"
 echo $?
 echo -n nonewline:
 echo newline:
-
 pwd
-cd tests
-pwd
-cd ..
-pwd
-
 export
 echo $TEST
 export TEST=test100
 echo $TEST
-
 x=3
 echo $x
 unset x
 echo $x
-
 env

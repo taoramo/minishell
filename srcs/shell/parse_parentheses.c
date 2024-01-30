@@ -107,6 +107,6 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return)
 			return (cmd_line_error(cmd_lines));
 		i = start + length;
 	}
-	vec_iter(cmd_lines, print_cmd_line);
+	//vec_iter(cmd_lines, print_cmd_line);
 	return (handle_pipelines(cmd_lines, last_return));
 }

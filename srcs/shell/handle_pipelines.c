@@ -1,13 +1,5 @@
 #include "minishell.h"
 
-int	prepare_cmd_line(t_cmd_line *cmd_line, int *last_return)
-{
-	while (ft_isspace(*cmd_line->str) || *cmd_line->str == '&' || *cmd_line->str == '|')
-		cmd_line->str++;
-	*last_return = run_command(cmd_line->str);
-	return (*last_return);
-}
-
 int	check_parenth_syntax(t_cmd_line *cmd_line)
 {
 	int	i;
@@ -59,9 +51,9 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 	t_cmd_line	*curr_cmd_line;
 
 	i = 0;
-	j = 0;
 	while (i < cmd_lines->len)
 	{
+		j = 0;
 		cmd_line = vec_get(cmd_lines, i);
 		check_parenth_syntax(cmd_line);
 		if (cmd_line->str[0] == '&' || cmd_line->str[0] == '|')
@@ -81,7 +73,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 			return (-1);
 		}
 		else
-			*last_return = prepare_cmd_line(cmd_line, last_return);
+			*last_return = run_command(&cmd_line->str[j]);
 		i++;
 		if (*last_return == 1)
 		{

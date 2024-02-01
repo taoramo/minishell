@@ -44,7 +44,6 @@ Fixes:
 	☐ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax)
 	☐ ctrl-C should not print "^C"
 	☐ ctrl-D should print "exit" before exiting
-	☐ "./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6" skipping parentheses
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -57,3 +56,5 @@ Archived fixes:
 		was error in pipe check in run command
 	✔ "./false 1 && ./true 2 || ./true 3" stopping after first false @done(24-01-30 15:40)
 		was error in my fix to an error when compiling with mac
+	✔ "./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6" skipping parentheses @done(24-02-01 10:20)
+		was error in how I had combined the shell and run command sections

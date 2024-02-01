@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/01 11:01:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/01 16:06:12 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@ pid_t	execute_command(t_vec argv)
 	if (nulterm == 0)
 		return (-1);
 	if (vec_push(&argv, nulterm) == -1)
+	{
+		free(nulterm);
 		return (-1);
+	}
 	strs = (char **) argv.memory;
 	ret = execve(strs[0], strs, NULL);
-	perror(strs[0]);
+	// perror(strs[0]);
+	vec_free(&argv);
 	return (ret);
 }
 
@@ -40,14 +44,30 @@ void	apply_redirect(void	*param)
 
 int	prepare_command(t_command *command, char *command_str)
 {
-	vec_new(&command->argv, 0, sizeof(char *));
+	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
+		return (-1);
 	if (split_command(&command->argv, command_str) == -1)
+	{
+		vec_free(&command->argv);
 		return (-1);
-	vec_new(&command->redirects, 0, sizeof(t_redirect));
+	}
+	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
+	{
+		vec_free(&command->argv);
+		return (-1);
+	}
 	if (extract_files(command) == -1)
+	{
+		vec_free(&command->argv);
+		vec_free(&command->redirects);
 		return (-1);
+	}
 	if (add_path((char **) vec_get(&command->argv, 0)) == -1)
+	{
+		vec_free(&command->argv);
+		vec_free(&command->redirects);
 		return (-1);
+	}
 	return (1);
 }
 
@@ -57,12 +77,12 @@ int	run_single_command(char *command_str)
 	int			ret;
 
 	if (prepare_command(&command, command_str) == -1)
-		return (-1);
+		return (1);
 	command.process_id = fork();
 	if (command.process_id < 0)
 	{
 		perror("fork failed");
-		return (-1);
+		return (1);
 	}
 	else if (command.process_id == 0)
 	{

@@ -27,9 +27,9 @@ check_output()
 		echo -e ${GREEN}"$line: [OK]"${NC} || 
 		(echo -e ${RED}"$line: [KO]"${NC}
 		echo -e ${COMMAND_COLOR}"bash:"${NC}
-		eval $line
+		cat $BASH_OUTPUT
 		echo -e ${COMMAND_COLOR}"minishell:"${NC}
-		eval $MINISHELL"\"$line\"")
+		cat $MINISHELL_OUTPUT)
 	rm ${BASH_OUTPUT}
 	rm ${MINISHELL_OUTPUT}
 }
@@ -118,5 +118,4 @@ while read -r line; do
 	check_output
 done < $TEST_DIR/and_or_tests.txt
 
-rm true
-rm false
+echo ""

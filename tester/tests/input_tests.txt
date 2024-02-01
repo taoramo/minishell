@@ -1,3 +1,14 @@
+echo spaces      ignored
+echo tabs		ignored
+   echo hello
+echo hello "hello"
+echo "hello" "hello"
+echo 'hello' 'hello'
+ec"ho" hello
+echo $HOME*
+echo '$HOME*'
+echo "$HOME*"
+echo $?
 echo *
 grep "x" ./*
 awk '{print $1}' infile

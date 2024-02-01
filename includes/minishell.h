@@ -61,6 +61,7 @@ int		ft_is_inside(const char *line, int i, int open_char);
 void	signal_interactive(void);
 void	signal_non_interactive(void);
 int		ft_error(char *str);
+int		minishell_error(char *str, char *message);
 int		cmd_line_error(t_vec *cmd_lines);
 int		prepare_cmd(t_cmd_line *cmd_line, int *last_return);
 #endif

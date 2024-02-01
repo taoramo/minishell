@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/29 15:05:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/01 16:23:41 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,9 @@ static int	pipe_to_pipe(t_command *command, int *pipe_fds)
 	{
 		close(pipe2_fds[0]);
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
-		return (execute_command(command->argv));
+		execute_command(command->argv);
+		close(pipe2_fds[1]);
+		return (-1);
 	}
 	return (process_id);
 }

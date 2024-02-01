@@ -21,7 +21,7 @@ Features:
 		Has to be done before running command, as environment variable may e.g. contain name of command
 	☐ Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
 		Could be handled right before running command?
-	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH
+	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH (see fixes section)
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
@@ -41,7 +41,8 @@ Bonus:
 
 Fixes:
 	☐ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'"
-	☐ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax)
+	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
+		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
 	☐ ctrl-C should not print "^C"
 	☐ ctrl-D should print "exit" before exiting
 

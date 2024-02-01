@@ -50,7 +50,10 @@ printf $HEADER_COLOR"\n#------ BUILT-IN ------#\n\n"$NC
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
-	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/built_in_tests.txt
 
@@ -61,9 +64,9 @@ printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
 while read -r line; do
 	eval $line > $BASH_OUTPUT
 	# comment out $ and " for -c input
-	line_commneted=${line//\$/\\\$}
-	line_commneted=${line_commneted//\"/\\\"}
-	eval $MINISHELL"\"$line_commneted\"" > $MINISHELL_OUTPUT
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/input_tests.txt
 
@@ -95,7 +98,10 @@ printf $HEADER_COLOR"\n#------ PIPES ------#\n\n"$NC
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
-	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/pipe_tests.txt
 

@@ -29,9 +29,9 @@ int	check_cmd_line_syntax(t_cmd_line *cmd_line)
 	i = 0;
 	while (cmd_line->str[i])
 	{
-		if ((cmd_line->str[0] == '|' && cmd_line->str[1] != '|')
-			|| (i != 0 && cmd_line->str[i] == '|' && ft_strncmp(&cmd_line->str[i - 1], " || ", 4)))
-			return (ft_error("syntax error near unexpected token `|’"));
+		// if ((cmd_line->str[0] == '|' && cmd_line->str[1] != '|')
+		// 	|| (i != 0 && cmd_line->str[i] == '|' && ft_strncmp(&cmd_line->str[i - 1], " || ", 4)))
+		// 	return (ft_error("syntax error near unexpected token `|’"));
 		if ((cmd_line->str[0] == '&' && cmd_line->str[1] != '&')
 			|| (i != 0 && cmd_line->str[i] == '&' && ft_strncmp(&cmd_line->str[i - 1], " && ", 4)))
 			return (ft_error("syntax error near unexpected token `&’"));

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/01 16:06:12 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/01 16:31:43 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,5 +101,7 @@ int	run_command(char *str)
 		ret = pipex(str);
 	else
 		ret = run_single_command(str);
+	if (ret == -1)
+		exit (1);
 	return (ret);
 }

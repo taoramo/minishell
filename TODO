@@ -46,7 +46,7 @@ Fixes:
 	☐ ctrl-C should not print "^C"
 	☐ ctrl-D should print "exit" before exiting
 	☐ Error checks everywhere
-	☐ Pipex fail command messing up shell, have to exit out of minishell
+	☐ Handle exit when command fails correctly (free etc);
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

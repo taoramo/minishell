@@ -20,7 +20,7 @@ Features:
 	☐ Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
 		Has to be done before running command, as environment variable may e.g. contain name of command
 	☐ Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
-		Could be expanded right before running command?
+		Could be expanded right before running command / pipe?
 	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH (see fixes section)
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)

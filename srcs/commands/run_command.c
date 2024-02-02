@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/01 16:31:43 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/02 14:41:42 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ pid_t	execute_command(t_vec argv)
 	}
 	strs = (char **) argv.memory;
 	ret = execve(strs[0], strs, NULL);
-	// perror(strs[0]);
 	vec_free(&argv);
 	return (ret);
 }
@@ -87,7 +86,8 @@ int	run_single_command(char *command_str)
 	else if (command.process_id == 0)
 	{
 		vec_iter(&command.redirects, apply_redirect);
-		return (execute_command(command.argv));
+		execute_command(command.argv);
+		exit (1);
 	}
 	waitpid(command.process_id, &ret, 0);
 	return (WEXITSTATUS(ret));
@@ -101,7 +101,5 @@ int	run_command(char *str)
 		ret = pipex(str);
 	else
 		ret = run_single_command(str);
-	if (ret == -1)
-		exit (1);
 	return (ret);
 }

@@ -40,11 +40,11 @@ Bonus:
 	☐ Wildcards * should work for the current working directory.
 
 Fixes:
-	☐ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'"
+	x Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'"
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
-	☐ ctrl-C should not print "^C"
-	☐ ctrl-D should print "exit" before exiting
+	x ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters
+	x ctrl-D should print "exit" before exiting
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc);
 

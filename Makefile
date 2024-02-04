@@ -2,12 +2,11 @@ NAME = minishell
 
 LIBFT = ./libft/libft.a
 
-READLINE = -lreadline -L ~/.brew/opt/readline/lib
-READLINE_TAAVI = -lreadline -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include
+READLINE = -lreadline -L ~/.brew/opt/readline/lib -L/usr/local/opt/readline/lib
 
 LIBS = $(LIBFT) $(READLINE)
 
-INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/
+INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I/usr/local/opt/readline/include
 
 SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c) \
 	   $(addprefix commands/, ft_isspace.c extract_files.c here_doc.c split_command.c add_path.c run_command.c pipex.c pipe_commands.c))
@@ -35,8 +34,5 @@ fclean: clean
 	make fclean -C ./libft/
 
 re: fclean all
-
-taavi: $(OBJS) $(LIBFT)
-	$(CC) $(READLINE_TAAVI) $(OBJS) $(LIBFT) -o $(NAME)
 
 .PHONY: all, clean, fclean, re

@@ -23,4 +23,4 @@ vec fail checks
 
 other fail checks
 
-remove readline headers from includes
+remove extra readline library locations from makefile

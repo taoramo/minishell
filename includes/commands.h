@@ -17,7 +17,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 
-# include "../libft/libft.h"
+# include "libft.h"
 # include "minishell.h"
 
 typedef struct s_command

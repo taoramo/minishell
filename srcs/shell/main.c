@@ -83,6 +83,7 @@ int	interactive(int *last_return)
 			break ;
 		free(line);
 	}
+	ft_printf("exit\n");
 	clear_history();
 	free(line);
 	return (0);

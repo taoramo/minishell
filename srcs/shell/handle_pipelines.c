@@ -8,7 +8,9 @@ int	check_parenth_syntax(t_cmd_line *cmd_line)
 	i = 0;
 	while (cmd_line->str[i])
 	{
-		if (i != 0 && cmd_line->str[i] == '(')
+		if (i != 0 && cmd_line->str[i] == '('
+			&& !ft_is_inside(cmd_line->str, i, '"')
+			&& !ft_is_inside(cmd_line->str, i, 39))
 		{
 			j = i - 1;
 			while (ft_isspace(cmd_line->str[j]))

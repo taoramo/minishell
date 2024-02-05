@@ -96,5 +96,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 			}
 		}
 	}
+	vec_iter(cmd_lines, free_cmd_line_str);
+	vec_free(cmd_lines);
 	return (*last_return);
 }

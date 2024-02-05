@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <sys/param.h>
 
 int	ft_echo(t_vec *argv)
 {
@@ -27,4 +28,38 @@ int	ft_echo(t_vec *argv)
 	if (print_nl)
 		write(1, "\n", 1);
 	return (0);
+}
+
+int	ft_cd(t_vec *argv)
+{
+	char	**strs;
+	int		r;
+
+	strs = (char **)argv->memory;
+	r = chdir(strs[0]);
+	if (r == -1)
+	{
+		ft_putstr_fd("minishell: cd:", 3);
+		ft_putstr_fd(strs[0], 3);
+		perror(0);
+	}
+	return (r);
+}
+
+int	ft_pwd(t_vec *argv)
+{
+	char	str[MAXPATHLEN];
+	char	*check;
+
+	(void)argv;
+	check = getcwd(str, MAXPATHLEN);
+	if (!check)
+	{
+		ft_putstr_fd("minishell: pwd:", 3);
+		ft_putstr_fd(str, 3);
+		perror(0);
+		return (-1);
+	}
+	else
+		return (0);
 }

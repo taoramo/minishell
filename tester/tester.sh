@@ -1,5 +1,9 @@
 #!/bin/bash
 
+cd ..
+make
+cd ./tester
+
 MINISHELL="../minishell -c "
 
 # Colors

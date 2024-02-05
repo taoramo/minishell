@@ -7,3 +7,4 @@ nocommand | nocommand
 cat nofile | wc -l
 cat infile | wc -l < nofile
 cat nofile | wc -l < nofile
+cat adfadsf | cat infile | wc -l < nofile | nocommand | wc -l < nofile2 | nocommad2

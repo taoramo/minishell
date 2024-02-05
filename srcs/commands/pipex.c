@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/02 09:26:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 12:02:00 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int	prepare_pipe(t_vec *commands, char *pipe_str)
 	char		**strs;
 	t_command	*command;
 	int			i;
+	int			exit_code;
 
+	exit_code = 0;
 	strs = ft_split(pipe_str, '|');
 	if (strs == 0)
 		return (0);
@@ -39,12 +41,11 @@ int	prepare_pipe(t_vec *commands, char *pipe_str)
 	while (strs[i] != 0)
 	{
 		command = ft_calloc(1, sizeof(t_command));
-		if (prepare_command(command, strs[i]) == -1)
-			return (-1);
+		exit_code = prepare_command(command, strs[i]);
 		vec_push(commands, command);
 		i++;
 	}
-	return (1);
+	return (exit_code);
 }
 
 int	pipex(char *pipe_str)
@@ -52,10 +53,10 @@ int	pipex(char *pipe_str)
 	t_vec	commands;
 	int		*process_ids;
 	int		exit_code;
+	int		ret;
 
 	vec_new(&commands, 1, sizeof(t_command));
-	if (prepare_pipe(&commands, pipe_str) == -1)
-		return (-1);
+	exit_code = prepare_pipe(&commands, pipe_str);
 	process_ids = ft_calloc(commands.len + 1, sizeof(int));
 	if (process_ids == 0)
 		return (-1);
@@ -64,7 +65,9 @@ int	pipex(char *pipe_str)
 		free(process_ids);
 		return (-1);
 	}
-	exit_code = wait_for_children(process_ids);
+	ret = wait_for_children(process_ids);
+	if (exit_code == 0)
+		exit_code = ret;
 	free(process_ids);
 	return (exit_code);
 }

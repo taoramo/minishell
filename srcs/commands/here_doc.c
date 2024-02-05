@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/01/30 13:41:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 10:14:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,13 @@ int	read_input(char *limiter, int *pipe_fds)
 		ft_printf("> ");
 		read_str = get_next_line(0);
 		if (read_str == 0)
-		{
-			close(pipe_fds[0]);
-			close(pipe_fds[1]);
 			return (-1);
-		}
 		if (ft_strncmp(read_str, limiter, ft_strlen(read_str)) == 0)
 			break ;
 		if (write(pipe_fds[1], read_str, ft_strlen(read_str)) == -1)
 		{
 			free(read_str);
-			close(pipe_fds[0]);
-			close(pipe_fds[1]);
+			return (-1);
 		}
 		free(read_str);
 	}

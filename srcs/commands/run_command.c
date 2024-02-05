@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 11:21:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 12:35:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	prepare_command(t_command *command, char *command_str)
 		return (1);
 	if (split_command(&command->argv, command_str) == -1)
 	{
-		vec_free(&command->argv);
+		vec_free(&command->argv); // free_split_vec malloc error
 		return (1);
 	}
 	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
@@ -57,7 +57,7 @@ int	prepare_command(t_command *command, char *command_str)
 	}
 	if (extract_files(command) == -1)
 	{
-		vec_free(&command->argv);
+		free_split_vec(&command->argv);
 		vec_free(&command->redirects);
 		return (1);
 	}

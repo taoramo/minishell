@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 11:21:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 12:51:42 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,23 +47,23 @@ int	prepare_command(t_command *command, char *command_str)
 		return (1);
 	if (split_command(&command->argv, command_str) == -1)
 	{
-		vec_free(&command->argv);
+		free_split_vec(&command->argv);
 		return (1);
 	}
 	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
 	{
-		vec_free(&command->argv);
+		free_split_vec(&command->argv);
 		return (1);
 	}
 	if (extract_files(command) == -1)
 	{
-		vec_free(&command->argv);
+		free_split_vec(&command->argv);
 		vec_free(&command->redirects);
 		return (1);
 	}
 	if (add_path((char **) vec_get(&command->argv, 0)) == -1)
 	{
-		vec_free(&command->argv);
+		free_split_vec(&command->argv);
 		vec_free(&command->redirects);
 		return (127);
 	}
@@ -90,6 +90,8 @@ int	run_single_command(char *command_str)
 		execute_command(command.argv);
 		exit (1);
 	}
+	free_split_vec(&command.argv);
+	vec_free(&command.redirects);
 	waitpid(command.process_id, &ret, 0);
 	return (WEXITSTATUS(ret));
 }

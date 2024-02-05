@@ -1,7 +1,10 @@
 cat infile | wc
+wc infile | grep 3
+grep 3 infile | wc
+ls -la | grep tester.sh
 /bin/cat infile | /usr/bin/wc
 cat < infile | wc
 echo wow dude wow | awk '{print $2}' | sort -u
-cat /dev/random | head -3 | wc -l
+cat /dev/random | head -3 | wc -l | grep hi | tr -d 0123456789
 < infile cat | wc
 cat < infile | wc

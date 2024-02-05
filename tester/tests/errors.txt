@@ -2,9 +2,14 @@ nocommand
 cat nofile
 cat < nofile
 nocommand | wc -l
+nocommand | ls ./
 cat infile | nocommand
-nocommand | nocommand
+nocommand1 | nocommand2
+wc --noargs | wc
+cat infile | wc --noargs
+wc --noargs | wc --noargs
+cat < nofile | wc -l
 cat nofile | wc -l
 cat infile | wc -l < nofile
 cat nofile | wc -l < nofile
-cat adfadsf | cat infile | wc -l < nofile | nocommand | wc -l < nofile2 | nocommad2
+cat adfadsf | cat infile | wc -l < nofile | nocommand | wc -asdfasdf < nofile2 | nocommad2

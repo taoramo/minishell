@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 12:51:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 15:46:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ int	run_single_command(char *command_str)
 	ret = prepare_command(&command, command_str);
 	if (ret != 0)
 		return (ret);
+	if (ft_strncmp(*(char **)vec_get(&command.argv, 0), "echo", ft_strlen(*(char **)vec_get(&command.argv, 0))) == 0) // TODO proper check
+		return (run_builtin(&command));
 	command.process_id = fork();
 	if (command.process_id < 0)
 	{

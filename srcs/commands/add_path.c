@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/01 16:21:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 09:23:59 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,5 @@ int	add_path(char **command_ptr)
 	}
 	minishell_error(*command_ptr, "command not found");
 	strsfree(paths);
-	return (1);
+	return (-1);
 }

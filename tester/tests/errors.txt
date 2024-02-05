@@ -1,0 +1,9 @@
+nocommand
+cat nofile
+cat < nofile
+nocommand | wc -l
+cat infile | nocommand
+nocommand | nocommand
+cat nofile | wc -l
+cat infile | wc -l < nofile
+cat nofile | wc -l < nofile

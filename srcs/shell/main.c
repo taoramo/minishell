@@ -56,9 +56,8 @@ int	parse_line(const char *line, int *last_return)
 		return (-1);
 	if (vec_new(&cmd_lines, 16, sizeof(t_cmd_line)) < 0)
 		return (ft_error("malloc"));
-	if (make_cmd_line_groups(&cmd_lines, line, last_return) < 0)
-		return (-1);
-	return (0);
+	*last_return = make_cmd_line_groups(&cmd_lines, line, last_return);
+	return (*last_return);
 }
 
 int	interactive(int *last_return)
@@ -86,7 +85,7 @@ int	interactive(int *last_return)
 	ft_printf("exit\n");
 	clear_history();
 	free(line);
-	return (0);
+	return (*last_return);
 }
 
 int	main(int argc, char **argv)
@@ -95,7 +94,7 @@ int	main(int argc, char **argv)
 
 	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
-		parse_line(argv[2], &last_return);
+		return (parse_line(argv[2], &last_return));
 	if (argc == 1)
-		interactive(&last_return);
+		return (interactive(&last_return));
 }

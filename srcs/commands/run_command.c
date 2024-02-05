@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/02 14:41:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 09:32:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,30 @@ void	apply_redirect(void	*param)
 int	prepare_command(t_command *command, char *command_str)
 {
 	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
-		return (-1);
+		return (1);
 	if (split_command(&command->argv, command_str) == -1)
 	{
 		vec_free(&command->argv);
-		return (-1);
+		return (1);
 	}
 	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
 	{
 		vec_free(&command->argv);
-		return (-1);
+		return (1);
 	}
 	if (extract_files(command) == -1)
 	{
 		vec_free(&command->argv);
 		vec_free(&command->redirects);
-		return (-1);
+		return (1);
 	}
 	if (add_path((char **) vec_get(&command->argv, 0)) == -1)
 	{
 		vec_free(&command->argv);
 		vec_free(&command->redirects);
-		return (-1);
+		return (127);
 	}
-	return (1);
+	return (0);
 }
 
 int	run_single_command(char *command_str)
@@ -75,8 +75,9 @@ int	run_single_command(char *command_str)
 	t_command	command;
 	int			ret;
 
-	if (prepare_command(&command, command_str) == -1)
-		return (1);
+	ret = prepare_command(&command, command_str);
+	if (ret != 0)
+		return (ret);
 	command.process_id = fork();
 	if (command.process_id < 0)
 	{

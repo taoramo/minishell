@@ -1,5 +1,7 @@
 #!/bin/bash
 
+MINISHELL="../minishell -c "
+
 # Colors
 NC='\033[0m'
 GREEN='\033[0;32m'
@@ -19,19 +21,32 @@ OUTPUT_DIR=./tmp
 BASH_OUTPUT=$OUTPUT_DIR/bash.out
 MINISHELL_OUTPUT=$OUTPUT_DIR/mini.out
 
-MINISHELL="../minishell -c "
+BASH_EXIT_CODE=0
+MINISHELL_EXIT_CODE=0
 
 check_output()
 {
 	cmp ${BASH_OUTPUT} ${MINISHELL_OUTPUT} && 
 		echo -e ${GREEN}"$line: [OK]"${NC} || 
 		(echo -e ${RED}"$line: [KO]"${NC}
-		echo -e ${COMMAND_COLOR}"bash:"${NC}
+		echo -e ${YELLOW}"bash:"${NC}
 		cat $BASH_OUTPUT
-		echo -e ${COMMAND_COLOR}"minishell:"${NC}
+		echo -e ${YELLOW}"minishell:"${NC}
 		cat $MINISHELL_OUTPUT)
 	rm ${BASH_OUTPUT}
 	rm ${MINISHELL_OUTPUT}
+}
+
+check_exit_code()
+{
+	if [ ${BASH_EXIT_CODE} -eq ${MINISHELL_EXIT_CODE} ]
+	then
+		echo -e ${GREEN}"Exit code: [OK]"${NC}
+	else
+		echo -e ${YELLOW}"Exit code: [KO]"
+		echo -e "bash: ${BASH_EXIT_CODE}"
+		echo -e "minishell: ${EXMINISHELL_EXIT_CODEIT_CODE}"${NC}
+	fi
 }
 
 #------ BASIC ------#
@@ -117,5 +132,18 @@ while read -r line; do
 	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/and_or_tests.txt
+
+#------ ERRORS ------#
+
+printf $HEADER_COLOR"\n#------ ERRORS ------#\n\n"$NC
+
+while read -r line; do
+	eval $line > $BASH_OUTPUT
+	BASH_EXIT_CODE=$(echo $?)
+	eval $MINISHELL"\"$line\""  > $MINISHELL_OUTPUT
+	MINISHELL_EXIT_CODE=$(echo $?)
+	check_output
+	check_exit_code
+done < $TEST_DIR/errors.txt
 
 echo ""

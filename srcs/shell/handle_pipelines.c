@@ -77,7 +77,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 		else
 			*last_return = run_command(&cmd_line->str[j]);
 		i++;
-		if (*last_return == 1)
+		if (*last_return > 0)
 		{
 			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
 			while (i < cmd_lines->len && ft_strncmp(curr_cmd_line->str, "||", 2))

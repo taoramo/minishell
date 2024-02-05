@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/02 09:16:28 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/05 10:03:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	extract_files(t_command *command)
 	size_t	i;
 	int		red_fd;
 	char	*red_comm_file[2];
+	int		ret;
 
 	strs = *(char ***) &command->argv;
 	i = 0;
@@ -98,10 +99,12 @@ int	extract_files(t_command *command)
 		{
 			if (get_redirect_command_file(red_comm_file, strs[i]) == -1)
 				return (-1);
-			set_redirect(command, red_fd, red_comm_file);
+			ret = set_redirect(command, red_fd, red_comm_file);
 			free(red_comm_file[0]);
 			free(red_comm_file[1]);
 			vec_remove(&command->argv, i);
+			if (ret == -1)
+				return (-1);
 			i--;
 		}
 		i++;

@@ -40,11 +40,13 @@ Bonus:
 	☐ Wildcards * should work for the current working directory.
 
 Fixes:
-	x Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'"
+	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
-	x ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters
-	x ctrl-D should print "exit" before exiting
+	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
+		☐ Can stty -echoctl be ran by minishell at start?
+	✔ ctrl-D should print "exit" before exiting @done(24-02-05 09:54)
+		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc);
 

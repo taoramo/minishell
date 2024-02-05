@@ -1,5 +1,17 @@
 #include "minishell.h"
 
+void	toggle_carret(int is_on)
+{
+	struct termios	new_attr;
+
+	tcgetattr(STDIN_FILENO, &new_attr);
+	if (!is_on)
+		new_attr.c_lflag &= ~ECHOCTL;
+	else
+		new_attr.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &new_attr);
+}
+
 void	new_prompt(int signal)
 {
 	(void)signal;
@@ -15,8 +27,9 @@ void	signal_interactive(void)
 	struct sigaction	sa;
 	struct sigaction	sb;
 
+	toggle_carret(0);
 	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = new_prompt; 
+	sa.sa_handler = new_prompt;
 	sigaction(SIGINT, &sa, 0);
 	ft_bzero(&sb, sizeof(sa));
 	sb.sa_handler = SIG_IGN;
@@ -33,7 +46,8 @@ void	print_new_line(int signal)
 void	signal_non_interactive(void)
 {
 	struct sigaction	sa;
-	
+
+	toggle_carret(1);
 	ft_bzero(&sa, sizeof(sa));
 	sa.sa_handler = print_new_line;
 	sigaction(SIGINT, &sa, 0);

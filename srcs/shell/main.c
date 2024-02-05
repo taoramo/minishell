@@ -44,7 +44,7 @@ int	check_open_quotes(const char *line)
 	}
 	if (singles % 2 || doubles % 2)
 		return (ft_error("syntax error: unclosed quotes\n"));
-	else 
+	else
 		return (0);
 }
 
@@ -82,7 +82,7 @@ int	interactive(int *last_return)
 			break ;
 		free(line);
 	}
-	ft_printf("exit\n");
+	toggle_carret(1);
 	clear_history();
 	free(line);
 	return (*last_return);

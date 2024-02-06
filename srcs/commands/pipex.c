@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 12:02:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 12:21:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,14 @@ int	prepare_pipe(t_vec *commands, char *pipe_str)
 	return (exit_code);
 }
 
-int	pipex(char *pipe_str)
+int	pipex(char *pipe_str, t_vec *env)
 {
 	t_vec	commands;
 	int		*process_ids;
 	int		exit_code;
 	int		ret;
+	
+	(void) env;
 
 	vec_new(&commands, 1, sizeof(t_command));
 	exit_code = prepare_pipe(&commands, pipe_str);

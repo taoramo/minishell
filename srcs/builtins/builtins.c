@@ -40,7 +40,10 @@ int	ft_cd(t_vec *argv)
 	int		r;
 
 	strs = (char **)argv->memory;
-	r = chdir(strs[1]);
+	if (strs[1] != 0)
+		r = chdir(strs[1]);
+	else
+		r = chdir(getenv("HOME"));
 	if (r == -1)
 	{
 		ft_putstr_fd("minishell: cd:", 3);
@@ -68,17 +71,40 @@ int	ft_pwd(t_vec *argv)
 		return (0);
 }
 
-int	ft_env(t_vec *argv)
+int	ft_env(t_vec *argv, t_vec *env)
 {
-	extern char	**environ;
-	int			i;
+	int	i;
 
 	i = 0;
 	(void)argv;
-	while (environ[i])
+	while (vec_get(env, i))
 	{
-		ft_putstr_fd(environ[i++], 1);
+		ft_putstr_fd(*(char **)vec_get(env, i), 1);
 		write(1, "\n", 1);
 	}
 	return (0);
+}
+
+int	ft_unset(t_vec *argv, t_vec *env)
+{
+	int		i;
+	int		j;
+	char	*ptr;
+
+	(void)argv;
+	i = 0;
+	while (vec_get(env, i))
+	{
+		ptr = *(char **)vec_get(env, i);
+		while (ptr[j] != '=')
+			j++;
+		if (!ft_strncmp(vec_get(argv, 1), ptr, j))
+		{
+			vec_remove(env, i);
+			return (1);
+		}
+		j = 0;
+		i++;
+	}
+	return (1);
 }

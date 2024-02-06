@@ -67,9 +67,11 @@ int		minishell_error(char *str, char *message);
 int		cmd_line_error(t_vec *cmd_lines);
 int		prepare_cmd(t_cmd_line *cmd_line, int *last_return);
 
-int	ft_echo(t_vec *argv);
-int	ft_cd(t_vec *argv);
-int	ft_pwd(t_vec *argv);
-int	ft_env(t_vec *argv);
+int		ft_echo(t_vec *argv);
+int		ft_cd(t_vec *argv);
+int		ft_pwd(t_vec *argv);
+int		ft_env(t_vec *argv, t_vec *env);
+int		ft_export(t_vec *argv, t_vec *env);
+int		ft_unset(t_vec *argv, t_vec *env);
 
 #endif

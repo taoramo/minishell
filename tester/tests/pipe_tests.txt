@@ -1,4 +1,5 @@
 cat infile | wc
+echo wow | cat
 wc infile | grep 3
 grep 3 infile | wc
 ls -la | grep tester.sh

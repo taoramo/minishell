@@ -6,7 +6,7 @@ int	ft_echo(t_vec *argv)
 	size_t	i;
 	int		print_nl;
 	int		r;
-
+	
 	strs = (char **)argv->memory;
 	if (!ft_strncmp(strs[1], "-n", 3))
 	{

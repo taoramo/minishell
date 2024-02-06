@@ -10,10 +10,15 @@ int	ft_echo(t_vec *argv)
 
 	strs = (char **)argv->memory;
 	if (!ft_strncmp(strs[0], "-n", 3))
+	{
 		print_nl = 0;
+		i = 2;
+	}
 	else
+	{
 		print_nl = 1;
-	i = 0;
+		i = 1;
+	}
 	while (i < argv->len)
 	{
 		r = ft_putstr_fd(strs[i], 1);
@@ -36,11 +41,11 @@ int	ft_cd(t_vec *argv)
 	int		r;
 
 	strs = (char **)argv->memory;
-	r = chdir(strs[0]);
+	r = chdir(strs[1]);
 	if (r == -1)
 	{
 		ft_putstr_fd("minishell: cd:", 3);
-		ft_putstr_fd(strs[0], 3);
+		ft_putstr_fd(strs[1], 3);
 		perror(0);
 	}
 	return (r);

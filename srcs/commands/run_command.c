@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 10:27:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 12:21:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	prepare_command(t_command *command, char *command_str)
 	return (0);
 }
 
-int	run_single_command(char *command_str)
+int	run_single_command(char *command_str, t_vec *env)
 {
 	t_command	command;
 	int			ret;
@@ -78,6 +78,7 @@ int	run_single_command(char *command_str)
 	ret = prepare_command(&command, command_str);
 	if (ret != 0)
 		return (ret);
+	command.env = env;
 	if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
 		return (run_builtin(&command));
 	command.process_id = fork();
@@ -102,10 +103,9 @@ int	run_command(char *str, t_vec *env)
 {
 	int		ret;
 
-	(void)env;
 	if (ft_strchr(str, '|') != 0)
-		ret = pipex(str);
+		ret = pipex(str, env);
 	else
-		ret = run_single_command(str);
+		ret = run_single_command(str, env);
 	return (ret);
 }

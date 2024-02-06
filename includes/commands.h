@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 09:43:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 12:21:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_command
 	t_vec	argv;
 	t_vec	redirects;
 	pid_t	process_id;
+	t_vec	*env;
 }	t_command;
 
 typedef struct s_redirect
@@ -48,7 +49,7 @@ int		execute_command(t_vec argv);
 
 int		run_builtin(t_command *command);
 
-int		pipex(char *command_str);
+int		pipex(char *pipe_str, t_vec *env);
 int		pipe_commands(t_vec commands, int **process_ids);
 
 #endif

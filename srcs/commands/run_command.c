@@ -98,10 +98,11 @@ int	run_single_command(char *command_str)
 	return (WEXITSTATUS(ret));
 }
 
-int	run_command(char *str)
+int	run_command(char *str, t_vec *env)
 {
 	int		ret;
 
+	(void)env;
 	if (ft_strchr(str, '|') != 0)
 		ret = pipex(str);
 	else

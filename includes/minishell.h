@@ -72,5 +72,6 @@ int	(*get_builtin(int i))(t_vec *);
 int	ft_echo(t_vec *argv);
 int	ft_cd(t_vec *argv);
 int	ft_pwd(t_vec *argv);
+int	ft_env(t_vec *argv);
 
 #endif

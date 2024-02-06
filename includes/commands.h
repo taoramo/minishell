@@ -42,7 +42,7 @@ int		add_path(char **command_ptr);
 
 int		infile_from_stdin(char *limiter);
 
-int		run_command(char *command_str);
+int		run_command(char *command_str, t_vec *env);
 void	apply_redirect(void	*param);
 int		execute_command(t_vec argv);
 

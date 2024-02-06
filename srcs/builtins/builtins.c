@@ -1,5 +1,4 @@
 #include "minishell.h"
-#include <sys/param.h>
 
 int	builtin_index(char *command)
 {
@@ -93,4 +92,19 @@ int	ft_pwd(t_vec *argv)
 	}
 	else
 		return (0);
+}
+
+int	ft_env(t_vec *argv)
+{
+	extern char	**environ;
+	int			i;
+
+	i = 0;
+	(void)argv;
+	while (environ[i])
+	{
+		ft_putstr_fd(environ[i++], 1);
+		write(1, "\n", 1);
+	}
+	return (0);
 }

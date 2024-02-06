@@ -6,16 +6,17 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 12:21:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 13:35:27 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-pid_t	execute_command(t_vec argv)
+pid_t	execute_command(t_vec argv, t_vec *env)
 {
 	int		ret;
 	char	**strs;
+	char	**envp;
 	char	*nulterm;
 
 	nulterm = ft_calloc(1, sizeof(char *));
@@ -27,6 +28,7 @@ pid_t	execute_command(t_vec argv)
 		return (-1);
 	}
 	strs = (char **) argv.memory;
+	envp = (char **) env->memory;
 	ret = execve(strs[0], strs, NULL);
 	vec_free(&argv);
 	return (ret);
@@ -90,7 +92,7 @@ int	run_single_command(char *command_str, t_vec *env)
 	else if (command.process_id == 0)
 	{
 		vec_iter(&command.redirects, apply_redirect);
-		execute_command(command.argv);
+		execute_command(command.argv, command.env);
 		exit (1);
 	}
 	free_split_vec(&command.argv);

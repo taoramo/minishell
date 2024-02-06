@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/02 16:04:44 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 13:45:52 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-static void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd)
+void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd)
 {
 	if (in_fd != 0)
 	{
@@ -58,20 +58,24 @@ void	handle_child(t_vec comms, size_t i, int pipe_fds[], int pipe2_fds[])
 		close(pipe2_fds[0]);
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	}
-	execute_command(command->argv);
+	execute_command(command->argv, command->env);
 	exit (1);
 }
 
 int	pipe_command(t_vec comms, size_t i, int pipe_fds[])
 {
-	int	process_id;
-	int	pipe2_fds[2];
+	int			process_id;
+	int			pipe2_fds[2];
+	t_command	*command;
 
+	command = (t_command *) vec_get(&comms, i);
 	if (i != 0 && i < comms.len - 1 && pipe(pipe2_fds) < 0)
 	{
 		perror("pipe failed");
 		return (-1);
 	}
+	if (command->argv.len != 0 && builtin_index(*(char **)vec_get(&command->argv, 0)) != -1)
+		return (run_builtin_pipe(comms, i, pipe_fds, pipe2_fds));
 	process_id = fork();
 	if (process_id < 0)
 	{

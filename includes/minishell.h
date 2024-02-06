@@ -20,34 +20,21 @@
 # include "libft.h"
 # include "commands.h"
 
-typedef enum e_syntax
-{
-	string,
-	greater,
-	greatergreater,
-	smaller,
-	smallersmaller,
-	pipechar,
-	asterisk
-}	t_syntax;
-
-typedef enum e_group_type
-{
-	group,
-	cmd_line
-}	t_group_type;
-
-typedef struct s_token
-{
-	t_vec		*str;
-	t_syntax	type;
-}	t_token;
-
 typedef struct s_cmd_line
 {
 	char			*str;
 	int				return_value;
 }	t_cmd_line;
+
+typedef struct s_wc
+{
+	size_t	pindex;
+	size_t	sindex;
+	int		s_backtrack;
+	int		last_wildcard;
+	int		next_to_wildcard;
+	int		i;
+}	t_wc;
 
 int		parse_line(const char *line, int *last_return);
 int		check_line_parentheses(const char *line);

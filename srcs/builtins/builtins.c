@@ -133,6 +133,7 @@ int	contains_equals(const char *str)
 {
 	int	i;
 
+	i = 0;
 	while (str[i])
 	{
 		if (str[i] == '=')
@@ -149,7 +150,7 @@ int	ft_env(t_vec *env)
 	i = 0;
 	while (i < env->len)
 	{
-		if (contains_equals(*char **)vec_get(env, i))
+		if (contains_equals(*(char **)vec_get(env, i)))
 			ft_putstr_fd(*(char **)vec_get(env, i), 1);
 		write(1, "\n", 1);
 		i++;

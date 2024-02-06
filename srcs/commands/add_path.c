@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 15:46:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 09:39:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	add_path(char **command_ptr)
 	char	**paths;
 	int		i;
 
-	if (ft_strncmp(*command_ptr, "echo", ft_strlen(*command_ptr)) == 0) // TODO proper check
+	if (builtin_index(*command_ptr) != -1)
 		return (1);
 	paths = get_paths();
 	if (paths == 0)

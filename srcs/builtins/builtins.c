@@ -1,5 +1,31 @@
 #include "minishell.h"
 
+int	builtin_index(char *command)
+{
+	static const char	*builtins[4] = {"echo", "cd", "pwd", NULL};
+	int					i;
+
+	i = 0;
+	while (builtins[i] != 0)
+	{
+		if (ft_strncmp(command, builtins[i], ft_strlen(builtins[i])) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+int	(*get_builtin(int i))(t_vec *)
+{
+	if (i == 0)
+		return (ft_echo);
+	if (i == 1)
+		return (ft_cd);
+	if (i == 2)
+		return (ft_pwd);
+	return (0);
+}
+
 int	ft_echo(t_vec *argv)
 {
 	char	**strs;

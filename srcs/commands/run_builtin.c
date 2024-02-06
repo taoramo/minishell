@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 14:23:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/06 14:34:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,17 @@ int	run_builtin_command(t_command *command)
 	return (0);
 }
 
-int	redirect_builtin(t_command *command, int stdfd_copy[])
+int	save_stdfds(int stdfd_copy[])
 {
 	stdfd_copy[0] = dup(0);
 	stdfd_copy[1] = dup(1);
 	stdfd_copy[2] = dup(2);
 	if (stdfd_copy[0] == -1 || stdfd_copy[1] == -1 || stdfd_copy[2] == -1)
 		return (-1);
-	vec_iter(&command->redirects, apply_redirect);
 	return (1);
 }
 
-int	reset_stdfd(int stdfd_copy[])
+int	reset_stdfds(int stdfd_copy[])
 {
 	if (dup2(stdfd_copy[0], 0) == -1)
 		return (-1);
@@ -73,9 +72,10 @@ int	run_builtin(t_command *command)
 {
 	int	stdfd_copy[3];
 
-	redirect_builtin(command, stdfd_copy);
+	save_stdfds(stdfd_copy);
+	vec_iter(&command->redirects, apply_redirect);
 	run_builtin_command(command);
-	reset_stdfd(stdfd_copy);
+	reset_stdfds(stdfd_copy);
 	return (0);
 }
 
@@ -84,9 +84,7 @@ int	run_builtin_pipe(t_vec comms, size_t i, int pipe_fds[], int pipe2_fds[])
 	int			stdfd_copy[3];
 	t_command	*command;
 
-	stdfd_copy[0] = dup(0);
-	stdfd_copy[1] = dup(1);
-	stdfd_copy[2] = dup(2);
+	save_stdfds(stdfd_copy);
 	command = (t_command *) vec_get(&comms, i);
 	if (i == 0)
 		apply_pipe_redirect(command, 0, pipe_fds[1]);
@@ -95,7 +93,7 @@ int	run_builtin_pipe(t_vec comms, size_t i, int pipe_fds[], int pipe2_fds[])
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	run_builtin_command(command);
-	reset_stdfd(stdfd_copy);
 	handle_parent(comms, i, pipe_fds, pipe2_fds);
+	reset_stdfds(stdfd_copy);
 	return (0);
 }

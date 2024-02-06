@@ -27,14 +27,14 @@ Features:
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
 
 Built-in functions:
-	☐ Work for single commands
-	☐ Work in pipes
-	☐ echo with option -n
+	✔ Work for single commands @done(24-02-06 14:35)
+	✔ Work in pipes @done(24-02-06 14:35)
+	✔ echo with option -n @done(24-02-06 14:35)
 	☐ cd with only a relative or absolute path
 	☐ pwd with no options
 	☐ export with no options
 	☐ unset with no options
-	☐ env with no options or arguments
+	✔ env with no options or arguments @done(24-02-06 14:35)
 	☐ exit with no options
 
 Bonus:

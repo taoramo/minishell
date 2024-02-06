@@ -82,7 +82,7 @@ int	interactive(int *last_return)
 			break ;
 		free(line);
 	}
-	toggle_carret(1);
+	//toggle_carret(1);
 	clear_history();
 	free(line);
 	return (*last_return);

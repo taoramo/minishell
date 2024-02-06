@@ -9,7 +9,8 @@ LIBS = $(LIBFT) $(READLINE)
 INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I/usr/local/opt/readline/include
 
 SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c) \
-	   $(addprefix commands/, ft_isspace.c extract_files.c here_doc.c split_command.c add_path.c run_command.c pipex.c pipe_commands.c))
+	   $(addprefix commands/, ft_isspace.c extract_files.c here_doc.c split_command.c add_path.c run_command.c pipex.c pipe_commands.c run_builtin.c) \
+	   $(addprefix builtins/, builtins.c))
 
 OBJS = $(SRCS:.c=.o)
 

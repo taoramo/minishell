@@ -22,7 +22,6 @@ int	check_parenth_syntax(t_cmd_line *cmd_line)
 	}
 	return (1);
 }
-	
 
 int	check_cmd_line_syntax(t_cmd_line *cmd_line)
 {
@@ -45,14 +44,43 @@ int	check_cmd_line_syntax(t_cmd_line *cmd_line)
 	return (1);
 }
 
+int	copy_env(t_vec *env)
+{
+	extern char **environ;
+	char		*temp;
+	int			i;
+
+	i = 0;
+	vec_new(env, 64, sizeof(char *));
+	while (environ[i])
+	{
+		temp = ft_strdup(environ[i]);
+		if (!temp)
+			return (free_split_vec(env));
+		if (vec_push(env, temp) < 0)
+			return (-1);
+		i++;
+	}
+	return (1);
+}
+
 int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 {
 	size_t		i;
 	int			j;
 	t_cmd_line	*cmd_line;
 	t_cmd_line	*curr_cmd_line;
+	t_vec		env;
 
 	i = 0;
+	if (copy_env(&env) < 0)
+	{
+		ft_error("error allocating memory\n");
+		vec_iter(cmd_lines, free_cmd_line_str);
+		vec_free(cmd_lines);
+		free_split_vec(&env);
+		vec_free(&env);
+	}
 	while (i < cmd_lines->len)
 	{
 		j = 0;
@@ -72,10 +100,12 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 		{
 			vec_iter(cmd_lines, free_cmd_line_str);
 			vec_free(cmd_lines);
+			free_split_vec(&env);
+			vec_free(&env);
 			return (-1);
 		}
 		else
-			*last_return = run_command(&cmd_line->str[j]);
+			*last_return = run_command(&cmd_line->str[j], &env);
 		i++;
 		if (*last_return > 0)
 		{
@@ -97,6 +127,8 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 		}
 	}
 	vec_iter(cmd_lines, free_cmd_line_str);
+	free_split_vec(&env);
+	vec_free(&env);
 	vec_free(cmd_lines);
 	return (*last_return);
 }

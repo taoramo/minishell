@@ -76,7 +76,9 @@ int	ft_env(t_vec *argv)
 	i = 0;
 	(void)argv;
 	while (environ[i])
+	{
 		ft_putstr_fd(environ[i++], 1);
+		write(1, "\n", 1);
+	}
 	return (0);
 }
-

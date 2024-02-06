@@ -57,7 +57,7 @@ int	copy_env(t_vec *env)
 		temp = ft_strdup(environ[i]);
 		if (!temp)
 			return (free_split_vec(env));
-		if (vec_push(env, temp) < 0)
+		if (vec_push(env, &temp) < 0)
 			return (-1);
 		i++;
 	}
@@ -128,7 +128,6 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return)
 	}
 	vec_iter(cmd_lines, free_cmd_line_str);
 	free_split_vec(&env);
-	vec_free(&env);
 	vec_free(cmd_lines);
 	return (*last_return);
 }

@@ -99,14 +99,15 @@ int	ft_pwd(t_vec *argv)
 
 int	ft_env(t_vec *argv, t_vec *env)
 {
-	int	i;
+	size_t	i;
 
 	i = 0;
 	(void)argv;
-	while (vec_get(env, i))
+	while (i < env->len)
 	{
 		ft_putstr_fd(*(char **)vec_get(env, i), 1);
 		write(1, "\n", 1);
+		i++;
 	}
 	return (0);
 }

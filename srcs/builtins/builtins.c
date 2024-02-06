@@ -114,16 +114,16 @@ int	ft_env(t_vec *argv, t_vec *env)
 
 int	ft_unset(t_vec *argv, t_vec *env)
 {
-	int		i;
+	size_t	i;
 	int		j;
 	char	*ptr;
 
 	(void)argv;
 	i = 0;
-	while (vec_get(env, i))
+	while (i < env->len)
 	{
 		ptr = *(char **)vec_get(env, i);
-		while (ptr[j] != '=')
+		while (ptr[j] && ptr[j] != '=')
 			j++;
 		if (!ft_strncmp(vec_get(argv, 1), ptr, j))
 		{

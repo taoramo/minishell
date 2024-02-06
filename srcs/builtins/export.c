@@ -47,7 +47,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 					write(1, &environment[i][j], 1);
 					j++;
 				}
-				write(1, "\"\n", 1);
+				write(1, "\"\n", 2);
 			}
 			else
 				ft_putstr_fd(environment[i], 1);

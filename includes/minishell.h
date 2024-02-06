@@ -75,5 +75,6 @@ int		ft_export(t_vec *argv, t_vec *env);
 int		ft_unset(t_vec *argv, t_vec *env);
 int		builtin_index(char *command);
 int		(*get_builtin(int i))(t_vec *);
+int		contains_equals(const char *str);
 
 #endif

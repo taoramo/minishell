@@ -13,7 +13,9 @@
 # include <sys/stat.h>
 # include <dirent.h>
 # include <errno.h>
+# include <sys/errno.h>
 # include <sys/ioctl.h>
+# include <sys/param.h>
 # include <curses.h>
 # include "libft.h"
 # include "commands.h"

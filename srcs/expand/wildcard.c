@@ -35,12 +35,13 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 	return (1);
 }
 
-int	expand_star(t_vec *new, t_vec *argv)
+int	expand_star(t_vec *argv)
 {
+	t_vec			new;
 	size_t			i;
 	char			**strs;
 
-	if (vec_new(new, 32, sizeof(char *)) < 0)
+	if (vec_new(&new, 32, sizeof(char *)) < 0)
 		return (ft_error("minishell: error allocating memory\n"));
 	i = 0;
 	while (i < argv->len)
@@ -48,13 +49,15 @@ int	expand_star(t_vec *new, t_vec *argv)
 		strs = (char **)argv->memory;
 		if (ft_strchr(strs[i], '*'))
 		{
-			if (push_expanded(new, strs, i) < 0)
+			if (push_expanded(&new, strs, i) < 0)
 				return (ft_error("minishell: error creaing argv\n"));
 		}
-		else if (vec_push(new, vec_get(argv, i)) < 0)
-			return (exp_wc_err(new, "error allocating memory"));
+		else if (vec_push(&new, vec_get(argv, i)) < 0)
+			return (exp_wc_err(&new, "error allocating memory"));
 		i++;
 	}
+	free_split_vec(argv);
+	ft_memcpy(argv, &new, sizeof(t_vec));
 	return (0);
 }
 

@@ -63,5 +63,7 @@ int		ft_unset(t_vec *argv, t_vec *env);
 int		builtin_index(char *command);
 int		(*get_builtin(int i))(t_vec *);
 int		contains_equals(const char *str);
+int		expand_star(t_vec *argv);
+int		is_wildcard_match(char *string, char *pattern);
 
 #endif

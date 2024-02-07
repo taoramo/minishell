@@ -49,6 +49,25 @@ int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
 	return (0);
 }
 
+int	remove_dotpath(t_vec *argv)
+{
+	size_t	i;
+	char	**strs;
+
+	strs = (char **)argv->memory;
+	i = 1;
+	while (i < argv->len)
+	{
+		if (!ft_strncmp(strs[i], "..", 3) || !ft_strncmp(strs[i], ".", 2))
+		{
+			vec_remove(argv, i);
+			i--;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	expand_star(t_vec *argv)
 {
 	t_vec			dst;
@@ -72,6 +91,7 @@ int	expand_star(t_vec *argv)
 	}
 	//free_split_vec(argv);
 	ft_memcpy(argv, &dst, sizeof(t_vec));
+	remove_dotpath(argv);
 	return (0);
 }
 

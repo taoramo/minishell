@@ -1,5 +1,40 @@
 #include "minishell.h"
 
+int	env_entry_exists(char *str, t_vec *env)
+{
+	size_t	i;
+	char	**entries;
+
+	entries = (char **)env->memory;
+	i = 0;
+	while (i < env->len)
+	{
+		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	remove_entry(char *str, t_vec *env)
+{
+	size_t	i;
+	char	**entries;
+
+	entries = (char **)env->memory;
+	i = 0;
+	while (i < env->len)
+	{
+		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
+		{
+			vec_remove(env, i);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	export_variable(t_vec *argv, t_vec *env)
 {
 	char	*str;
@@ -10,11 +45,18 @@ int	export_variable(t_vec *argv, t_vec *env)
 		ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
 		return (-1);
 	}
-	if (vec_push(env, str) < 0)
+	if (!contains_equals(str) && env_entry_exists(str, env))
+		return (0);
+	else
 	{
-		ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
-		return (-1);
+		if (vec_push(env, str) < 0)
+		{
+			ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
+			return (-1);
+		}
 	}
+	if (contains_equals(str) && env_entry_exists(str, env))
+		remove_entry(str, env);
 	return (0);
 }
 

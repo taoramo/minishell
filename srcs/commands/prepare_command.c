@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 14:12:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:33:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	expand_command(t_vec *argv, t_vec *env)
 	(void) env;
 	
 	expand_env(argv, env);
-	//expand_star(argv);
+	expand_star(argv);
 	remove_quotes(argv);
 
 	return (1);

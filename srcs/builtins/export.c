@@ -62,17 +62,31 @@ int	export_variable(t_vec *argv, t_vec *env)
 	return (0);
 }
 
+int	vec_sort_strncmp(void *one, void *two)
+{
+	char	*sone;
+	char	*stwo;
+
+	sone = *(char **)one;
+	stwo = *(char **)two;
+	return (ft_strncmp(sone, stwo, 1024));
+}
+
 int	ft_export(t_vec *argv, t_vec *env)
 {
 	char	**arguments;
 	char	**environment;
+	t_vec	sorted;
 	size_t	i;
 	int		j;
 
 	arguments = (char **)argv->memory;
-	environment = (char **)env->memory;
 	if (arguments[1] == 0)
 	{
+		vec_new(&sorted, env->len, env->elem_size);
+		vec_copy(&sorted, env);
+		vec_sort(&sorted, vec_sort_strncmp);
+		environment = (char **)sorted.memory;
 		i = 0;
 		while (i < env->len)
 		{
@@ -97,6 +111,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 				ft_putstr_fd(environment[i], 1);
 			i++;
 		}
+		free_split_vec(&sorted);
 		return (0);
 	}
 	else

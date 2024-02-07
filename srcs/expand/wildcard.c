@@ -1,106 +1,78 @@
 #include "minishell.h"
 
-static t_wc	*init_i(t_wc *i)
+static int	exp_wc_err(t_vec *new, char *msg)
 {
-	i->pindex = 0;
-	i->sindex = 0;
-	i->s_backtrack = -1;
-	i->last_wildcard = -1;
-	i->next_to_wildcard = -1;
-	i->i = 0;
-	return (i);
+	free_split_vec(new);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(msg, 2);
+	ft_putstr_fd("\n", 2);
+	return (-1);
 }
 
-void	set_indeces_at_wc(t_wc *i)
+int	push_expanded(t_vec *dst, char **strs, int i)
 {
-	i->last_wildcard = i->pindex;
-	i->next_to_wildcard = ++i->pindex;
-	i->s_backtrack = i->sindex;
-}
-
-int	check_rest_p(char *p, size_t pindex)
-{
-	while (pindex < ft_strlen(p))
-	{
-		if (p[pindex] != '*')
-			return (0);
-		pindex++;
-	}
-	return (1);
-}
-
-int	is_wildcard_match(char *s, char *p)
-{
-	t_wc	i;
-
-	init_i(&i);
-	while (i.sindex < ft_strlen(s))
-	{
-		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex])
-		{
-			++i.pindex;
-			++i.sindex;
-		}
-		else if (i.pindex < ft_strlen(p) && p[i.pindex] == '*')
-			set_indeces_at_wc(&i);
-		else if (i.last_wildcard == -1)
-			return (0);
-		else
-		{
-			i.pindex = i.next_to_wildcard;
-			i.sindex = ++i.s_backtrack;
-		}
-	}
-	return (check_rest_p(p, i.pindex));
-}
-
-int	expand_star(t_vec *argv)
-{
-	size_t			i;
-	char			path[MAXPATHLEN];
 	DIR				*ptr;
-	char			**strs;
 	struct dirent	*ep;
+	char			*path;
 
 	ptr = opendir("./");
 	if (!ptr)
+		return (exp_wc_err(dst, "error opening directory"));
+	ep = readdir(ptr);
+	while (ep)
 	{
-		ft_putstr_fd("minishell: error opening directory\n", 2);
-		return (-1);
+		if (is_wildcard_match(ep->d_name, strs[i]))
+		{
+			path = ft_strdup(ep->d_name);
+			if (!path)
+				return (exp_wc_err(dst, "error allocating memory"));
+			if (vec_push(dst, &path) < 0)
+				return (exp_wc_err(dst, "error parsing wildcard"));
+		}
+		ep = readdir(ptr);
 	}
+	closedir(ptr);
+	return (1);
+}
+
+int	expand_star(t_vec *new, t_vec *argv)
+{
+	size_t			i;
+	char			**strs;
+
+	if (vec_new(new, 32, sizeof(char *)) < 0)
+		return (ft_error("minishell: error allocating memory\n"));
 	i = 0;
 	while (i < argv->len)
 	{
-		strs = (char **)argv->memory;;
+		strs = (char **)argv->memory;
 		if (ft_strchr(strs[i], '*'))
 		{
-			ep = readdir(ptr);
-			while (ep)
-			{
-				if (is_wildcard_match(ep->d_name, strs[i]))
-				{
-					ft_strlcpy(path, ep->d_name, ep->d_namlen + 1);
-					if (vec_insert(argv, &path, i + 1) < 0)
-					{
-						ft_putstr_fd("minishell: error parsing wildcard\n", 2);
-						return (-1);
-					}
-				}
-				ep = readdir(ptr);
-			}
-			closedir(ptr);
-			//vec_remove(argv, i);
+			if (push_expanded(new, strs, i) < 0)
+				return (ft_error("minishell: error creaing argv\n"));
 		}
+		else if (vec_push(new, vec_get(argv, i)) < 0)
+			return (exp_wc_err(new, "error allocating memory"));
 		i++;
 	}
 	return (0);
 }
 
+/* int	ft_error(char *str)
+{
+	if (ft_strlen(str))
+	{
+		printf("%s\n", str);
+	}
+	return (-1);
+}
+
 int	main(void)
 {
 	t_vec	strs;
+	t_vec	new;
 
-	vec_split(&strs, "*.c", ' ');
-	expand_star(&strs);
-	vec_iter(&strs, vec_print_elem_str);
-}
+	vec_split(&strs, "*.c *.o", ' ');
+	expand_star(&new, &strs);
+	vec_iter(&new, vec_print_elem_str);
+} */

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 09:39:51 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 14:12:16 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,22 @@ char	**strs_addstr(char **strs, char *str)
 	return (strs);
 }
 
-char	**get_paths(void)
+char	**get_paths(t_vec *env)
 {
+	size_t	i;
 	char	*path_str;
 	char	**paths;
 
-	path_str = getenv("PATH");
-	if (path_str == 0)
-		return (0);
+	i = 0;
+	while (i < env->len)
+	{
+		path_str = *(char **)vec_get(env, i);
+		if (ft_strncmp(path_str, "PATH=", 5) == 0)
+			break;
+		i++;
+	}
+	if (i == env->len)
+		return (ft_calloc(1, sizeof(char *)));
 	paths = ft_split(path_str, ':');
 	if (paths == 0)
 		return (0);
@@ -81,14 +89,14 @@ int	check_path(char *path, char **command_ptr)
 	return (0);
 }
 
-int	add_path(char **command_ptr)
+int	add_path(char **command_ptr, t_vec *env)
 {
 	char	**paths;
 	int		i;
 
 	if (builtin_index(*command_ptr) != -1)
 		return (1);
-	paths = get_paths();
+	paths = get_paths(env);
 	if (paths == 0)
 		return (-1);
 	i = 0;

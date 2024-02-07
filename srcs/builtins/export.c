@@ -38,13 +38,17 @@ int	remove_entry(char *str, t_vec *env)
 int	export_variable(t_vec *argv, t_vec *env)
 {
 	char	*str;
+	char	**strs;
 
-	str = ft_strdup(*(char **)vec_get(argv, 1));
+	strs = (char **)argv->memory;
+	str = ft_strdup(strs[1]);
 	if (!str)
 	{
 		ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
 		return (-1);
 	}
+	if (contains_equals(str) && env_entry_exists(str, env))
+		remove_entry(str, env);
 	if (!contains_equals(str) && env_entry_exists(str, env))
 		return (0);
 	else
@@ -55,8 +59,6 @@ int	export_variable(t_vec *argv, t_vec *env)
 			return (-1);
 		}
 	}
-	if (contains_equals(str) && env_entry_exists(str, env))
-		remove_entry(str, env);
 	return (0);
 }
 

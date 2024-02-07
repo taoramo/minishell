@@ -59,7 +59,7 @@ int	expand_star(t_vec *argv)
 	size_t			i;
 	char			path[MAXPATHLEN];
 	DIR				*ptr;
-	char			*str;
+	char			**strs;
 	struct dirent	*ep;
 
 	ptr = opendir("./");
@@ -71,16 +71,16 @@ int	expand_star(t_vec *argv)
 	i = 0;
 	while (i < argv->len)
 	{
-		str = (char *)argv->memory;
-		if (ft_strchr(str, '*'))
+		strs = (char **)argv->memory;;
+		if (ft_strchr(strs[i], '*'))
 		{
 			ep = readdir(ptr);
 			while (ep)
 			{
-				if (is_wildcard_match(ep->d_name, str))
+				if (is_wildcard_match(ep->d_name, strs[i]))
 				{
-					ft_strlcpy(path, ep->d_name, ft_strlen(ep->d_name) + 1);
-					if (vec_insert(argv, path, i + 1) < 0)
+					ft_strlcpy(path, ep->d_name, ep->d_namlen + 1);
+					if (vec_insert(argv, &path, i + 1) < 0)
 					{
 						ft_putstr_fd("minishell: error parsing wildcard\n", 2);
 						return (-1);
@@ -89,18 +89,18 @@ int	expand_star(t_vec *argv)
 				ep = readdir(ptr);
 			}
 			closedir(ptr);
-			vec_remove(argv, i);
+			//vec_remove(argv, i);
 		}
 		i++;
 	}
 	return (0);
 }
 
-/* int	main(void)
+int	main(void)
 {
 	t_vec	strs;
 
 	vec_split(&strs, "*.c", ' ');
 	expand_star(&strs);
 	vec_iter(&strs, vec_print_elem_str);
-} */
+}

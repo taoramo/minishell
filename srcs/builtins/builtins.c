@@ -8,6 +8,8 @@ int	ft_echo(t_vec *argv)
 	int		r;
 	
 	strs = (char **)argv->memory;
+	if (!strs[1])
+		return (0);
 	if (!ft_strncmp(strs[1], "-n", 3))
 	{
 		print_nl = 0;
@@ -71,6 +73,8 @@ int	ft_cd(t_vec *argv)
 	int		r;
 
 	strs = (char **)argv->memory;
+	if (!strs[1])
+		return (0);
 	if (ft_strlen(strs[1]) > MAXPATHLEN)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
@@ -165,13 +169,17 @@ int	ft_unset(t_vec *argv, t_vec *env)
 	size_t	i;
 	int		j;
 	char	**strs;
+	char	**args;
 
-	(void)argv;
 	i = 0;
 	j = 0;
+
+	strs = (char **)env->memory;
+	args = (char **)argv->memory;
+	if (!args[1])
+		return (0);
 	while (i < env->len)
 	{
-		strs = (char **)env->memory;
 		while (strs[i][j] && strs[i][j] != '=')
 			j++;
 		if (!ft_strncmp(vec_get(argv, 1), strs[i], j))

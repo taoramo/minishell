@@ -49,7 +49,7 @@ int	export_variable(t_vec *argv, t_vec *env)
 		return (0);
 	else
 	{
-		if (vec_push(env, str) < 0)
+		if (vec_push(env, &str) < 0)
 		{
 			ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
 			return (-1);

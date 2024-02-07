@@ -87,7 +87,7 @@ int	next_length(const char *line, int index)
 	}
 }
 
-int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return)
+int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return, t_vec *env)
 {
 	int			i;
 	int			start;
@@ -102,11 +102,16 @@ int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return)
 		ft_memset(&current, 0, sizeof(t_cmd_line));
 		current.str = ft_substr(line, start, length);
 		if (!current.str)
+		{
+			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
+		}
 		if (vec_push(cmd_lines, &current) < 0)
+		{
+			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
+		}
 		i = start + length;
 	}
-	//vec_iter(cmd_lines, print_cmd_line);
-	return (handle_pipelines(cmd_lines, last_return));
+	return (handle_pipelines(cmd_lines, last_return, env));
 }

@@ -36,12 +36,12 @@ typedef struct s_wc
 	int		i;
 }	t_wc;
 
-int		parse_line(const char *line, int *last_return);
+int		parse_line(const char *line, int *last_return, t_vec *env);
 int		check_line_parentheses(const char *line);
 int		make_cmd_line_groups(t_vec *cmd_lines,
-			const char *line, int *last_return);
+			const char *line, int *last_return, t_vec *env);
 int		next_cmd_line_length(const char *line);
-int		handle_pipelines(t_vec *cmd_lines, int *last_return);
+int		handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env);
 int		check_parenthesis_count(const char *line);
 void	remove_parentheses(t_cmd_line *cmd_line);
 void	free_cmd_line_str(void *arg);

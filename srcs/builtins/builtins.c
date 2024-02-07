@@ -164,16 +164,17 @@ int	ft_unset(t_vec *argv, t_vec *env)
 {
 	size_t	i;
 	int		j;
-	char	*ptr;
+	char	**strs;
 
 	(void)argv;
 	i = 0;
+	j = 0;
 	while (i < env->len)
 	{
-		ptr = *(char **)vec_get(env, i);
-		while (ptr[j] && ptr[j] != '=')
+		strs = (char **)env->memory;
+		while (strs[i][j] && strs[i][j] != '=')
 			j++;
-		if (!ft_strncmp(vec_get(argv, 1), ptr, j))
+		if (!ft_strncmp(vec_get(argv, 1), strs[i], j))
 		{
 			vec_remove(env, i);
 			return (1);

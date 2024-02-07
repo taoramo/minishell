@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 10:00:34 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 12:14:38 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_redirect
 }	t_redirect;
 
 int		ft_isspace(int c);
+int		quote_length(char *str);
 
 int		prepare_command(t_command *command, char *command_str, t_vec *env);
 int		split_command(t_vec *strs, char *str);

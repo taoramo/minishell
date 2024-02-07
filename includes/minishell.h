@@ -65,5 +65,7 @@ int		(*get_builtin(int i))(t_vec *);
 int		contains_equals(const char *str);
 int		expand_star(t_vec *argv);
 int		is_wildcard_match(char *string, char *pattern);
+int		remove_quotes(t_vec *argv);
+int		expand_env(t_vec *argv, t_vec *env);
 
 #endif

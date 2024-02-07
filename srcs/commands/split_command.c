@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 10:00:54 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:26:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int	add_str(t_vec *strs, char *str, char *end)
 {
 	char	*substr;
 
-	if (*(end - 1) == '\"' || *(end - 1) == '\'')
-		substr = ft_substr((str + 1), 0, (end - 1) - (str + 1));
-	else
-		substr = ft_substr(str, 0, end - str);
+	substr = ft_substr(str, 0, end - str);
 	if (substr == 0)
 		return (-1);
 	if (vec_push(strs, &substr) == -1)

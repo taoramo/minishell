@@ -6,24 +6,33 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 10:28:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 13:33:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// int	expand_command(t_vec command, t_vec *env)
-// {
+int	expand_command(t_vec *argv, t_vec *env)
+{
+	(void) env;
 	
-// }
+	expand_env(argv, env);
+	//expand_star(argv);
+	remove_quotes(argv);
+
+	return (1);
+}
 
 int	prepare_argv(t_command *command, char *command_str, t_vec *env)
 {
-	(void) env;
-
 	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
 		return (-1);
 	if (split_command(&command->argv, command_str) == -1)
+	{
+		free_split_vec(&command->argv);
+		return (-1);
+	}
+	if (expand_command(&command->argv, env) == -1)
 	{
 		free_split_vec(&command->argv);
 		return (-1);

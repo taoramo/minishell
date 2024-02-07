@@ -5,6 +5,9 @@ echo hello "hello"
 echo "hello" "hello"
 echo 'hello' 'hello'
 ec"ho" hello
+"echo" hello
+"ec"ho hello
+e"ch""o" he"llo""o"
 echo $HOME*
 echo '$HOME*'
 echo "$HOME*"

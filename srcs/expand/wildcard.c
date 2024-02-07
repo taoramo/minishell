@@ -38,22 +38,24 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
 {
 	char			*str;
+	char			**strs;
 
-	str = strdup((char *)vec_get(argv, i));
+	strs = (char **)argv->memory;
+	str = strdup(strs[i]);
 	if (!str)
 		return (exp_wc_err(dst, "error allocating memory"));
-	if (vec_push(dst, str) < 0)
+	if (vec_push(dst, &str) < 0)
 		return (exp_wc_err(dst, "error allocating memory"));
 	return (0);
 }
 
 int	expand_star(t_vec *argv)
 {
-	t_vec			new;
+	t_vec			dst;
 	size_t			i;
 	char			**strs;
 
-	if (vec_new(&new, 32, sizeof(char *)) < 0)
+	if (vec_new(&dst, 32, sizeof(char *)) < 0)
 		return (ft_error("minishell: error allocating memory\n"));
 	i = 0;
 	while (i < argv->len)
@@ -61,15 +63,15 @@ int	expand_star(t_vec *argv)
 		strs = (char **)argv->memory;
 		if (ft_strchr(strs[i], '*'))
 		{
-			if (push_expanded(&new, strs, i) < 0)
+			if (push_expanded(&dst, strs, i) < 0)
 				return (ft_error("minishell: error creaing argv\n"));
 		}
-		else if (push_argv_elem(&new, argv, i) < 0)
+		else if (push_argv_elem(&dst, argv, i) < 0)
 			return (-1);
 		i++;
 	}
-	free_split_vec(argv);
-	ft_memcpy(argv, &new, sizeof(t_vec));
+	//free_split_vec(argv);
+	ft_memcpy(argv, &dst, sizeof(t_vec));
 	return (0);
 }
 
@@ -82,12 +84,12 @@ int	expand_star(t_vec *argv)
 	return (-1);
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_vec	strs;
-	t_vec	new;
 
-	vec_split(&strs, "*.c *.o", ' ');
-	expand_star(&new, &strs);
-	vec_iter(&new, vec_print_elem_str);
+	(void)argc;
+	vec_split(&strs, "echo *.c helo wow *a", ' ');
+	expand_star(&strs);
+	vec_iter(&strs, vec_print_elem_str);
 } */

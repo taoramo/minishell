@@ -22,7 +22,8 @@ int	check_rest_p(char *p, size_t pindex)
 {
 	while (pindex < ft_strlen(p))
 	{
-		if (p[pindex] != '*')
+		if (p[pindex] != '*' && !ft_is_inside(p, pindex, '"')
+			&& !ft_is_inside(p, pindex, 39))
 			return (0);
 		pindex++;
 	}
@@ -41,7 +42,9 @@ int	is_wildcard_match(char *s, char *p)
 			++i.pindex;
 			++i.sindex;
 		}
-		else if (i.pindex < ft_strlen(p) && p[i.pindex] == '*')
+		else if (i.pindex < ft_strlen(p) && p[i.pindex] == '*'
+			&& !ft_is_inside(p, i.pindex, '"')
+			&& !ft_is_inside(p, i.pindex, 39))
 			set_indeces_at_wc(&i);
 		else if (i.last_wildcard == -1)
 			return (0);

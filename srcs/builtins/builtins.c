@@ -73,8 +73,10 @@ int	ft_cd(t_vec *argv)
 	strs = (char **)argv->memory;
 	if (ft_strlen(strs[1]) > MAXPATHLEN)
 	{
-		ft_putstr_fd("minishell: cd: path too long\n", 2);
-		return (-1);
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(strs[1], 2);
+		ft_putstr_fd(": File name too long\n", 2);
+		return (1);
 	}
 	if (strs[1] != 0)
 	{
@@ -83,7 +85,7 @@ int	ft_cd(t_vec *argv)
 			if (relative_parent(path, strs[1]) < 0)
 			{
 				ft_putstr_fd("minishell: cd: path too long\n", 2);
-				return (-1);
+				return (1);
 			}
 		}
 		else if (!ft_strncmp(strs[1], "./", 2))
@@ -91,7 +93,7 @@ int	ft_cd(t_vec *argv)
 			if (relative_current(path, strs[1]) < 0)
 			{
 				ft_putstr_fd("minishell: cd: path too long\n", 2);
-				return (-1);
+				return (1);
 			}
 		}
 		r = chdir(path);
@@ -100,9 +102,9 @@ int	ft_cd(t_vec *argv)
 		r = chdir(getenv("HOME"));
 	if (r == -1)
 	{
-		ft_putstr_fd("minishell: cd:", 2);
-		ft_putstr_fd(strs[1], 2);
-		perror(0);
+		ft_putstr_fd("minishell: cd: ", 2);
+		perror(strs[1]);
+		return (1);
 	}
 	return (r);
 }

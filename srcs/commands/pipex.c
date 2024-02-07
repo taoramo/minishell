@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/06 14:27:07 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/07 10:02:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ int	prepare_pipe(t_vec *commands, char *pipe_str, t_vec *env)
 	while (strs[i] != 0)
 	{
 		command = ft_calloc(1, sizeof(t_command));
-		exit_code = prepare_command(command, strs[i]);
-		command->env = env;
+		exit_code = prepare_command(command, strs[i], env);
 		vec_push(commands, command);
 		i++;
 	}

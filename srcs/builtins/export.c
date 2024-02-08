@@ -111,7 +111,8 @@ int	ft_export(t_vec *argv, t_vec *env)
 				ft_putstr_fd(environment[i], 1);
 			i++;
 		}
-		free_split_vec(&sorted);
+		vec_free(&sorted);
+		vec_clear(&sorted);
 		return (0);
 	}
 	else

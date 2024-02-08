@@ -60,6 +60,7 @@ int		ft_pwd(t_vec *argv);
 int		ft_env(t_vec *env);
 int		ft_export(t_vec *argv, t_vec *env);
 int		ft_unset(t_vec *argv, t_vec *env);
+int		ft_getenv(char *buffer, char *arg, t_vec *env);
 int		builtin_index(char *command);
 int		(*get_builtin(int i))(t_vec *);
 int		contains_equals(const char *str);

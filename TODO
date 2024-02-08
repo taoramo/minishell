@@ -31,15 +31,15 @@ Built-in functions:
 	✔ Work in pipes @done(24-02-06 14:35)
 	✔ echo with option -n @done(24-02-06 14:35)
 	☐ cd with only a relative or absolute path
-	x pwd with no options
-	x export with no options
-	x unset with no options
+	✔ pwd with no options @done(24-02-08 16:29)
+	✔ export with no options @done(24-02-08 16:29)
+	✔ unset with no options @done(24-02-08 16:29)
 	✔ env with no options or arguments @done(24-02-06 14:35)
 	☐ exit with no options
 
 Bonus:
 	✔ && and || with parenthesis for priorities. @done(24-01-30 13:59)
-	x Wildcards * should work for the current working directory.
+	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
 	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
@@ -51,8 +51,10 @@ Fixes:
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc);
-	- the argument .. doesn't get to argv, for example "echo .."
+	- the argument .. doesn't get to argv, for example "echo .." (or arg .)
 	- cd with relative path
+	☐ ft_getenv needs to determine size of returned string, cannot be known before
+	☐ Use ft_getenv in add_path as well
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -62,6 +64,7 @@ Unsure:
 
 Tester:
 	☐ Figure out how to test in interactive mode for e.g. "cd" testing
+	☐ Test that "* hello" in a folder containing only a file named "echo" works as "echo hello"
 
 Archived fixes:
 	✔ "./false 1 || ./true 2" - first command returns 1 but second does not run @done(24-01-30 15:09)

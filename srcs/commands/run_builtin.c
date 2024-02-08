@@ -78,7 +78,7 @@ int	run_builtin_command(t_command *command)
 	if (command_index == 0)
 		return (ft_echo(&command->argv));
 	if (command_index == 1)
-		return (ft_cd(&command->argv));
+		return (ft_cd(&command->argv, command->env));
 	if (command_index == 2)
 		return (ft_pwd(&command->argv));
 	if (command_index == 3)

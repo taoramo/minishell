@@ -42,7 +42,6 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
 	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
@@ -56,8 +55,7 @@ Fixes:
 	☐ ft_getenv needs to determine size of returned string, cannot be known before
 	☐ Use ft_getenv in add_path as well
 	☐ "* hello" in a folder containing only a file named "echo" should work as "echo hello"
-	☐ echo *$HOME (expands to argv [echo][*/Users/hpatsi]) segfauts at wildcard
-	☐ echo '$HOME*' (expands to argv [echo]['$HOME*']) segfaults at wildcard
+	☐ Non matching wildcard pattern should return the pattern
 	☐ ft_getenv expands "$HOME*" as it would $HOME
 
 Unsure:
@@ -76,3 +74,4 @@ Archived fixes:
 		was error in my fix to an error when compiling with mac
 	✔ "./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6" skipping parentheses @done(24-02-01 10:20)
 		was error in how I had combined the shell and run command sections
+		✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)

@@ -4,5 +4,3 @@ echo newline:
 pwd
 export | head -28
 env | head -28
-cd /.. && pwd
-cd ../ && pwd

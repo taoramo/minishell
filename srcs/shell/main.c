@@ -126,8 +126,9 @@ int	main(int argc, char **argv, char **envp)
 	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
 	{
+		last_return = parse_line(argv[2], &last_return, &env);
 		free_split_vec(&env);
-		return (parse_line(argv[2], &last_return, &env));
+		return (last_return);
 	}
 	if (argc == 1)
 	{

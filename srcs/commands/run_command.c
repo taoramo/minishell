@@ -70,7 +70,12 @@ int	run_command(char *str, t_vec *env)
 	if (ret != 0)
 		return (ret);
 	if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-		return (run_builtin(&command));
+	{
+		ret = run_builtin(&command);
+		free_split_vec(&command.argv);
+		vec_free(&command.redirects);
+		return (ret);
+	}
 	if (run_single_command(&command) == -1)
 		return (1);
 	free_split_vec(&command.argv);

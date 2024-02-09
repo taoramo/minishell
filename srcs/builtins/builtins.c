@@ -257,6 +257,7 @@ int	ft_unset(t_vec *argv, t_vec *env)
 			j++;
 		if (!ft_strncmp(args[1], strs[i], j))
 		{
+			free(strs[i]);
 			vec_remove(env, i);
 			return (1);
 		}

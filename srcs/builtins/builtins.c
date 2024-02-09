@@ -114,7 +114,7 @@ char	*parse_directory(t_vec *pathstrs)
 			vec_remove(pathstrs, i - 1);
 			i--;
 		}
-		if (!ft_strncmp(dirs[i], ".", 2) || (i == 0 && !ft_strncmp(dirs[i], "..", 3)))
+		else if (!ft_strncmp(dirs[i], ".", 2) || (i == 0 && !ft_strncmp(dirs[i], "..", 3)))
 		{
 			vec_remove(pathstrs, i);
 			i--;
@@ -126,6 +126,7 @@ char	*parse_directory(t_vec *pathstrs)
 	while (i < pathstrs->len)
 	{
 		ft_strlcat(path, *(char **)vec_get(pathstrs, i), MAXPATHLEN);
+		ft_strlcat(path, "/", MAXPATHLEN);
 		i++;
 	}
 	return (path);

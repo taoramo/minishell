@@ -56,7 +56,13 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 	{
 		j = 0;
 		cmd_line = vec_get(cmd_lines, i);
-		check_parenth_syntax(cmd_line);
+		if (check_parenth_syntax(cmd_line) < 0)
+		{
+			vec_iter(cmd_lines, free_cmd_line_str);
+			vec_free(cmd_lines);
+			free_split_vec(env);
+			return (-1);
+		}
 		if (cmd_line->str[0] == '&' || cmd_line->str[0] == '|')
 			j = j + 2;
 		while (ft_isspace(cmd_line->str[j]))

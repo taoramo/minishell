@@ -4,7 +4,8 @@ int	ft_error(char *str)
 {
 	if (ft_strlen(str))
 	{
-		printf("%s\n", str);
+		ft_putstr_fd(str, 2);
+		write(2, "\n", 1);
 		rl_on_new_line();
 	}
 	return (-1);

@@ -2,8 +2,8 @@
 
 int	is_inside_parenth(const char *line, int i, int open_char)
 {
-	int j;
-	int is_inside;
+	int	j;
+	int	is_inside;
 	int	closed_char;
 
 	j = 0;
@@ -25,16 +25,16 @@ int	is_inside_parenth(const char *line, int i, int open_char)
 	return (is_inside);
 }
 
-int ft_is_inside(const char *line, int i, int open_char)
+int	ft_is_inside(const char *line, int i, int open_char)
 {
-	int j;
-	int is_inside;
+	int	j;
+	int	is_inside;
 
 	if (open_char == '(' || open_char == '[' || open_char == '{')
 		return (is_inside_parenth(line, i, open_char));
 	j = 0;
 	is_inside = 0;
-	while(line[j] && j < i)
+	while (line[j] && j < i)
 	{
 		if (line[j] == open_char && is_inside == 0)
 			is_inside = 1;

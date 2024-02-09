@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 12:23:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/09 12:40:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,9 @@ int	expand_substr_env(t_vec *str_vec, size_t i, t_vec *env)
 	env_name = get_env_name(str_vec, i);
 	if (env_name == 0)
 		return (-1);
-	ft_printf("env name = %s\n", env_name);
 	env_expanded = ft_getenv(env_name, env);
 	if (env_expanded == 0)
 		env_expanded = "";
-	ft_printf("env expanded = %s\n", env_expanded);
 
 	j = 0;
 	while (j < ft_strlen(env_name) + 1)

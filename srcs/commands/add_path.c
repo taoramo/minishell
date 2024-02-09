@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 14:33:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/09 12:41:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,7 @@ char	**get_paths(t_vec *env)
 	char	**paths;
 
 	i = 0;
-	while (i < env->len)
-	{
-		path_str = *(char **)vec_get(env, i);
-		if (ft_strncmp(path_str, "PATH=", 5) == 0)
-			break;
-		i++;
-	}
+	path_str = ft_getenv("PATH", env);
 	if (i == env->len)
 		return (ft_calloc(1, sizeof(char *)));
 	paths = ft_split(path_str, ':');

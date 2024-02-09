@@ -41,7 +41,11 @@ int	relative_parent(char *path)
 	int	i;
 	int	len;
 
-	getcwd(path, MAXPATHLEN);
+	if (!getcwd(path, MAXPATHLEN))
+	{
+		perror("minishell: cd:");
+		return (-1);
+	}
 	len = ft_strlen(path);
 	i = len;
 	while (i >= 0 && path[i] != '/')
@@ -55,11 +59,12 @@ int	relative_parent(char *path)
 	return (0);
 }
 
-int	ft_getenv(char *buffer, char *arg, t_vec *env)
+char	*ft_getenv(char *arg, t_vec *env)
 {
 	size_t	i;
 	int		j;
 	char	**entries;
+	char	*str;
 
 	entries = (char **)env->memory;
 	i = 0;
@@ -71,25 +76,33 @@ int	ft_getenv(char *buffer, char *arg, t_vec *env)
 			while (entries[i][j] && entries[i][j] != '=')
 				j++;
 			j++;
-			ft_strlcpy(buffer, &entries[i][j], ft_strlen(&entries[i][j]) + 1);
-			return (0);
+			str = ft_calloc(ft_strlen(&entries[i][j]) + 1, sizeof(char));
+			if (!str)
+				return (0);
+			ft_strlcpy(str, &entries[i][j], ft_strlen(&entries[i][j]) + 1);
+			return (str);
 		}
 		i++;
 	}
-	return (-1);
+	return (0);
 }
 
-int	cd_relative(char *buffer, t_vec *argv)
+char	*change_directory(t_vec *argv)
 {
-	(void)buffer;
-	(void)argv;
-	return (0);
+	t_vec	pathstrs;
+
+	if (vec_split(&pathstrs, *(char **)vec_get(argv, 1), '/') < 0)
+	{
+		ft_error("minishell: cd: memory error\n"));
+		return (0);
+	}
+
 }
 
 int	ft_cd(t_vec *argv, t_vec *env)
 {
 	char	**strs;
-	char	path[MAXPATHLEN];
+	char	*path;
 	int		r;
 
 	strs = (char **)argv->memory;
@@ -102,26 +115,24 @@ int	ft_cd(t_vec *argv, t_vec *env)
 	}
 	if (strs[1] && ft_strlen(strs[1]))
 	{
-		if (!ft_strncmp(strs[1], "../", 3) || !ft_strncmp(strs[1], "./", 2))
+		path = change_directory(argv);
+		if (!path)
 		{
-			if (cd_relative(path, argv) < 0)
-			{
-				ft_putstr_fd("minishell: cd: path too long\n", 2);
-				return (1);
-			}
+			ft_putstr_fd("minishell: cd: path too long\n", 2);
+			return (1);
 		}
-		else
-			ft_strlcpy(path, strs[1], ft_strlen(strs[1]) + 1);
-		r = chdir(path);
+	r = chdir(path);
 	}
 	else
 	{
-		if (ft_getenv(path, "HOME", env) < 0)
+		path = ft_getenv("HOME", env);
+		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: error\n", 2);
 			return (1);
 		}
 		r = chdir(path);
+		free(path);
 	}
 	if (r == -1)
 	{

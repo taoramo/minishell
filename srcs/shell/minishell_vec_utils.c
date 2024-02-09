@@ -10,6 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+
 int	contains_supergroup(void *arg)
 {
 	char		*ptr;
@@ -24,4 +26,14 @@ int	contains_supergroup(void *arg)
 		i++;
 	}
 	return (0);
+}
+
+int	vec_sort_strncmp(void *one, void *two)
+{
+	char	*sone;
+	char	*stwo;
+
+	sone = *(char **)one;
+	stwo = *(char **)two;
+	return (ft_strncmp(sone, stwo, 1024));
 }

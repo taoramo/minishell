@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 16:31:38 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	env_entry_exists(char *str, t_vec *env)
@@ -62,14 +74,29 @@ int	export_variable(t_vec *argv, t_vec *env)
 	return (0);
 }
 
-int	vec_sort_strncmp(void *one, void *two)
+void	print_env(char **environment, size_t i)
 {
-	char	*sone;
-	char	*stwo;
+	size_t	j;
 
-	sone = *(char **)one;
-	stwo = *(char **)two;
-	return (ft_strncmp(sone, stwo, 1024));
+	ft_putstr_fd("declare -x ", 1);
+	j = 0;
+	if (contains_equals(environment[i]))
+	{
+		while (environment[i][j] != '=')
+		{
+			write(1, &environment[i][j], 1);
+			j++;
+		}
+		write(1, "\"", 1);
+		while (environment[i][j])
+		{
+			write(1, &environment[i][j], 1);
+			j++;
+		}
+		write(1, "\"\n", 2);
+	}
+	else
+		ft_putstr_fd(environment[i], 1);
 }
 
 int	ft_export(t_vec *argv, t_vec *env)
@@ -78,7 +105,6 @@ int	ft_export(t_vec *argv, t_vec *env)
 	char	**environment;
 	t_vec	sorted;
 	size_t	i;
-	int		j;
 
 	arguments = (char **)argv->memory;
 	if (arguments[1] == 0)
@@ -90,25 +116,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 		i = 0;
 		while (i < env->len)
 		{
-			ft_putstr_fd("declare -x ", 1);
-			j = 0;
-			if (contains_equals(environment[i]))
-			{
-				while (environment[i][j] != '=')
-				{
-					write(1, &environment[i][j], 1);
-					j++;
-				}
-				write(1, "\"", 1);
-				while (environment[i][j])
-				{
-					write(1, &environment[i][j], 1);
-					j++;
-				}
-				write(1, "\"\n", 2);
-			}
-			else
-				ft_putstr_fd(environment[i], 1);
+			print_env(environment, i);
 			i++;
 		}
 		vec_free(&sorted);

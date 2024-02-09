@@ -77,5 +77,6 @@ int		is_wildcard_match(char *string, char *pattern);
 int		remove_quotes(t_vec *argv);
 int		expand_envs(t_vec *argv, t_vec *env);
 void	toggle_carret(int is_on);
+int		vec_sort_strncmp(void *one, void *two);
 
 #endif

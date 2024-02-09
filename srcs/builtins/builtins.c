@@ -36,29 +36,6 @@ int	ft_echo(t_vec *argv)
 	return (0);
 }
 
-int	relative_parent(char *path)
-{
-	int	i;
-	int	len;
-
-	if (!getcwd(path, MAXPATHLEN))
-	{
-		perror("minishell: cd:");
-		return (-1);
-	}
-	len = ft_strlen(path);
-	i = len;
-	while (i >= 0 && path[i] != '/')
-		i--;
-	while (i < len)
-	{
-		path[i] = 0;
-		i++;
-	}
-	chdir(path);
-	return (0);
-}
-
 char	*ft_getenv(char *arg, t_vec *env)
 {
 	size_t	i;
@@ -71,7 +48,8 @@ char	*ft_getenv(char *arg, t_vec *env)
 	j = 0;
 	while (i < env->len)
 	{
-		if (!ft_strncmp(arg, entries[i], ft_strlen_member(entries[i], '=')))
+		if (!ft_strncmp(arg, entries[i], ft_strlen_member(entries[i], '='))
+			&& arg[ft_strlen_member(entries[i], '=')] == 0)
 		{
 			while (entries[i][j] && entries[i][j] != '=')
 				j++;
@@ -110,12 +88,15 @@ char	*parse_directory(t_vec *pathstrs)
 	{
 		if (i != 0 && !ft_strncmp(dirs[i], "..", 3))
 		{
+			free(dirs[i]);
 			vec_remove(pathstrs, i);
+			free(dirs[i - 1]);
 			vec_remove(pathstrs, i - 1);
 			i--;
 		}
 		else if (!ft_strncmp(dirs[i], ".", 2) || (i == 0 && !ft_strncmp(dirs[i], "..", 3)))
 		{
+			free(dirs[i]);
 			vec_remove(pathstrs, i);
 			i--;
 		}
@@ -146,6 +127,7 @@ char	*change_directory(t_vec *argv)
 			return (cd_error("memory_error"));
 		if (vec_split(&pathstrs, buffer, '/') < 0)
 			return (cd_error("memory_error"));
+		free(buffer);
 	}
 	if (vec_split(&pathstrs, *(char **)vec_get(argv, 1), '/') < 0)
 	{
@@ -181,8 +163,8 @@ int	ft_cd(t_vec *argv, t_vec *env)
 			ft_putstr_fd("minishell: cd: path too long\n", 2);
 			return (1);
 		}
-	r = chdir(path);
-	free(path);
+		r = chdir(path);
+		free(path);
 	}
 	else
 	{

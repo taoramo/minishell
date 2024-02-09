@@ -30,7 +30,7 @@ Built-in functions:
 	✔ Work for single commands @done(24-02-06 14:35)
 	✔ Work in pipes @done(24-02-06 14:35)
 	✔ echo with option -n @done(24-02-06 14:35)
-	☐ cd with only a relative or absolute path
+	x cd with only a relative or absolute path
 	✔ pwd with no options @done(24-02-08 16:29)
 	✔ export with no options @done(24-02-08 16:29)
 	✔ unset with no options @done(24-02-08 16:29)
@@ -50,12 +50,7 @@ Fixes:
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc);
-	☐ the argument .. doesn't get to argv, for example "echo .." (or arg .)
-	☐ cd with relative path
-	☐ ft_getenv needs to determine size of returned string, cannot be known before
 	☐ Use ft_getenv in add_path as well
-	☐ "* hello" in a folder containing only a file named "echo" should work as "echo hello"
-	☐ Non matching wildcard pattern should return the pattern
 	☐ ft_getenv expands "$HOME*" as it would $HOME
 
 Unsure:
@@ -68,6 +63,11 @@ Tester:
 	☐ Figure out how to test in interactive mode for e.g. "cd" testing
 
 Archived fixes:
+	x "* hello" in a folder containing only a file named "echo" should work as "echo hello"
+	x the argument .. doesn't get to argv, for example "echo .." (or arg .)
+	x cd with relative path
+	x ft_getenv needs to determine size of returned string, cannot be known before
+	x Non matching wildcard pattern should return the pattern
 	✔ "./false 1 || ./true 2" - first command returns 1 but second does not run @done(24-01-30 15:09)
 		was error in pipe check in run command
 	✔ "./false 1 && ./true 2 || ./true 3" stopping after first false @done(24-01-30 15:40)

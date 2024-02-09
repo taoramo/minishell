@@ -1,3 +1,4 @@
+#include "libft.h"
 #include "minishell.h"
 
 static int	exp_wc_err(t_vec *new, char *msg)
@@ -46,14 +47,10 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 
 int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
 {
-	char			*str;
 	char			**strs;
 
 	strs = (char **)argv->memory;
-	str = strdup(strs[i]);
-	if (!str)
-		return (exp_wc_err(dst, "error allocating memory"));
-	if (vec_push(dst, &str) < 0)
+	if (vec_push(dst, &strs[i]) < 0)
 		return (exp_wc_err(dst, "error allocating memory"));
 	return (0);
 }

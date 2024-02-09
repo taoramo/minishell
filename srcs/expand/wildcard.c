@@ -1,4 +1,15 @@
-#include "libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcard.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 17:10:29 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 17:10:30 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	exp_wc_err(t_vec *new, char *msg)
@@ -10,20 +21,14 @@ static int	exp_wc_err(t_vec *new, char *msg)
 	return (-1);
 }
 
-int	push_expanded(t_vec *dst, char **strs, int i)
+int	push_matches(t_vec *dst, char **strs, int i, DIR *ptr)
 {
-	DIR				*ptr;
 	struct dirent	*ep;
-	char			*path;
 	int				j;
+	char			*path;
 
+	ep = readdir(ptr);
 	j = 0;
-	ptr = opendir("./");
-	if (!ptr)
-		return (exp_wc_err(dst, "error opening directory"));
-	ep = readdir(ptr);
-	ep = readdir(ptr);
-	ep = readdir(ptr);
 	while (ep)
 	{
 		if (is_wildcard_match(ep->d_name, strs[i]))
@@ -42,7 +47,21 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 		vec_push(dst, &strs[i]);
 	else
 		free(strs[i]);
-	return (1);
+	return (0);
+}
+
+int	push_expanded(t_vec *dst, char **strs, int i)
+{
+	DIR				*ptr;
+	struct dirent	*ep;
+
+	ptr = opendir("./");
+	ep = readdir(ptr);
+	ep = readdir(ptr);
+	(void)ep;
+	if (!ptr)
+		return (exp_wc_err(dst, "error opening directory"));
+	return (push_matches(dst, strs, i, ptr));
 }
 
 int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
@@ -80,22 +99,3 @@ int	expand_star(t_vec *argv)
 	ft_memcpy(argv, &dst, sizeof(t_vec));
 	return (0);
 }
-
-/* int	ft_error(char *str)
-{
-	if (ft_strlen(str))
-	{
-		printf("%s\n", str);
-	}
-	return (-1);
-}
-
-int	main(int argc, char **argv)
-{
-	t_vec	strs;
-
-	(void)argc;
-	vec_split(&strs, "echo *.c helo wow *a", ' ');
-	expand_star(&strs);
-	vec_iter(&strs, vec_print_elem_str);
-} */

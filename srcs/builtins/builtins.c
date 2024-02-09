@@ -87,16 +87,75 @@ char	*ft_getenv(char *arg, t_vec *env)
 	return (0);
 }
 
+char	*cd_error(char *str)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(str, 2);
+	write(2, "\n", 1);
+	return (0);
+}
+
+char	*parse_directory(t_vec *pathstrs)
+{
+	size_t		i;
+	char		**dirs;
+	char		*path;
+
+	path = ft_calloc(sizeof(char), MAXPATHLEN);
+	if (!path)
+		return (0);
+	dirs = (char **)pathstrs->memory;
+	i = 0;
+	while (i < pathstrs->len)
+	{
+		if (i != 0 && !ft_strncmp(dirs[i], "..", 3))
+		{
+			vec_remove(pathstrs, i);
+			vec_remove(pathstrs, i - 1);
+			i--;
+		}
+		if (!ft_strncmp(dirs[i], ".", 2) || (i == 0 && !ft_strncmp(dirs[i], "..", 3)))
+		{
+			vec_remove(pathstrs, i);
+			i--;
+		}
+		i++;
+	}
+	path[0] = '/';
+	i = 0;
+	while (i < pathstrs->len)
+	{
+		ft_strlcat(path, *(char **)vec_get(pathstrs, i), MAXPATHLEN);
+		i++;
+	}
+	return (path);
+}
+
 char	*change_directory(t_vec *argv)
 {
 	t_vec	pathstrs;
+	char	*buffer;
 
+	buffer = 0;
+	vec_new(&pathstrs, 32, sizeof(char *));
+	if (ft_strncmp(*(char **)vec_get(argv, 1), "/", 1))
+	{
+		buffer = getcwd(0, MAXPATHLEN);
+		if (!buffer) 
+			return (cd_error("memory_error"));
+		if (vec_split(&pathstrs, buffer, '/') < 0)
+			return (cd_error("memory_error"));
+	}
 	if (vec_split(&pathstrs, *(char **)vec_get(argv, 1), '/') < 0)
 	{
-		ft_error("minishell: cd: memory error\n"));
-		return (0);
+		free_split_vec(&pathstrs);
+		return (cd_error("memory_error"));
 	}
-
+	buffer = parse_directory(&pathstrs);
+	free_split_vec(&pathstrs);
+	if (!buffer)
+		return (cd_error("memory_error"));
+	return (buffer);
 }
 
 int	ft_cd(t_vec *argv, t_vec *env)
@@ -122,6 +181,7 @@ int	ft_cd(t_vec *argv, t_vec *env)
 			return (1);
 		}
 	r = chdir(path);
+	free(path);
 	}
 	else
 	{

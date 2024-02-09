@@ -9,8 +9,10 @@ ec"ho" hello
 "ec"ho hello
 e"ch""o" he"llo""o"
 echo $HOME*
+echo *$HOME
 echo '$HOME*'
 echo "$HOME*"
+echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?
 echo *
 grep "x" ./*

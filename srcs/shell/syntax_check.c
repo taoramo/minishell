@@ -60,22 +60,22 @@ int	check_open_quotes(const char *line)
 		return (0);
 }
 
-int	check_parenth_syntax(t_cmd_line *cmd_line)
+int	check_parenth_syntax(char *cmd_line)
 {
 	int	i;
 	int	j;
 
 	i = 0;
-	while (cmd_line->str[i])
+	while (cmd_line[i])
 	{
-		if (i != 0 && cmd_line->str[i] == '('
-			&& !ft_is_inside(cmd_line->str, i, '"')
-			&& !ft_is_inside(cmd_line->str, i, 39))
+		if (i != 0 && cmd_line[i] == '('
+			&& !ft_is_inside(cmd_line, i, '"')
+			&& !ft_is_inside(cmd_line, i, 39))
 		{
 			j = i - 1;
-			while (ft_isspace(cmd_line->str[j]))
+			while (ft_isspace(cmd_line[j]))
 				j--;
-			if (cmd_line->str[j] != '&' && cmd_line->str[j] != '|')
+			if (cmd_line[j] != '&' && cmd_line[j] != '|')
 				return (ft_error("syntax error near unexpected token `(’"));
 		}
 		i++;
@@ -83,19 +83,19 @@ int	check_parenth_syntax(t_cmd_line *cmd_line)
 	return (1);
 }
 
-int	check_cmd_line_syntax(t_cmd_line *cmd_line)
+int	check_cmd_line_syntax(char *cmd_line)
 {
 	int	i;
 
 	i = 0;
-	while (cmd_line->str[i])
+	while (cmd_line[i])
 	{
-		if ((cmd_line->str[0] == '&' && cmd_line->str[1] != '&')
-			|| (i != 0 && cmd_line->str[i] == '&'
-				&& ft_strncmp(&cmd_line->str[i - 1], " && ", 4)))
+		if ((cmd_line[0] == '&' && cmd_line[1] != '&')
+			|| (i != 0 && cmd_line[i] == '&'
+				&& ft_strncmp(&cmd_line[i - 1], " && ", 4)))
 			return (ft_error("syntax error near unexpected token `&’"));
-		if (!ft_strncmp(&cmd_line->str[i], "&&", 2)
-			|| !ft_strncmp(&cmd_line->str[i], "||", 2))
+		if (!ft_strncmp(&cmd_line[i], "&&", 2)
+			|| !ft_strncmp(&cmd_line[i], "||", 2))
 			i = i + 2;
 		else
 			i++;

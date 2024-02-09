@@ -25,8 +25,7 @@ int	ft_error(char *str)
 
 int	cmd_line_error(t_vec *cmd_lines)
 {
-	vec_iter(cmd_lines, free_cmd_line_str);
-	vec_free(cmd_lines);
+	free_split_vec(cmd_lines);
 	return (ft_error("error allocating memory\n"));
 }
 

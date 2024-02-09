@@ -108,16 +108,15 @@ int	make_cmd_line_groups(t_vec *cmd_lines,
 	int			i;
 	int			start;
 	int			length;
-	t_cmd_line	current;
+	char		*current;
 
 	i = 0;
 	while (line[i])
 	{
 		start = next_start(line, i);
 		length = next_length(line, start);
-		ft_memset(&current, 0, sizeof(t_cmd_line));
-		current.str = ft_substr(line, start, length);
-		if (!current.str)
+		current = ft_substr(line, start, length);
+		if (!current)
 		{
 			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));

@@ -21,7 +21,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		free_split_vec(env);
 		return (-1);
 	}
-	if (vec_new(&cmd_lines, 16, sizeof(t_cmd_line)) < 0)
+	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
 	{
 		free_split_vec(env);
 		return (ft_error("malloc"));

@@ -10,28 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
 int	contains_supergroup(void *arg)
 {
-	t_cmd_line	*ptr;
+	char		*ptr;
 	int			i;
 
 	ptr = arg;
 	i = 0;
-	while (ptr->str[i])
+	while (ptr[i])
 	{
-		if (ptr->str[i] == '(')
+		if (ptr[i] == '(')
 			return (1);
 		i++;
 	}
 	return (0);
-}
-
-void	free_cmd_line_str(void *arg)
-{
-	t_cmd_line	*ptr;
-
-	ptr = arg;
-	free(ptr->str);
 }

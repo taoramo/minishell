@@ -32,12 +32,6 @@
 # include "libft.h"
 # include "commands.h"
 
-typedef struct s_cmd_line
-{
-	char			*str;
-	int				return_value;
-}	t_cmd_line;
-
 typedef struct s_wc
 {
 	size_t	pindex;
@@ -56,10 +50,9 @@ int		next_cmd_line_length(const char *line);
 int		handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env);
 int		check_parenthesis_count(const char *line);
 int		check_open_quotes(const char *line);
-int		check_parenth_syntax(t_cmd_line *cmd_line);
-int		check_cmd_line_syntax(t_cmd_line *cmd_line);
-void	remove_parentheses(t_cmd_line *cmd_line);
-void	free_cmd_line_str(void *arg);
+int		check_parenth_syntax(char *cmd_line);
+int		check_cmd_line_syntax(char *cmd_line);
+void	remove_parentheses(char *cmd_line);
 void	print_cmd_line(void *arg);
 int		ft_is_inside(const char *line, int i, int open_char);
 void	signal_interactive(void);
@@ -67,7 +60,7 @@ void	signal_non_interactive(void);
 int		ft_error(char *str);
 int		minishell_error(char *str, char *message);
 int		cmd_line_error(t_vec *cmd_lines);
-int		prepare_cmd(t_cmd_line *cmd_line, int *last_return);
+int		prepare_cmd(char *cmd_line, int *last_return);
 
 int		ft_echo(t_vec *argv);
 int		ft_cd(t_vec *argv, t_vec *env);

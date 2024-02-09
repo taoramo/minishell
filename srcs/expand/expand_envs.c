@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 12:40:58 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/09 13:25:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ char	*get_env_name(t_vec *str_vec, size_t start)
 		c = *(char *)vec_get(str_vec, start + i);
 		if (c == '\'' || c == '\"' || c == '$')
 			return (ft_substr((char *) str_vec->memory, start, i));
+		if (c == '*' && !ft_is_inside((char *) str_vec->memory, start + i, '\'') &&
+				!ft_is_inside((char *) str_vec->memory, start + i, '\"'))
+			return (ft_substr((char *) str_vec->memory, start, i));
 		i++;
 	}
 	return (ft_substr((char *) str_vec->memory, start, i));
@@ -40,8 +43,7 @@ int	expand_substr_env(t_vec *str_vec, size_t i, t_vec *env)
 		return (-1);
 	env_expanded = ft_getenv(env_name, env);
 	if (env_expanded == 0)
-		env_expanded = "";
-
+		env_expanded = ft_strdup("");
 	j = 0;
 	while (j < ft_strlen(env_name) + 1)
 	{
@@ -54,12 +56,8 @@ int	expand_substr_env(t_vec *str_vec, size_t i, t_vec *env)
 		vec_insert(str_vec, &env_expanded[j], i + j);
 		j++;
 	}
-
-	// ft_printf("{%s}\n", (char *) str_vec->memory);
-
-	// free(env_name);
-	// free(env_expanded);
-
+	free(env_name);
+	free(env_expanded);
 	return (1);
 }
 
@@ -72,7 +70,6 @@ int	expand_str_envs(char	**str_ptr, t_vec *env)
 	i = 0;
 	while (i < str_vec.len)
 	{
-		// ft_printf("char = %c\n", *(char *)vec_get(&str_vec, i));
 		if (*(char *)vec_get(&str_vec, i) == '\'')
 		{
 			i++;

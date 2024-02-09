@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 12:40:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/09 13:31:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,9 @@
 
 int	expand_command(t_vec *argv, t_vec *env)
 {
-	// ft_printf("argv:\n");
-	// ft_printf("[%s][%s]\n", *(char **)vec_get(argv, 0), *(char **)vec_get(argv, 1));
 	expand_envs(argv, env);
-	// ft_printf("\nenvs:\n");
-	// ft_printf("[%s][%s]\n", *(char **)vec_get(argv, 0), *(char **)vec_get(argv, 1));
 	expand_star(argv);
-	// ft_printf("\nstars:\n");
-	// ft_printf("[%s][%s]\n", *(char **)vec_get(argv, 0), *(char **)vec_get(argv, 1));
 	remove_quotes(argv);
-	// ft_printf("\nquotes:\n");
-	// ft_printf("[%s][%s]\n", *(char **)vec_get(argv, 0), *(char **)vec_get(argv, 1));
 
 	return (1);
 }

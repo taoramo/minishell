@@ -78,5 +78,6 @@ int		remove_quotes(t_vec *argv);
 int		expand_envs(t_vec *argv, t_vec *env);
 void	toggle_carret(int is_on);
 int		vec_sort_strncmp(void *one, void *two);
+char	*cd_error(char *str);
 
 #endif

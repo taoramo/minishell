@@ -38,3 +38,11 @@ int	minishell_error(char *str, char *message)
 	ft_putchar_fd('\n', 2);
 	return (-1);
 }
+
+char	*cd_error(char *str)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	ft_putstr_fd(str, 2);
+	write(2, "\n", 1);
+	return (0);
+}

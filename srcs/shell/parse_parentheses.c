@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_parentheses.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:16:56 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:16:59 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	next_start(const char *line, int i)
@@ -25,14 +37,15 @@ int	length_next_in_parenth(const char *line, int index)
 	open_parentheses = 0;
 	while (line[index + i])
 	{
-		if (open_parentheses == 0 && line[index + i - 1] == ')' && !ft_is_inside(line, i, '"') && !ft_is_inside(line, i, 39))
+		if (open_parentheses == 0 && line[index + i - 1] == ')'
+			&& !ft_is_inside(line, i, '"') && !ft_is_inside(line, i, 39))
 			break ;
 		if (line[index + i] == '('
 			&& !ft_is_inside(line, index + i, 39)
 			&& !ft_is_inside(line, index + i, '"'))
 			open_parentheses++;
 		if (line[index + i] == ')'
-			&& open_parentheses 
+			&& open_parentheses
 			&& !ft_is_inside(line, index + i, 39)
 			&& !ft_is_inside(line, index + i, '"'))
 			open_parentheses--;
@@ -48,9 +61,11 @@ int	length_next_outside_parenth(const char *line, int index)
 	i = 0;
 	while (line[index + i])
 	{
-		if (!ft_strncmp(&line[index + i], "&&", 2) || !ft_strncmp(&line[index + i], "||", 2))
+		if (!ft_strncmp(&line[index + i], "&&", 2)
+			|| !ft_strncmp(&line[index + i], "||", 2))
 		{
-			if (!ft_is_inside(line, index + i, '"') && !ft_is_inside(line, index + i, 39))
+			if (!ft_is_inside(line, index + i, '"')
+				&& !ft_is_inside(line, index + i, 39))
 				break ;
 		}
 		i++;
@@ -87,7 +102,8 @@ int	next_length(const char *line, int index)
 	}
 }
 
-int	make_cmd_line_groups(t_vec *cmd_lines, const char *line, int *last_return, t_vec *env)
+int	make_cmd_line_groups(t_vec *cmd_lines,
+	const char *line, int *last_return, t_vec *env)
 {
 	int			i;
 	int			start;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:10:24 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include <stdio.h>
@@ -43,6 +55,9 @@ int		make_cmd_line_groups(t_vec *cmd_lines,
 int		next_cmd_line_length(const char *line);
 int		handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env);
 int		check_parenthesis_count(const char *line);
+int		check_open_quotes(const char *line);
+int		check_parenth_syntax(t_cmd_line *cmd_line);
+int		check_cmd_line_syntax(t_cmd_line *cmd_line);
 void	remove_parentheses(t_cmd_line *cmd_line);
 void	free_cmd_line_str(void *arg);
 void	print_cmd_line(void *arg);
@@ -68,5 +83,6 @@ int		expand_star(t_vec *argv);
 int		is_wildcard_match(char *string, char *pattern);
 int		remove_quotes(t_vec *argv);
 int		expand_envs(t_vec *argv, t_vec *env);
+void	toggle_carret(int is_on);
 
 #endif

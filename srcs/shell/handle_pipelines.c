@@ -1,55 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   handle_pipelines.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:48:21 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	check_parenth_syntax(t_cmd_line *cmd_line)
+int	handle_pipelines_error(t_vec *cmd_lines, t_vec *env)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	while (cmd_line->str[i])
-	{
-		if (i != 0 && cmd_line->str[i] == '('
-			&& !ft_is_inside(cmd_line->str, i, '"')
-			&& !ft_is_inside(cmd_line->str, i, 39))
-		{
-			j = i - 1;
-			while (ft_isspace(cmd_line->str[j]))
-				j--;
-			if (cmd_line->str[j] != '&' && cmd_line->str[j] != '|')
-				return (ft_error("syntax error near unexpected token `(’"));
-		}
-		i++;
-	}
-	return (1);
+	ft_error("memory error\n");
+	vec_iter(cmd_lines, free_cmd_line_str);
+	vec_free(cmd_lines);
+	free_split_vec(env);
+	return (-1);
 }
 
-int	check_cmd_line_syntax(t_cmd_line *cmd_line)
+void	next_cmd_line(t_vec *cmd_lines,
+		size_t *i, int *last_return)
 {
-	int	i;
+	t_cmd_line	*curr_cmd_line;
 
-	i = 0;
-	while (cmd_line->str[i])
+	if (*last_return != 0)
 	{
-		// if ((cmd_line->str[0] == '|' && cmd_line->str[1] != '|')
-		// 	|| (i != 0 && cmd_line->str[i] == '|' && ft_strncmp(&cmd_line->str[i - 1], " || ", 4)))
-		// 	return (ft_error("syntax error near unexpected token `|’"));
-		if ((cmd_line->str[0] == '&' && cmd_line->str[1] != '&')
-			|| (i != 0 && cmd_line->str[i] == '&' && ft_strncmp(&cmd_line->str[i - 1], " && ", 4)))
-			return (ft_error("syntax error near unexpected token `&’"));
-		if (!ft_strncmp(&cmd_line->str[i], "&&", 2) || !ft_strncmp(&cmd_line->str[i], "||", 2))
-			i = i + 2;
-		else
-			i++;
+		curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, *i);
+		while (*i < cmd_lines->len
+			&& ft_strncmp(curr_cmd_line->str, "||", 2))
+		{
+			*i = *i + 1;
+			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, *i);
+		}
 	}
-	return (1);
+	else
+	{
+		curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, *i);
+		while (*i < cmd_lines->len
+			&& ft_strncmp(curr_cmd_line->str, "&&", 2))
+		{
+			*i = *i + 1;
+			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, *i);
+		}
+	}
+}
+
+int	handle_parentheses(t_cmd_line *cmd_line,
+	int *last_return, t_vec *env, size_t j)
+{
+	ft_memmove(cmd_line->str, &cmd_line->str[j],
+		ft_strlen(&cmd_line->str[j]));
+	remove_parentheses(cmd_line);
+	if (parse_line(cmd_line->str, last_return, env) < 0)
+		return (-1);
+	else
+		return (0);
+}
+
+int	next_cmd_line_action(t_cmd_line *cmd_line,
+	int *last_return, t_vec *env, size_t j)
+{
+	if (cmd_line->str[j] == '(')
+	{
+		if (handle_parentheses(cmd_line, last_return, env, j) < 0)
+			return (-1);
+	}
+	else if (check_cmd_line_syntax(cmd_line) < 0)
+		return (-1);
+	else
+		*last_return = run_command(&cmd_line->str[j], env);
+	return (0);
 }
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
 	size_t		i;
-	int			j;
+	size_t		j;
 	t_cmd_line	*cmd_line;
-	t_cmd_line	*curr_cmd_line;
 
 	i = 0;
 	while (i < cmd_lines->len)
@@ -57,50 +87,15 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		j = 0;
 		cmd_line = vec_get(cmd_lines, i);
 		if (check_parenth_syntax(cmd_line) < 0)
-		{
-			vec_iter(cmd_lines, free_cmd_line_str);
-			vec_free(cmd_lines);
-			free_split_vec(env);
-			return (-1);
-		}
+			return (handle_pipelines_error(cmd_lines, env));
 		if (cmd_line->str[0] == '&' || cmd_line->str[0] == '|')
 			j = j + 2;
 		while (ft_isspace(cmd_line->str[j]))
 			j++;
-		if (cmd_line->str[j] == '(')
-		{
-			ft_memmove(cmd_line->str, &cmd_line->str[j], ft_strlen(&cmd_line->str[j]));
-			remove_parentheses(cmd_line);
-			parse_line(cmd_line->str, last_return, env);
-		}
-		else if (check_cmd_line_syntax(cmd_line) < 0)
-		{
-			vec_iter(cmd_lines, free_cmd_line_str);
-			vec_free(cmd_lines);
-			free_split_vec(env);
-			return (-1);
-		}
-		else
-			*last_return = run_command(&cmd_line->str[j], env);
+		if (next_cmd_line_action(cmd_line, last_return, env, j) < 0)
+			return (handle_pipelines_error(cmd_lines, env));
 		i++;
-		if (*last_return > 0)
-		{
-			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
-			while (i < cmd_lines->len && ft_strncmp(curr_cmd_line->str, "||", 2))
-			{
-				i++;
-				curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
-			}
-		}
-		if (*last_return == 0)
-		{
-			curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
-			while (i < cmd_lines->len && ft_strncmp(curr_cmd_line->str, "&&", 2))
-			{
-				i++;
-				curr_cmd_line = (t_cmd_line *) vec_get(cmd_lines, i);
-			}
-		}
+		next_cmd_line(cmd_lines, &i, last_return);
 	}
 	vec_iter(cmd_lines, free_cmd_line_str);
 	vec_free(cmd_lines);

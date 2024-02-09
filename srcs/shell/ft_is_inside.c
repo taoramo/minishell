@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_is_inside.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:08:48 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:08:53 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	is_inside_parenth(const char *line, int i, int open_char)
@@ -44,9 +56,3 @@ int	ft_is_inside(const char *line, int i, int open_char)
 	}
 	return (is_inside);
 }
-
-/* int	main(int argc, char **argv)
-{
-	if (argc == 4)
-		printf("%d\n", ft_is_inside(argv[1], ft_atoi(argv[2]), argv[3][0]));
-} */

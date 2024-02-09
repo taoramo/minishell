@@ -1,52 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:09:24 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-int	check_parenthesis_count(const char *line)
-{
-	int	i;
-	int	open_parentheses;
-	int	closed_parentheses;
-
-	i = 0;
-	open_parentheses = 0;
-	closed_parentheses = 0;
-	while (line[i])
-	{
-		if (line[i] == '(')
-			open_parentheses++;
-		if (line[i] == ')' && open_parentheses)
-			closed_parentheses++;
-		if (line[i] == ')' && !open_parentheses)
-			return (ft_error("syntax error near unexpected token `)'\n"));
-		i++;
-	}
-	if (open_parentheses != closed_parentheses)
-		return (ft_error("syntax error: unclosed parentheses\n"));
-	else
-		return (open_parentheses);
-}
-
-int	check_open_quotes(const char *line)
-{
-	int				i;
-	unsigned int	singles;
-	unsigned int	doubles;
-
-	i = 0;
-	singles = 0;
-	doubles = 0;
-	while (line[i])
-	{
-		if (line[i] == 39)
-			singles++;
-		if (line[i] == 34)
-			doubles++;
-		i++;
-	}
-	if (singles % 2 || doubles % 2)
-		return (ft_error("syntax error: unclosed quotes\n"));
-	else
-		return (0);
-}
 
 int	parse_line(const char *line, int *last_return, t_vec *env)
 {
@@ -107,7 +71,7 @@ int	interactive(int *last_return, t_vec *env)
 			break ;
 		free(line);
 	}
-	//toggle_carret(1);
+	toggle_carret(1);
 	clear_history();
 	free(line);
 	return (*last_return);
@@ -136,4 +100,5 @@ int	main(int argc, char **argv, char **envp)
 		free_split_vec(&env);
 		return (last_return);
 	}
+	free_split_vec(&env);
 }

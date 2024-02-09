@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_vec_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/09 15:14:46 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/09 15:14:48 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	contains_supergroup(void *arg)
@@ -22,12 +34,4 @@ void	free_cmd_line_str(void *arg)
 
 	ptr = arg;
 	free(ptr->str);
-}
-
-void	print_cmd_line(void *arg)
-{
-	t_cmd_line	*ptr;
-
-	ptr = arg;
-	printf("String:%s\n", ptr->str);
 }

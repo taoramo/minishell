@@ -128,4 +128,5 @@ int	main(int argc, char **argv, char **envp)
 		return (parse_line(argv[2], &last_return, &env));
 	if (argc == 1)
 		return (interactive(&last_return, &env));
+	free_split_vec(&env);
 }

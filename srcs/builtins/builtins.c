@@ -148,6 +148,8 @@ int	ft_cd(t_vec *argv, t_vec *env)
 	int		r;
 
 	strs = (char **)argv->memory;
+	if (!strs[1])
+		return (0);
 	if (strs[1] && ft_strlen(strs[1]) > MAXPATHLEN)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);

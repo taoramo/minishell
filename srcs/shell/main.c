@@ -125,7 +125,14 @@ int	main(int argc, char **argv, char **envp)
 	}
 	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
+	{
+		free_split_vec(&env);
 		return (parse_line(argv[2], &last_return, &env));
+	}
 	if (argc == 1)
-		return (interactive(&last_return, &env));
+	{
+		last_return = interactive(&last_return, &env);
+		free_split_vec(&env);
+		return (last_return);
+	}
 }

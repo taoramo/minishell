@@ -51,20 +51,23 @@ Fixes:
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc);
-	- the argument .. doesn't get to argv, for example "echo .." (or arg .)
-	- cd with relative path
+	☐ the argument .. doesn't get to argv, for example "echo .." (or arg .)
+	☐ cd with relative path
 	☐ ft_getenv needs to determine size of returned string, cannot be known before
 	☐ Use ft_getenv in add_path as well
+	☐ "* hello" in a folder containing only a file named "echo" should work as "echo hello"
+	☐ echo *$HOME (expands to argv [echo][*/Users/hpatsi]) segfauts at wildcard
+	☐ echo '$HOME*' (expands to argv [echo]['$HOME*']) segfaults at wildcard
+	☐ ft_getenv expands "$HOME*" as it would $HOME
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
 		currently works as bash does
-	☐ should the command 'ec"ho" hello' work? it does in bash
-		could be implemented by combining quotes and non-quotes that are not separated by spaces
+	✔ should the command 'ec"ho" hello' work? it does in bash @done(24-02-09 08:39)
+		yes
 
 Tester:
 	☐ Figure out how to test in interactive mode for e.g. "cd" testing
-	☐ Test that "* hello" in a folder containing only a file named "echo" works as "echo hello"
 
 Archived fixes:
 	✔ "./false 1 || ./true 2" - first command returns 1 but second does not run @done(24-01-30 15:09)

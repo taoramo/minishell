@@ -93,10 +93,10 @@ char	*change_directory(t_vec *argv)
 
 	if (vec_split(&pathstrs, *(char **)vec_get(argv, 1), '/') < 0)
 	{
-		ft_error("minishell: cd: memory error\n"));
+		ft_error("minishell: cd: memory error\n");
 		return (0);
 	}
-
+	return (0);
 }
 
 int	ft_cd(t_vec *argv, t_vec *env)

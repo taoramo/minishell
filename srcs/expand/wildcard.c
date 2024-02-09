@@ -14,7 +14,9 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 	DIR				*ptr;
 	struct dirent	*ep;
 	char			*path;
+	int				j;
 
+	j = 0;
 	ptr = opendir("./");
 	if (!ptr)
 		return (exp_wc_err(dst, "error opening directory"));
@@ -30,10 +32,15 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 				return (exp_wc_err(dst, "error allocating memory"));
 			if (vec_push(dst, &path) < 0)
 				return (exp_wc_err(dst, "error parsing wildcard"));
+			j++;
 		}
 		ep = readdir(ptr);
 	}
 	closedir(ptr);
+	if (!j)
+		vec_push(dst, &strs[i]);
+	else
+		free(strs[i]);
 	return (1);
 }
 

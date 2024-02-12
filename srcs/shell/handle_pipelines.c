@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-int	handle_pipelines_error(t_vec *cmd_lines)
-{
-	free_split_vec(cmd_lines);
-	return (-1);
-}
-
 void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 {
 	char	*curr_cmd_line;
@@ -72,27 +66,27 @@ int	next_cmd_line_action(char *cmd_line,
 	return (0);
 }
 
-int	check_andor_syntax(t_vec *cmd_lines)
+int	check_andor_syntax(char **strs, size_t len)
 {
 	size_t	i;
 	size_t	j;
-	char	**strs;
 
-	strs = (char **)cmd_lines->memory;
 	i = 0;
-	j = 0;
-	while (i < cmd_lines->len)
+	while (i < len)
 	{
+		j = 0;
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 		{
-			if (strs[i][0] != strs[i][1])
-				return (-1);
 			j = j + 2;
-			while (strs[i][j] && ft_isspace(strs[i][j]))
-				j++;
-			if (strs[i][j] == '|' || strs[i][2] == '|')
+			if (strs[i][2] == '|')
 				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][j] == '&' || strs[i][2] == '&')
+			if (strs[i][2] == '&')
+				return (ft_error("syntax error near unexpected token `&’"));
+			while (ft_isspace(strs[i][j]))
+				j++;
+			if (strs[i][j] == '|')
+				return (ft_error("syntax error near unexpected token `|’"));
+			if (strs[i][j] == '&')
 				return (ft_error("syntax error near unexpected token `&’"));
 		}
 		i++;
@@ -108,11 +102,8 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 
 	i = 0;
 	strs = (char **)cmd_lines->memory;
-	if (check_andor_syntax(cmd_lines) < 0)
-	{
-		free_split_vec(cmd_lines);
-		return (*last_return);
-	}
+	if (check_andor_syntax(strs, cmd_lines->len) < 0)
+		return (handle_pipelines_error(cmd_lines));
 	while (i < cmd_lines->len)
 	{
 		j = 0;

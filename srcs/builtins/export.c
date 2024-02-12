@@ -88,7 +88,7 @@ void	print_env(char **environment, size_t i)
 			j++;
 		}
 		write(1, "=", 1);
-			j++;
+		j++;
 		write(1, "\"", 1);
 		while (environment[i][j])
 		{
@@ -125,6 +125,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 		vec_clear(&sorted);
 		return (0);
 	}
-	else
-		return (export_variable(argv, env));
+	else if (export_variable(argv, env) < 0)
+		return (1);
+	return (0);
 }

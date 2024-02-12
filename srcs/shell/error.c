@@ -20,7 +20,7 @@ int	ft_error(char *str)
 		write(2, "\n", 1);
 		rl_on_new_line();
 	}
-	return (1);
+	return (-1);
 }
 
 int	cmd_line_error(t_vec *cmd_lines)
@@ -45,4 +45,10 @@ char	*cd_error(char *str)
 	ft_putstr_fd(str, 2);
 	write(2, "\n", 1);
 	return (0);
+}
+
+int	handle_pipelines_error(t_vec *cmd_lines)
+{
+	free_split_vec(cmd_lines);
+	return (-1);
 }

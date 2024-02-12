@@ -43,27 +43,19 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
-		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
 	☐ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?)
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc)
-	☐ "echo hello &&& echo wow" and "echo hello ||| echo wow" output the first "hello" (should not run at all)
-	☐ "echo hello && | echo wow" prints "hello" and "wow" (should fail on '|' at start of command and not run at all)
-	☐ "cd tester" "cd .." segfault
 	☐ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty
-	☐ export and unset should take multiple args
-	☐ export ASDF && export prints two vars on the same line
-	☐ export name cannot begin with a number (e.g. "export 1x" error "bash: export: `1x': not a valid identifier")
-		can begin with a letter or _ at least
+	disable all error message printing while taking heredoc input
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
 		currently works as bash does
 	☐ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ?
 		since pipe is forked, should run in subshell (random person on internet), so could use env instead of *env
-	☐ "‘|’ cat" prints error message twice
+	☐ "‘|’ cat" should print error message
 		for me it just get stuck
 
 Tester:
@@ -92,3 +84,12 @@ Archived fixes:
 	✔ minishell> << LIM > a > b > a >> b | << LIM > c @done(24-02-12 14:19)
 	✔ "<< LIM" also sefaults @done(24-02-12 14:19)
 	✔ "echo | echo | > echo" segfaults @done(24-02-12 14:24)
+	☐ "echo hello &&& echo wow" and "echo hello ||| echo wow" output the first "hello" (should not run at all)
+	☐ "echo hello && | echo wow" prints "hello" and "wow" (should fail on '|' at start of command and not run at all)
+	☐ "cd tester" "cd .." segfault
+	☐ export and unset should take multiple args
+	☐ export ASDF && export prints two vars on the same line
+	☐ export name cannot begin with a number (e.g. "export 1x" error "bash: export: `1x': not a valid identifier")
+		can begin with a letter or _ at least
+	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
+		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking

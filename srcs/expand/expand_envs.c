@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 13:25:46 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 09:32:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ int	expand_str_envs(char	**str_ptr, t_vec *env)
 		{
 			if (expand_substr_env(&str_vec, i, env) == -1)
 				return (-1);
-			continue ;
 		}
 		i++;
 	}
 	free(*str_ptr);
-	vec_push(&str_vec, 0);
+	char n = 0;
+	vec_push(&str_vec, &n);
 	*str_ptr = (char *) str_vec.memory;
 	return (1);
 }

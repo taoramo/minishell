@@ -30,7 +30,7 @@ Built-in functions:
 	✔ Work for single commands @done(24-02-06 14:35)
 	✔ Work in pipes @done(24-02-06 14:35)
 	✔ echo with option -n @done(24-02-06 14:35)
-	x cd with only a relative or absolute path
+	✔ cd with only a relative or absolute path @done(24-02-12 08:54)
 	✔ pwd with no options @done(24-02-08 16:29)
 	✔ export with no options @done(24-02-08 16:29)
 	✔ unset with no options @done(24-02-08 16:29)
@@ -44,34 +44,35 @@ Bonus:
 Fixes:
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
-	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
-		☐ Can stty -echoctl be ran by minishell at start?
 	✔ ctrl-D should print "exit" before exiting @done(24-02-05 09:54)
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
-	☐ Handle exit when command fails correctly (free etc);
-	☐ Use ft_getenv in add_path as well
-	☐ ft_getenv expands "$HOME*" as it would $HOME
+	☐ Handle exit when command fails correctly (free etc)
+	☐ "echo hello &&& echo wow" and "echo hello ||| echo wow" output the first "hello" (should not run at all)
+	☐ "echo hello && | echo wow" prints "hello" and "wow" (should fail on '|' at start of command and not run at all)
+	☐ "cd tester" "cd .." segfault
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
 		currently works as bash does
-	✔ should the command 'ec"ho" hello' work? it does in bash @done(24-02-09 08:39)
-		yes
+	☐ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ?
+		since pipe is forked, should run in subshell (random person on internet), so could use env instead of *env
 
 Tester:
 	☐ Figure out how to test in interactive mode for e.g. "cd" testing
 
 Archived fixes:
-	x "* hello" in a folder containing only a file named "echo" should work as "echo hello"
-	x the argument .. doesn't get to argv, for example "echo .." (or arg .)
-	x cd with relative path
-	x ft_getenv needs to determine size of returned string, cannot be known before
-	x Non matching wildcard pattern should return the pattern
+	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
+	✔ "* hello" in a folder containing only a file named "echo" should work as "echo hello" @done(24-02-12 08:44)
+	✔ the argument .. doesn't get to argv, for example "echo .." (or arg .) @done(24-02-12 08:44)
+	✔ cd with relative path @done(24-02-12 08:44)
+	✔ ft_getenv needs to determine size of returned string, cannot be known before @done(24-02-12 08:44)
+	✔ Non matching wildcard pattern should return the pattern @done(24-02-12 08:44)
+	✔ should the command 'ec"ho" hello' work? it does in bash @done(24-02-09 08:39)
+	✔ Use ft_getenv in add_path as well @done(24-02-12 08:46)
+	✔ ft_getenv expands "$HOME*" as it would $HOME, should expand $HOME* (blank output) @done(24-02-12 08:46)
 	✔ "./false 1 || ./true 2" - first command returns 1 but second does not run @done(24-01-30 15:09)
-		was error in pipe check in run command
 	✔ "./false 1 && ./true 2 || ./true 3" stopping after first false @done(24-01-30 15:40)
-		was error in my fix to an error when compiling with mac
 	✔ "./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6" skipping parentheses @done(24-02-01 10:20)
-		was error in how I had combined the shell and run command sections
-		✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
+	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
+	✔ export x='$a', export a=hello, echo $x prints "hello", shoud print "$a" and not re-expand expanded result @done(24-02-12 09:32)

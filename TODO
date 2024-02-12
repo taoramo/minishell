@@ -25,6 +25,10 @@ Features:
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
+	<< operators always take input first, even if you have the bonus’ && / || operators it will first take every heredoc’s input that’s on the inputted line and then goes through the multiple cmd pipelines. It is interesting because it’s the only redirection that takes such precedence (trying to be user-friendly? idk)
+	ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
+	you can have multiple heredocs within one pipeline which means managing multiple temp files
+
 
 Built-in functions:
 	✔ Work for single commands @done(24-02-06 14:35)
@@ -51,12 +55,23 @@ Fixes:
 	☐ "echo hello &&& echo wow" and "echo hello ||| echo wow" output the first "hello" (should not run at all)
 	☐ "echo hello && | echo wow" prints "hello" and "wow" (should fail on '|' at start of command and not run at all)
 	☐ "cd tester" "cd .." segfault
+	☐ "touch a && chmod 000 a && echo hi > a" should print "minishell: a: Permission denied"
+	☐ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty
+	☐ "echo | echo | > echo" segfaults
+	☐ below should take input for both heredocs and creates (if they don’t exist yet) and truncates a, b and c -> outputs nothing
+	☐ minishell> << LIM > a > b > a >> b | << LIM > c
+			> asdf
+			> LIM
+			zsh: segmentation fault  ./minishell
+	☐ export and unset should take multiple args
+	☐ export ASDF && export prints two vars on the same line
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
 		currently works as bash does
 	☐ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ?
 		since pipe is forked, should run in subshell (random person on internet), so could use env instead of *env
+	☐ "‘|’ cat" prints error message twice
 
 Tester:
 	☐ Figure out how to test in interactive mode for e.g. "cd" testing

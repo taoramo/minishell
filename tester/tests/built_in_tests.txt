@@ -1,6 +1,13 @@
 echo hello
 echo -n nonewline:
 echo newline:
+echo
+       echo
+echo foo bar zoo asdf
+echo	foo  bar    zoo asdf
 pwd
+unset
+export foo=bar && export | grep foo=bar
+export foo=bar && export | grep foo=bar && unset foo && export | grep foo
 export | head -28
 env | head -28

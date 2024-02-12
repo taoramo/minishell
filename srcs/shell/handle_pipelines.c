@@ -75,16 +75,24 @@ int	next_cmd_line_action(char *cmd_line,
 int	check_andor_syntax(t_vec *cmd_lines)
 {
 	size_t	i;
+	size_t	j;
 	char	**strs;
 
 	strs = (char **)cmd_lines->memory;
 	i = 0;
+	j = 0;
 	while (i < cmd_lines->len)
 	{
-		if (strs[i][0] == '&' && strs[i][2] != ' ')
-			return (ft_error("syntax error near unexpected token `&’"));
-		if (strs[i][0] == '|' && strs[i][2] != ' ')
-			return (ft_error("syntax error near unexpected token `|’"));
+		if (strs[i][0] == '&' || strs[i][0] == '|')
+		{
+			if (strs[i][2] != ' ')
+				return (ft_error("syntax error near unexpected token `&’"));
+			j = j + 2;
+			while (ft_isspace(strs[i][j]))
+				j++;
+			if (strs[i][j] == '|' || strs[i][j] == '&')
+				return (ft_error("syntax error near unexpected token `&’"));
+		}
 		i++;
 	}
 	return (1);

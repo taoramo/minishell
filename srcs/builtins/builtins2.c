@@ -84,7 +84,7 @@ int	ft_unset(t_vec *argv, t_vec *env)
 		{
 			free(strs[i]);
 			vec_remove(env, i);
-			return (1);
+			return (0);
 		}
 		j = 0;
 		i++;

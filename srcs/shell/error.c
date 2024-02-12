@@ -20,7 +20,7 @@ int	ft_error(char *str)
 		write(2, "\n", 1);
 		rl_on_new_line();
 	}
-	return (-1);
+	return (1);
 }
 
 int	cmd_line_error(t_vec *cmd_lines)

@@ -59,10 +59,9 @@ int	export_variable(t_vec *argv, t_vec *env)
 	{
 		str = ft_strdup(strs[i]);
 		if (!str)
-		{
-			ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
-			return (1);
-		}
+			return (ft_error("minishell: export: failed to allocate memory"));
+		if (!ft_isalpha(str[0]) && str[0] != '_')
+			return (ft_error("minishell: export: not a valid identifier"));
 		if (contains_equals(str) && env_entry_exists(str, env))
 			remove_entry(str, env);
 		if (!contains_equals(str) && env_entry_exists(str, env))

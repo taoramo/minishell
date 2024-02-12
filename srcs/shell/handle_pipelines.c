@@ -85,13 +85,15 @@ int	check_andor_syntax(t_vec *cmd_lines)
 	{
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 		{
-			if (strs[i][2] != ' ')
-				return (ft_error("syntax error near unexpected token `&’"));
+			if (strs[i][0] != strs[i][1])
+				return (-1);
 			j = j + 2;
-			while (ft_isspace(strs[i][j]))
+			while (strs[i][j] && ft_isspace(strs[i][j]))
 				j++;
-			if (strs[i][j] == '|' || strs[i][j] == '&')
+			if (strs[i][j] == '|' || strs[i][2] == '|')
 				return (ft_error("syntax error near unexpected token `|’"));
+			if (strs[i][j] == '&' || strs[i][2] == '&')
+				return (ft_error("syntax error near unexpected token `&’"));
 		}
 		i++;
 	}

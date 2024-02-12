@@ -72,6 +72,11 @@ Unsure:
 	☐ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ?
 		since pipe is forked, should run in subshell (random person on internet), so could use env instead of *env
 	☐ "‘|’ cat" prints error message twice
+	☐ Weird functionality in pipe echo $?:
+		☐ ./false 1 || echo $? always prints 1
+		☐ ./false 1 | echo $? always prints 0 (??)
+		☐ ./false 1 || ./false 2 | echo $? also always prints 0 (??)
+		The reason you always get an exit status of 0 is that the exit status returned is that of the last command in the pipeline.
 
 Tester:
 	✔ Figure out how to test in interactive mode for e.g. "cd" testing @done(24-02-12 11:59)

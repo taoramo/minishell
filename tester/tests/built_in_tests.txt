@@ -7,8 +7,8 @@ echo
 echo foo bar zoo asdf
 echo	foo  bar    zoo asdf
 pwd
-export | head -28
-env | head -28
+export | head -20
+env | head -20
 export foo=bar && export | grep foo=bar
 export foo=bar && export | grep foo=bar && unset foo && export | grep foo
 export x='$y' && export y=z && echo $x

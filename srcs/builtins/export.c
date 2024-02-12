@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 16:31:38 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/12 13:14:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	print_env(char **environment, size_t i)
 			write(1, &environment[i][j], 1);
 			j++;
 		}
+		write(1, "=", 1);
+			j++;
 		write(1, "\"", 1);
 		while (environment[i][j])
 		{

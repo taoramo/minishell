@@ -133,13 +133,23 @@ cc $SRCS_DIR/false.c -o false
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
-	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
+		# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
 done < $TEST_DIR/and_or_tests.txt
 
 #------ ERRORS ------#
 
 printf $HEADER_COLOR"\n#------ ERRORS ------#\n\n"$NC
+
+touch tmp/noaccess
+chmod -rwx tmp/noaccess
+touch tmp/noread
+chmod -r tmp/noread
+touch tmp/nowrite
+chmod -w tmp/nowrite
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
@@ -149,5 +159,9 @@ while read -r line; do
 	check_output
 	check_exit_code
 done < $TEST_DIR/errors.txt
+
+rm -f tmp/noaccess
+rm -f tmp/noread
+rm -f tmp/nowrite
 
 echo ""

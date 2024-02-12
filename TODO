@@ -17,10 +17,8 @@ Features:
 		✔ << should be given a delimiter, then read the input until a line containing the delimiter is seen. However, it doesn’t have to update the history! @done(24-01-30 13:51)
 		✔ >> should redirect output in append mode @done(24-01-30 13:51)
 	✔ Implement pipes (| character). @done(24-01-30 13:52)
-	☐ Handle environment variables ($ followed by a sequence of characters) which should expand to their values.
-		Has to be done before running command, as environment variable may e.g. contain name of command
-	☐ Handle $? which should expand to the exit status of the most recently executed foreground pipeline.
-		Could be expanded right before running command / pipe?
+	✔ Handle environment variables ($ followed by a sequence of characters) which should expand to their values. @done(24-02-12 11:42)
+	✔ Handle $? which should expand to the exit status of the most recently executed foreground pipeline. @done(24-02-12 11:42)
 	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH (see fixes section)
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
@@ -48,14 +46,13 @@ Bonus:
 Fixes:
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		☐ fixed in "check_cmd_line_syntax", check that this change does not break any error checking
-	✔ ctrl-D should print "exit" before exiting @done(24-02-05 09:54)
+	☐ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?)
 		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc)
 	☐ "echo hello &&& echo wow" and "echo hello ||| echo wow" output the first "hello" (should not run at all)
 	☐ "echo hello && | echo wow" prints "hello" and "wow" (should fail on '|' at start of command and not run at all)
 	☐ "cd tester" "cd .." segfault
-	☐ "touch a && chmod 000 a && echo hi > a" should print "minishell: a: Permission denied"
 	☐ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty
 	☐ "echo | echo | > echo" segfaults
 	☐ below should take input for both heredocs and creates (if they don’t exist yet) and truncates a, b and c -> outputs nothing
@@ -63,6 +60,7 @@ Fixes:
 			> asdf
 			> LIM
 			zsh: segmentation fault  ./minishell
+	☐ export list should be in alphabetical order
 	☐ export and unset should take multiple args
 	☐ export ASDF && export prints two vars on the same line
 	☐ export name cannot begin with a number (e.g. "export 1x" error "bash: export: `1x': not a valid identifier")
@@ -76,7 +74,8 @@ Unsure:
 	☐ "‘|’ cat" prints error message twice
 
 Tester:
-	☐ Figure out how to test in interactive mode for e.g. "cd" testing
+	✔ Figure out how to test in interactive mode for e.g. "cd" testing @done(24-02-12 11:59)
+		just use && and ||
 
 Archived fixes:
 	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
@@ -94,3 +93,4 @@ Archived fixes:
 	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
 	✔ export x='$a', export a=hello, echo $x prints "hello", shoud print "$a" and not re-expand expanded result @done(24-02-12 09:32)
 	✔ export x='$$$$$a', export a=hello, echo $x prints "hello", shoud print "$$$$$a" and not re-expand expanded result @done(24-02-12 10:35)
+	✔ "touch a && chmod 000 a && echo hi > a" should print "minishell: a: Permission denied" @done(24-02-12 12:39)

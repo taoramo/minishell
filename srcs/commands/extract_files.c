@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 12:43:17 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 12:10:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 		new_fd = open(red_comm_file[1], O_RDONLY);
 	if (new_fd == -1)
 	{
-		minishell_error(red_comm_file[1], "No such file or directory");
+		minishell_error(red_comm_file[1], strerror(errno));
 		return (-1);
 	}
 	redirect = malloc(sizeof(t_redirect));

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 10:33:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 12:37:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 	if (env_expanded == 0)
 		env_expanded = ft_strdup("");
 	ret = replace_vec_str(str_vec, env_expanded, *i, ft_strlen(env_name) + 1);
-	*i += ft_strlen(env_expanded);
+	*i += ft_strlen(env_expanded) - 1;
 	free(env_name);
 	free(env_expanded);
 	return (ret);

@@ -2,6 +2,11 @@ nocommand
 cat nofile
 cat < nofile
 bash < nofile
+cat < tmp/noaccess
+cat < tmp/noread
+echo hello > tmp/nowrite
+cat < tmp/noread > tmp/nowrite
+cat > tmp/nowrite < tmp/noread
 cd nodir
 nocommand | wc -l
 nocommand | ls ./

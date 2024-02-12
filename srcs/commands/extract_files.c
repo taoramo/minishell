@@ -26,9 +26,10 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<", 1) == 0)
 		new_fd = open(red_comm_file[1], O_RDONLY);
-	if (new_fd == -1)
+	if (new_fd < 0)
 	{
-		minishell_error(red_comm_file[1], strerror(errno));
+		if (new_fd == -1)
+			minishell_error(red_comm_file[1], strerror(errno));
 		return (-1);
 	}
 	redirect = malloc(sizeof(t_redirect));

@@ -49,13 +49,16 @@ int	infile_from_stdin(char *limiter)
 		perror("pipe failed");
 		return (-1);
 	}
+	toggle_carret(0);
 	if (read_input(nl_limiter, pipe_fds) == -1)
 	{
 		free(nl_limiter);
 		close(pipe_fds[0]);
 		close(pipe_fds[1]);
-		return (-1);
+		toggle_carret(1);
+		return (-2);
 	}
+	toggle_carret(1);
 	free(nl_limiter);
 	close(pipe_fds[1]);
 	return (pipe_fds[0]);

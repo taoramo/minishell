@@ -13,5 +13,6 @@ cat < infile | wc
 ./false 1 | echo $?
 ./true 1 || echo fail && ./false 2 | echo $?
 ./false 1 && echo fail || ./true 2 | echo $?
+./false 1 && echo fail || echo $? | cat
 ./false 1 | ./false 2 && echo fail || echo $?
 ./false 1 | ./true 2 || echo fail && echo $?

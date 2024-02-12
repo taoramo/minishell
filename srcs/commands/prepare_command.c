@@ -6,22 +6,22 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 13:31:04 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:06:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	expand_command(t_vec *argv, t_vec *env)
+int	expand_command(t_vec *argv, t_vec *env,  int last_return)
 {
-	expand_envs(argv, env);
+	expand_envs(argv, env, last_return);
 	expand_star(argv);
 	remove_quotes(argv);
 
 	return (1);
 }
 
-int	prepare_argv(t_command *command, char *command_str, t_vec *env)
+int	prepare_argv(t_command *command, char *command_str, t_vec *env, int last_return)
 {
 	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
 		return (-1);
@@ -30,7 +30,7 @@ int	prepare_argv(t_command *command, char *command_str, t_vec *env)
 		free_split_vec(&command->argv);
 		return (-1);
 	}
-	if (expand_command(&command->argv, env) == -1)
+	if (expand_command(&command->argv, env, last_return) == -1)
 	{
 		free_split_vec(&command->argv);
 		return (-1);
@@ -54,9 +54,9 @@ int	prepare_redirects(t_command *command)
 	return (1);
 }
 
-int	prepare_command(t_command *command, char *command_str, t_vec *env)
+int	prepare_command(t_command *command, char *command_str, t_vec *env, int last_return)
 {
-	if (prepare_argv(command, command_str, env) == -1)
+	if (prepare_argv(command, command_str, env, last_return) == -1)
 		return (1);
 	if (prepare_redirects(command) == -1)
 		return (1);

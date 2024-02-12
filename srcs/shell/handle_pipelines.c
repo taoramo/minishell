@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_pipelines.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:48:21 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:03:25 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	next_cmd_line_action(char *cmd_line,
 	else if (check_cmd_line_syntax(cmd_line) < 0)
 		return (-1);
 	else
-		*last_return = run_command(&cmd_line[j], env);
+		*last_return = run_command(&cmd_line[j], env, *last_return);
 	return (0);
 }
 

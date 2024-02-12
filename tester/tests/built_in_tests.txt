@@ -9,5 +9,6 @@ pwd
 unset
 export foo=bar && export | grep foo=bar
 export foo=bar && export | grep foo=bar && unset foo && export | grep foo
+export x='$y' && export y=z && echo $x
 export | head -28
 env | head -28

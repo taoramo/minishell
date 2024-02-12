@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:10:24 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/12 10:07:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		contains_equals(const char *str);
 int		expand_star(t_vec *argv);
 int		is_wildcard_match(char *string, char *pattern);
 int		remove_quotes(t_vec *argv);
-int		expand_envs(t_vec *argv, t_vec *env);
+int		expand_envs(t_vec *argv, t_vec *env, int last_return);
 void	toggle_carret(int is_on);
 int		vec_sort_strncmp(void *one, void *two);
 char	*cd_error(char *str);

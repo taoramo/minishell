@@ -65,6 +65,8 @@ Fixes:
 			zsh: segmentation fault  ./minishell
 	☐ export and unset should take multiple args
 	☐ export ASDF && export prints two vars on the same line
+	☐ export name cannot begin with a number (e.g. "export 1x" error "bash: export: `1x': not a valid identifier")
+		can begin with a letter or _ at least
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -91,3 +93,4 @@ Archived fixes:
 	✔ "./true 1 && ./false 2 || (./true 3 && ./false 4) || ./false 5 && ./true 6" skipping parentheses @done(24-02-01 10:20)
 	✔ Unnecessary "syntax error near unexpected token `(’" in e.g. "awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'" @done(24-02-05 09:44)
 	✔ export x='$a', export a=hello, echo $x prints "hello", shoud print "$a" and not re-expand expanded result @done(24-02-12 09:32)
+	✔ export x='$$$$$a', export a=hello, echo $x prints "hello", shoud print "$$$$$a" and not re-expand expanded result @done(24-02-12 10:35)

@@ -10,13 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "minishell.h"
 
-int	handle_pipelines_error(t_vec *cmd_lines, t_vec *env)
+int	handle_pipelines_error(t_vec *cmd_lines)
 {
 	free_split_vec(cmd_lines);
-	free_split_vec(env);
 	return (-1);
 }
 
@@ -30,7 +28,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "||", 2))
+			&& ft_strncmp(curr_cmd_line, "|| ", 3))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];
@@ -40,7 +38,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "&&", 2))
+			&& ft_strncmp(curr_cmd_line, "&& ", 3))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];
@@ -74,6 +72,24 @@ int	next_cmd_line_action(char *cmd_line,
 	return (0);
 }
 
+int	check_andor_syntax(t_vec *cmd_lines)
+{
+	size_t	i;
+	char	**strs;
+
+	strs = (char **)cmd_lines->memory;
+	i = 0;
+	while (i < cmd_lines->len)
+	{
+		if (strs[i][0] == '&' && strs[i][2] != ' ')
+			return (ft_error("syntax error near unexpected token `&’"));
+		if (strs[i][0] == '|' && strs[i][2] != ' ')
+			return (ft_error("syntax error near unexpected token `|’"));
+		i++;
+	}
+	return (1);
+}
+
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
 	size_t		i;
@@ -82,17 +98,22 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 
 	i = 0;
 	strs = (char **)cmd_lines->memory;
+	if (check_andor_syntax(cmd_lines) < 0)
+	{
+		free_split_vec(cmd_lines);
+		return (*last_return);
+	}
 	while (i < cmd_lines->len)
 	{
 		j = 0;
 		if (check_parenth_syntax(strs[i]) < 0)
-			return (handle_pipelines_error(cmd_lines, env));
+			return (handle_pipelines_error(cmd_lines));
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;
 		while (ft_isspace(strs[i][j]))
 			j++;
 		if (next_cmd_line_action(strs[i], last_return, env, j) < 0)
-			return (handle_pipelines_error(cmd_lines, env));
+			return (handle_pipelines_error(cmd_lines));
 		i++;
 		next_cmd_line(cmd_lines, &i, last_return);
 	}

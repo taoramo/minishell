@@ -89,5 +89,5 @@ int	ft_unset(t_vec *argv, t_vec *env)
 		j = 0;
 		i++;
 	}
-	return (1);
+	return (0);
 }

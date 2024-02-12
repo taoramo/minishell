@@ -26,7 +26,7 @@ int	ft_error(char *str)
 int	cmd_line_error(t_vec *cmd_lines)
 {
 	free_split_vec(cmd_lines);
-	return (ft_error("error allocating memory\n"));
+	return (ft_error("error allocating memory"));
 }
 
 int	minishell_error(char *str, char *message)

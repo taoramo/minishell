@@ -42,7 +42,10 @@ int	ft_echo(t_vec *argv)
 
 	strs = (char **)argv->memory;
 	if (!strs[1])
+	{
+		write(1, "\n", 1);
 		return (0);
+	}
 	if (!ft_strncmp(strs[1], "-n", 3))
 	{
 		print_nl = 0;

@@ -81,7 +81,7 @@ int	expand_star(t_vec *argv)
 	char			**strs;
 
 	if (vec_new(&dst, 32, sizeof(char *)) < 0)
-		return (ft_error("minishell: error allocating memory\n"));
+		return (ft_error("minishell: error allocating memory"));
 	i = 0;
 	while (i < argv->len)
 	{
@@ -89,7 +89,7 @@ int	expand_star(t_vec *argv)
 		if (ft_strchr(strs[i], '*'))
 		{
 			if (push_expanded(&dst, strs, i) < 0)
-				return (ft_error("minishell: error creaing argv\n"));
+				return (ft_error("minishell: error creaing argv"));
 		}
 		else if (push_argv_elem(&dst, argv, i) < 0)
 			return (-1);

@@ -18,7 +18,6 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 
 	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
 	{
-		free_split_vec(env);
 		return (-1);
 	}
 	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)

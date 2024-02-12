@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 10:21:48 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 14:18:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int	run_command(char *str, t_vec *env, int last_return)
 		return (pipex(str, env, last_return));
 	ret = prepare_command(&command, str, env, last_return);
 	if (ret != 0)
+		return (ret);
+	if (command.argv.len == 0)
 		return (ret);
 	if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
 	{

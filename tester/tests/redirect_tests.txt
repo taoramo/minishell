@@ -3,7 +3,6 @@ grep W < infile > tmp/outfile
 < infile >tmp/outfile grep W
 grep <infile >tmp/outfile W
 grep W < infile < tmp/outfile
-
 cat infile >tmp/outfile >tmp/outfile2
 cat infile >tmp/outfile >>tmp/outfile2
 cat infile >>tmp/outfile >tmp/outfile2
@@ -11,3 +10,5 @@ cat infile >>tmp/outfile >>tmp/outfile2
 cat infile >tmp/outfile >>tmp/outfile
 cat infile >>tmp/outfile >tmp/outfile
 cat infile >>tmp/outfile >>tmp/outfile
+< tester.sh
+< tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c

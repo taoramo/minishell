@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 10:06:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/12 14:17:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	prepare_command(t_command *command, char *command_str, t_vec *env, int last_
 		return (1);
 	if (prepare_redirects(command) == -1)
 		return (1);
-	if (add_path((char **) vec_get(&command->argv, 0), env) == -1)
+	if (command->argv.len != 0 && add_path((char **) vec_get(&command->argv, 0), env) == -1)
 	{
 		free_split_vec(&command->argv);
 		vec_free(&command->redirects);

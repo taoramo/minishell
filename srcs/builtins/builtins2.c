@@ -63,30 +63,41 @@ int	ft_env(t_vec *env)
 	return (0);
 }
 
-int	ft_unset(t_vec *argv, t_vec *env)
+void	unset_variable(t_vec *env, char *arg)
 {
 	size_t	i;
 	int		j;
 	char	**strs;
-	char	**args;
 
 	i = 0;
 	j = 0;
 	strs = (char **)env->memory;
-	args = (char **)argv->memory;
-	if (argv->len < 2)
-		return (0);
 	while (i < env->len)
 	{
 		while (strs[i][j] && strs[i][j] != '=')
 			j++;
-		if (!ft_strncmp(args[1], strs[i], j))
+		if (!ft_strncmp(arg, strs[i], j))
 		{
 			free(strs[i]);
 			vec_remove(env, i);
-			return (0);
 		}
 		j = 0;
+		i++;
+	}
+}
+
+int	ft_unset(t_vec *argv, t_vec *env)
+{
+	size_t	i;
+	char	**args;
+
+	i = 1;
+	args = (char **)argv->memory;
+	if (argv->len < 2)
+		return (0);
+	while (i < argv->len)
+	{
+		unset_variable(env, args[i]);
 		i++;
 	}
 	return (0);

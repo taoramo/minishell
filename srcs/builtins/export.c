@@ -51,25 +51,26 @@ int	export_variable(t_vec *argv, t_vec *env)
 {
 	char	*str;
 	char	**strs;
+	size_t	i;
 
 	strs = (char **)argv->memory;
-	str = ft_strdup(strs[1]);
-	if (!str)
+	i = 1;
+	while (i < argv->len)
 	{
-		ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
-		return (1);
-	}
-	if (contains_equals(str) && env_entry_exists(str, env))
-		remove_entry(str, env);
-	if (!contains_equals(str) && env_entry_exists(str, env))
-		return (0);
-	else
-	{
-		if (vec_push(env, &str) < 0)
+		str = ft_strdup(strs[i]);
+		if (!str)
 		{
 			ft_putstr_fd("minishell: export: failed to allocate memory\n", 2);
 			return (1);
 		}
+		if (contains_equals(str) && env_entry_exists(str, env))
+			remove_entry(str, env);
+		if (!contains_equals(str) && env_entry_exists(str, env))
+			return (0);
+		else if (vec_push(env, &str) < 0)
+			return (ft_error("minishell: \
+				export: failed to allocate memory"));
+		i++;
 	}
 	return (0);
 }
@@ -98,7 +99,7 @@ void	print_env(char **environment, size_t i)
 		write(1, "\"\n", 2);
 	}
 	else
-		ft_putstr_fd(environment[i], 1);
+		ft_printf("%s\n", environment[i]);
 }
 
 int	ft_export(t_vec *argv, t_vec *env)

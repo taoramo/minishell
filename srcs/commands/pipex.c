@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 17:16:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:25:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,6 @@ int	count_commands(char **strs)
 	return (i);
 }
 
-int	split_pipe(char ***strs, char *pipe_str)
-{
-	*strs = ft_split(pipe_str, '|');
-	if (*strs == 0)
-		return (-1);
-	return (1);
-}
-
 int	pipex(char *pipe_str, t_vec *env, int last_return)
 {
 	int		*process_ids;
@@ -52,7 +44,8 @@ int	pipex(char *pipe_str, t_vec *env, int last_return)
 
 	if (pipe_str[0] == '|')
 		return (ft_error("minishell: syntax error near unexpected token `|'"));
-	if (split_pipe(&strs, pipe_str) == -1)
+	strs = ft_split(pipe_str, '|');
+	if (strs == 0)
 		return (-1);
 	process_ids = ft_calloc(count_commands(strs) + 1, sizeof(int));
 	if (process_ids == 0)

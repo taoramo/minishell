@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 10:47:44 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:38:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ int		count_commands(char **strs);
 int		pipe_commands(char **strs, int **p_ids, t_vec *env, int last_return);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
 void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[]);
+void	handle_child(t_command *command, int pipe_fds[], int pipe2_fds[], int pos);
 
 #endif

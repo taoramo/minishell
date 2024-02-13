@@ -47,28 +47,69 @@ int	remove_entry(char *str, t_vec *env)
 	return (0);
 }
 
-int	export_variable(t_vec *argv, t_vec *env)
+int	contains_plusequals(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	if (str[i] && i > 0 && str[i - 1] == '+')
+		return (1);
+	return (0);
+}
+
+int	add_to_env(t_vec *env, char *str)
+{
+	int		i;
+	size_t	j;
+	char	*new;
+
+	i = 0;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+	{
+		ft_error("minishell: export: not a valid identifier");
+		return (0);
+	}
+	while (str[i] && str[i] != '=')
+		i++;
+	if (str[i] == '=' && i > 1)
+		i = i - 2;
+	j = 0;
+	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
+		j++;
+	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
+	free(*(char **)vec_get(env, j));
+	vec_remove(env, j);
+	if (vec_insert(env, &new, j) < 0)
+		return (ft_error("minishell: export: malloc failed"));
+	return (0);
+}
+
+int	export_variable(t_vec *argv, t_vec *env, char **strs)
 {
 	char	*str;
-	char	**strs;
 	size_t	i;
 
-	strs = (char **)argv->memory;
 	i = 1;
 	while (i < argv->len)
 	{
-		str = ft_strdup(strs[i]);
-		if (!str)
-			return (ft_error("minishell: export: failed to allocate memory"));
-		if (!ft_isalpha(str[0]) && str[0] != '_')
-			return (ft_error("minishell: export: not a valid identifier"));
-		if (contains_equals(str) && env_entry_exists(str, env))
-			remove_entry(str, env);
-		if (!contains_equals(str) && env_entry_exists(str, env))
-			return (0);
-		else if (vec_push(env, &str) < 0)
-			return (ft_error("minishell: \
-				export: failed to allocate memory"));
+		if (contains_plusequals(strs[i]) && add_to_env(env, strs[i]) < 0)
+			return (-1);
+		else if (!contains_plusequals(strs[i]))
+		{
+			str = ft_strdup(strs[i]);
+			if (!str)
+				return (ft_error("minishell: export: malloc failed"));
+			if (!ft_isalpha(str[0]) && str[0] != '_')
+				return (ft_error("minishell: export: not a valid identifier"));
+			if (contains_equals(str) && env_entry_exists(str, env))
+				remove_entry(str, env);
+			if (!(!contains_equals(str) && env_entry_exists(str, env))
+				&& vec_push(env, &str) < 0)
+				return (ft_error("minishell: \
+					export: failed to allocate memory"));
+		}
 		i++;
 	}
 	return (0);
@@ -125,7 +166,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 		vec_clear(&sorted);
 		return (0);
 	}
-	else if (export_variable(argv, env) < 0)
+	else if (export_variable(argv, env, arguments) < 0)
 		return (1);
 	return (0);
 }

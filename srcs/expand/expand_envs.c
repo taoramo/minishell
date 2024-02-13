@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 12:37:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 09:10:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 	char	*env_expanded;
 	int		ret;
 	
+	if (*i + 1 >= str_vec->len)
+		return (1);
 	if (*(char *)vec_get(str_vec, *i + 1) == '?')
 	{
 		env_expanded = ft_itoa(last_return);

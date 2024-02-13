@@ -16,3 +16,4 @@ cat < infile | wc
 ./false 1 && echo fail || echo $? | cat
 ./false 1 | ./false 2 && echo fail || echo $?
 ./false 1 | ./true 2 || echo fail && echo $?
+echo hi > a | grep h > b > a > c < a && cat a && cat b && cat c

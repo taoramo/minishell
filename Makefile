@@ -1,4 +1,4 @@
-CC = ./AFLplusplus/afl-clang-fast
+CC = afl-clang
 
 NAME = minishell
 
@@ -17,14 +17,14 @@ SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
+CFLAGS = -fsanitize=address -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 
 $(OBJS): $(SRCS)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) -o $(NAME) $(CFLAGS)
 
 $(LIBFT):
 	make -C ./libft/

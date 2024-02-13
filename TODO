@@ -50,6 +50,7 @@ Fixes:
 	☐ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty
 	☐ disable all error message printing while taking heredoc input
 	☐ export x="echo hello | cat" freezes, should work
+	☐ cat < "hello" stuck with new order, might have to change extract files
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

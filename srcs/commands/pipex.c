@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 08:34:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 11:26:23 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,47 +26,51 @@ static int	wait_for_children(int *process_ids)
 	return (WEXITSTATUS(ret));
 }
 
-int	prepare_pipe(t_vec *commands, char *pipe_str, t_vec *env,  int last_return)
+int	count_commands(char **strs)
 {
-	char		**strs;
-	t_command	*command;
-	int			i;
+	int	i;
 
-	strs = ft_split(pipe_str, '|');
-	if (strs == 0)
-		return (0);
 	i = 0;
 	while (strs[i] != 0)
-	{
-		command = ft_calloc(1, sizeof(t_command));
-		last_return = prepare_command(command, strs[i], env, last_return);
-		vec_push(commands, command);
 		i++;
-	}
-	return (last_return);
+	return (i);
+}
+
+int	split_pipe(char ***strs, char *pipe_str)
+{
+	*strs = ft_split(pipe_str, '|');
+	if (*strs == 0)
+		return (-1);
+	return (1);
 }
 
 int	pipex(char *pipe_str, t_vec *env, int last_return)
 {
-	t_vec	commands;
 	int		*process_ids;
 	int		ret;
+	char	**strs;
 
 	if (pipe_str[0] == '|')
 		return (ft_error("minishell: syntax error near unexpected token `|'"));
-	vec_new(&commands, 1, sizeof(t_command));
-	last_return = prepare_pipe(&commands, pipe_str, env, last_return);
-	process_ids = ft_calloc(commands.len + 1, sizeof(int));
+	if (split_pipe(&strs, pipe_str) == -1)
+		return (-1);
+	process_ids = ft_calloc(count_commands(strs) + 1, sizeof(int));
 	if (process_ids == 0)
 		return (-1);
-	if (pipe_commands(commands, &process_ids) == -1)
-	{
-		free(process_ids);
-		return (-1);
-	}
+		
+	pipe_commands(strs, &process_ids, env, last_return);
+	
+	// vec_new(&commands, 1, sizeof(t_command));
+	// last_return = prepare_pipe(&commands, pipe_str);
+
+	// if (pipe_commands(commands, &process_ids) == -1)
+	// {
+	// 	free(process_ids);
+	// 	return (-1);
+	// }
 	ret = wait_for_children(process_ids);
-	if (last_return == 0)
-		last_return = ret;
+	// if (last_return == 0)
+	// 	last_return = ret;
 	free(process_ids);
-	return (last_return);
+	return (ret);
 }

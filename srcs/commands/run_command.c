@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 14:18:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 19:04:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 pid_t	execute_command(t_vec argv, t_vec *env)
 {
-	int		ret;
 	char	**strs;
 	char	**envp;
 	char	*nulterm;
@@ -29,9 +28,8 @@ pid_t	execute_command(t_vec argv, t_vec *env)
 	}
 	strs = (char **) argv.memory;
 	envp = (char **) env->memory;
-	ret = execve(strs[0], strs, envp);
-	vec_free(&argv);
-	return (ret);
+	execve(strs[0], strs, envp);
+	exit(1);
 }
 
 void	apply_redirect(void	*param)

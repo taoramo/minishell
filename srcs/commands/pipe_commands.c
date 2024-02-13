@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 18:36:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:59:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,27 @@
 
 int	run_single_pipe_command(t_command *command, int pipe_fds[], int pipe2_fds[], int pos)
 {
-	command->process_id = fork();
-	if (command->process_id < 0)
+	int	process_id;
+
+	process_id = fork();
+	if (process_id < 0)
 	{
 		perror("fork failed");
 		return (-1);
 	}
-	else if (command->process_id == 0)
+	else if (process_id == 0)
 		handle_child(command, pipe_fds, pipe2_fds, pos);
 	else
 		handle_parent(pos, pipe_fds, pipe2_fds);
-	return (command->process_id);
+	return (process_id);
 }
 
 int first_pipe_commmand(char *str, int pipe_fds[], t_vec *env, int last_return)
 {
 	t_command	command;
 	
-	prepare_command(&command, str, env, last_return);
+	if (prepare_command(&command, str, env, last_return) == -1)
+		return (-1);
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
@@ -44,7 +47,8 @@ int last_pipe_command(char *str, int pipe_fds[], t_vec *env)
 {
 	t_command	command;
 	
-	prepare_command(&command, str, env, 0);
+	if (prepare_command(&command, str, env, 0) == -1)
+		return (-1);
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
@@ -63,7 +67,8 @@ int	middle_pipe_command(char *str, int pipe_fds[], t_vec *env)
 		perror("pipe failed");
 		return (-1);
 	}
-	prepare_command(&command, str, env, 0);
+	if (prepare_command(&command, str, env, 0) == -1)
+		return (-1);
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)

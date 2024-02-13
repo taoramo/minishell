@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 18:25:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 18:57:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,18 @@ int	pipex(char *pipe_str, t_vec *env, int last_return)
 		return (-1);
 	process_ids = ft_calloc(count_commands(strs) + 1, sizeof(int));
 	if (process_ids == 0)
+	{
+		ft_free_split(strs);
 		return (-1);
+	}
 	if (pipe_commands(strs, &process_ids, env, last_return) == -1)
 	{
+		ft_free_split(strs);
 		free(process_ids);
 		return (-1);
 	}
 	ret = wait_for_children(process_ids, count_commands(strs));
+	ft_free_split(strs);
 	free(process_ids);
 	return (ret);
 }

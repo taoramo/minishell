@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 11:26:42 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 11:46:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,9 @@ void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[])
 
 void	handle_child(t_command *command, int pipe_fds[], int pos)
 {
+	ft_printf("pos = %d, executing\n", pos);
+	vec_iter(&command->argv, vec_print_elem_str);
+
 	if (pos == 0)
 	{
 		close(pipe_fds[0]);
@@ -56,9 +59,6 @@ void	handle_child(t_command *command, int pipe_fds[], int pos)
 	// 	apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	// }
 	
-	ft_printf("pos = %d, executing\n", pos);
-	vec_iter(&command->argv, vec_print_elem_str);
-
 	execute_command(command->argv, command->env);
 	exit (1);
 }
@@ -106,15 +106,20 @@ int	run_single_pipe_command(t_command *command, int pipe_fds[], int pos)
 	return (command->process_id);
 }
 
-int file_to_pipe(char *str, int pipe_fds[], t_vec *env, int last_return)
+int first_pipe_commmand(char *str, int pipe_fds[], t_vec *env, int last_return)
 {
 	t_command	command;
 	
 	prepare_command(&command, str, env, last_return);
+	if (command.argv.len != 0)
+	{
+		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
+			return (run_builtin_pipe(&command, 0, pipe_fds, 0));
+	}
 	return (run_single_pipe_command(&command, pipe_fds, 0));
 }
 
-int pipe_to_file(char *str, int pipe_fds[], t_vec *env)
+int last_pipe_command(char *str, int pipe_fds[], t_vec *env)
 {
 	t_command	command;
 	
@@ -136,9 +141,9 @@ int	pipe_commands(char **strs, int **p_ids, t_vec *env, int last_return)
 	while (i < count_commands(strs))
 	{
 		if (i == 0)
-			(*p_ids)[i] = file_to_pipe(strs[i], pipe_fds, env, last_return);
+			(*p_ids)[i] = first_pipe_commmand(strs[i], pipe_fds, env, last_return);
 		else if (i == count_commands(strs) - 1)
-			(*p_ids)[i] = pipe_to_file(strs[i], pipe_fds, env);
+			(*p_ids)[i] = last_pipe_command(strs[i], pipe_fds, env);
 		else
 			continue ;
 		if ((*p_ids)[i] == -1)

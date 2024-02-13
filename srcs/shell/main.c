@@ -80,6 +80,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	int		last_return;
 	t_vec	env;
+	char	*buf;
 
 	if (copy_env(&env, envp) < 0)
 	{
@@ -87,7 +88,16 @@ int	main(int argc, char **argv, char **envp)
 		return (-1);
 	}
 	last_return = 0;
-	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
+	buf = get_next_line(0);
+	while (buf)
+	{
+		last_return = parse_line(buf, &last_return, &env);
+		free(buf);
+		buf = get_next_line(0);
+	}
+	(void)argv;
+	(void)argc;
+	/* if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
 	{
 		last_return = parse_line(argv[2], &last_return, &env);
 		free_split_vec(&env);
@@ -98,6 +108,6 @@ int	main(int argc, char **argv, char **envp)
 		last_return = interactive(&last_return, &env);
 		free_split_vec(&env);
 		return (last_return);
-	}
+	} */
 	free_split_vec(&env);
 }

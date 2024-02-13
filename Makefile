@@ -1,3 +1,5 @@
+CC = ./AFLplusplus/afl-clang-fast
+
 NAME = minishell
 
 LIBFT = ./libft/libft.a
@@ -15,7 +17,7 @@ SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
+CFLAGS = -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 

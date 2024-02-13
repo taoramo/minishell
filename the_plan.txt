@@ -41,8 +41,11 @@ PREPARING COMMANDS
 
 skip any number of isspace
 
-expand all env variables not in ' '
-expand all * not in ' ' or " "
+if pipe:
+	split into commands
+	run below
+
+split command into argv (keep "< + arg" etc. together)
 
 while > or >> left:
 	if outfile open:
@@ -56,11 +59,14 @@ while < left:
 	open new infile
 	remove "<" and "infile"
 
-# TODO figure out how here doc and redirect in work together
+expand all env variables not in ' '
+expand all * not in ' ' or " "
+remove all outer level " and ' pairs
 
-save first word as command
-
-save split string as argv:
-	split by any amount of isspace
-	keep anything in ' ' or " " as its own arg
-		(ignore anything inside quotes)
+fork
+	child:
+		perform (pipe dups for pipe then) file dups
+		execve
+	parent:
+		close folders/pipes
+		free everything

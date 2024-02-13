@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 13:25:29 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 08:34:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ int	pipex(char *pipe_str, t_vec *env, int last_return)
 	int		*process_ids;
 	int		ret;
 
+	if (pipe_str[0] == '|')
+		return (ft_error("minishell: syntax error near unexpected token `|'"));
 	vec_new(&commands, 1, sizeof(t_command));
 	last_return = prepare_pipe(&commands, pipe_str, env, last_return);
 	process_ids = ft_calloc(commands.len + 1, sizeof(int));

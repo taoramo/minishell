@@ -14,4 +14,5 @@ export foo=bar && export | grep foo=bar && unset foo && export | grep foo
 export x='$y' && export y=z && echo $x
 export x='$$$$y$$y' && export y=z && echo $x
 export foo=bar && echo $foo && unset foo && echo $foo
+export x=* && echo $x
 cd tests && ls && cd ..

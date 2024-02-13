@@ -1,4 +1,4 @@
-CC = afl-clang
+CC = /Users/toramo/42/minishell/AFLplusplus/afl-clang-fast
 
 NAME = minishell
 
@@ -17,7 +17,7 @@ SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -fsanitize=address -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
+CFLAGS = -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 

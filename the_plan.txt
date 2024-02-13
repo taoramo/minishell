@@ -45,8 +45,6 @@ if pipe:
 	split into commands
 	run below
 
-split command into argv (keep "< + arg" etc. together)
-
 while > or >> left:
 	if outfile open:
 		close outfile
@@ -62,6 +60,8 @@ while < left:
 expand all env variables not in ' '
 expand all * not in ' ' or " "
 remove all outer level " and ' pairs
+
+split command into argv (keep "< + arg" etc. together)
 
 fork
 	child:

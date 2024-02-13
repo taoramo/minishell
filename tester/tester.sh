@@ -133,7 +133,7 @@ cc $SRCS_DIR/false.c -o false
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
-		# comment out $ and " for -c input
+	# comment out $ and " for -c input
 	line_commented=${line//\$/\\\$}
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
@@ -154,7 +154,10 @@ chmod -w tmp/nowrite
 while read -r line; do
 	eval $line > $BASH_OUTPUT
 	BASH_EXIT_CODE=$(echo $?)
-	eval $MINISHELL"\"$line\""  > $MINISHELL_OUTPUT
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\""  > $MINISHELL_OUTPUT
 	MINISHELL_EXIT_CODE=$(echo $?)
 	check_output
 	check_exit_code
@@ -163,5 +166,10 @@ done < $TEST_DIR/errors.txt
 rm -f tmp/noaccess
 rm -f tmp/noread
 rm -f tmp/nowrite
+
+rm -f a
+rm -f b
+rm -f c
+rm -f "outfile && echo hello > outfile && cat outfile"
 
 echo ""

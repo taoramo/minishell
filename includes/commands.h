@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 10:17:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 09:47:23 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		quote_length(char *str);
 
 int		prepare_command(t_command *command, char *command_str, t_vec *env, int last_return);
 int		split_command(t_vec *strs, char *str);
+int		split_expanded_command(t_vec *argv);
 int		extract_files(t_command *command);
 int		add_path(char **command_ptr, t_vec *env);
 

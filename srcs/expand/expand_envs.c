@@ -97,7 +97,7 @@ int	expand_str_envs(char **str_ptr, t_vec *env, int last_return)
 			while (i < str_vec.len && *(char *)vec_get(&str_vec, i) != '\'')
 				i++;
 		}
-		if (*(char *)vec_get(&str_vec, i) == '$')
+		if (i < str_vec.len && *(char *)vec_get(&str_vec, i) == '$')
 		{
 			if (expand_substr_env(&str_vec, &i, env, last_return) == -1)
 				return (-1);

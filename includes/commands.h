@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 09:47:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/13 10:47:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int		run_builtin(t_command *command);
 int		run_builtin_pipe(t_command *command, int pos, int pipe_fds[], int pipe2_fds[]);
 
 int		pipex(char *pipe_str, t_vec *env, int last_return);
-int		pipe_commands(t_vec commands, int **process_ids);
+int		count_commands(char **strs);
+int		pipe_commands(char **strs, int **p_ids, t_vec *env, int last_return);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
 void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[]);
 

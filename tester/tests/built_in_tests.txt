@@ -16,3 +16,6 @@ export x='$$$$y$$y' && export y=z && echo $x
 export foo=bar && echo $foo && unset foo && echo $foo
 export x=* && echo $x
 cd tests && ls && cd ..
+export foo bar asdf
+export +=asdf
+export foo && export foo+=asdf && export

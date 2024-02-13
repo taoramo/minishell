@@ -70,6 +70,7 @@ int	interactive(int *last_return, t_vec *env)
 			break ;
 		free(line);
 	}
+	write(1, "exit\n", 5);
 	toggle_carret(1);
 	clear_history();
 	free(line);

@@ -17,7 +17,6 @@ echo "$HOME*"
 echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?
 echo *
-grep "x" ./*
 awk '{print $1}' infile
 awk '{print NR " - " $1 }' infile
 awk '{ if (length($0) > max) max = length($0) } END { print max }' infile

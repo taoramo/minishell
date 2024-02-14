@@ -81,5 +81,8 @@ int		vec_sort_strncmp(void *one, void *two);
 char	*cd_error(char *str);
 void	toggle_echo(int is_on);
 int		handle_pipelines_error(t_vec *cmd_lines);
+int		env_entry_exists(char *str, t_vec *env);
+int		remove_entry(char *str, t_vec *env);
+int		contains_plusequals(char *str);
 
 #endif

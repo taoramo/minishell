@@ -22,8 +22,6 @@ Features:
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
-	☐ << operators always take input first, even if you have the bonus’ && / || operators it will first take every heredoc’s input that’s on the inputted line and then goes through the multiple cmd pipelines. It is interesting because it’s the only redirection that takes such precedence (trying to be user-friendly? idk)
-	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
 	✔ you can have multiple heredocs within one pipeline which means managing multiple temp files @done(24-02-12 13:42)
 
 
@@ -36,7 +34,7 @@ Built-in functions:
 	✔ export with no options @done(24-02-08 16:29)
 	✔ unset with no options @done(24-02-08 16:29)
 	✔ env with no options or arguments @done(24-02-06 14:35)
-	☐ exit with no options
+	✔ exit with no options @done(24-02-14 12:36)
 
 Bonus:
 	✔ && and || with parenthesis for priorities. @done(24-01-30 13:59)
@@ -49,6 +47,10 @@ Fixes:
 	☐ Handle exit when command fails correctly (free etc)
 	☐ disable all error message printing while taking heredoc input
 	☐ cat < "hello" stuck with new order, might have to change extract files
+	☐ << operator input should be taken before anything else
+	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
+	☐ cat | cat
+	☐ cat | cat | cat
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

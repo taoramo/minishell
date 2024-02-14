@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 10:14:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 14:58:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,69 @@ int	infile_from_stdin(char *limiter)
 	free(nl_limiter);
 	close(pipe_fds[1]);
 	return (pipe_fds[0]);
+}
+
+int read_heredoc(char *str)
+{
+	char	*limiter;
+	int		fd;
+	int		i;
+
+	if (*str == 0)
+	{
+		ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
+		return (-1);
+	}
+	i = 0;
+	while(str[i] != 0 && !ft_isspace(str[i]) && str[i] != '<' && str[i] != '>')
+		i++;
+	limiter = ft_substr(str, 0, i);
+	if (limiter == 0)
+		return (0);
+	fd = infile_from_stdin(limiter);
+	free(limiter);
+	return (fd);
+}
+
+int	get_heredoc_fd(char *str)
+{
+	int fd;
+	int	i;
+
+	fd = 0;
+	i = 0;
+	while (str[i] != 0)
+	{
+		if (str[i] == '\"' || str[i] == '\'')
+			i += quote_length(&str[i]);
+		if (str[i] == '<' && str[i + 1] == '<')
+		{
+			i += 2;
+			while (ft_isspace(str[i]))
+				i++;
+			fd = read_heredoc(&str[i]);
+			if (fd == -1)
+				return (-1);
+		}
+		i++;
+	}
+	return (fd);
+}
+
+int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
+{
+	size_t	i;
+	char	*str;
+	int		fd;
+
+	vec_new(heredoc_fds, cmd_lines->len, sizeof(int));
+	i = 0;
+	while (i < cmd_lines->len)
+	{
+		str = *(char **)vec_get(cmd_lines, i);
+		fd = get_heredoc_fd(str);
+		vec_push(heredoc_fds, &fd);
+		i++;
+	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 12:10:05 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:05:28 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 	if (ft_strncmp(red_comm_file[0], ">>", 2) == 0)
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<<", 2) == 0)
-		new_fd = infile_from_stdin(red_comm_file[1]);
+		return (1);
 	else if (ft_strncmp(red_comm_file[0], ">", 1) == 0)
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<", 1) == 0)

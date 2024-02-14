@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 18:57:07 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 09:32:43 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,14 @@ static int	wait_for_children(int *process_ids, int len)
 	i = 0;
 	while (i < len)
 	{
-		waitpid(process_ids[i], &ret, 0);
+		if (process_ids[i] <= 127)
+			ret = process_ids[i];
+		else
+			waitpid(process_ids[i], &ret, 0);
 		i++;
 	}
+	if (ret <= 127)
+		return (ret);
 	return (WEXITSTATUS(ret));
 }
 

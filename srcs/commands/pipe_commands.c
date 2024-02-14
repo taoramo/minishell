@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 18:59:35 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 08:57:57 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@ int	run_single_pipe_command(t_command *command, int pipe_fds[], int pipe2_fds[],
 int first_pipe_commmand(char *str, int pipe_fds[], t_vec *env, int last_return)
 {
 	t_command	command;
+	int			ret;
 	
-	if (prepare_command(&command, str, env, last_return) == -1)
-		return (-1);
+	ret = prepare_command(&command, str, env, last_return);
+	if (ret != 0)
+	{
+		handle_parent(0, pipe_fds, 0);
+		return (ret);
+	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
@@ -46,9 +51,14 @@ int first_pipe_commmand(char *str, int pipe_fds[], t_vec *env, int last_return)
 int last_pipe_command(char *str, int pipe_fds[], t_vec *env)
 {
 	t_command	command;
+	int			ret;
 	
-	if (prepare_command(&command, str, env, 0) == -1)
-		return (-1);
+	ret = prepare_command(&command, str, env, 0);
+	if (ret != 0)
+	{
+		handle_parent(1, pipe_fds, 0);
+		return (ret);
+	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
@@ -61,14 +71,19 @@ int	middle_pipe_command(char *str, int pipe_fds[], t_vec *env)
 {
 	int			pipe2_fds[2];
 	t_command	command;
+	int			ret;
 
 	if (pipe(pipe2_fds) < 0)
 	{
 		perror("pipe failed");
 		return (-1);
 	}
-	if (prepare_command(&command, str, env, 0) == -1)
-		return (-1);
+	ret = prepare_command(&command, str, env, 0);
+	if (ret != 0)
+	{
+		handle_parent(2, pipe_fds, pipe2_fds);
+		return (ret);
+	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)

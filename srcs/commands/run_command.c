@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 19:04:19 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 19:45:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,15 @@ pid_t	execute_command(t_vec argv, t_vec *env)
 	char	**envp;
 	char	*nulterm;
 
-	nulterm = ft_calloc(1, sizeof(char *));
-	if (nulterm == 0)
-		return (-1);
-	if (vec_push(&argv, nulterm) == -1)
-	{
-		free(nulterm);
-		return (-1);
-	}
+	nulterm = 0;
+	if (vec_push(&argv, &nulterm) == -1)
+		exit(1);
+	if (vec_push(env, &nulterm) == -1)
+		exit(1);
 	strs = (char **) argv.memory;
 	envp = (char **) env->memory;
 	execve(strs[0], strs, envp);
+	ft_putstr_fd("execve failed\n", 2);
 	exit(1);
 }
 

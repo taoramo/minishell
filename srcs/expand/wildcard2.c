@@ -77,6 +77,9 @@ int	after_wildcard_pushing(t_vec *dst, char **strs, int i, int j)
 			return (-1);
 	}
 	else
+	{
 		free(strs[i]);
+		vec_sort(dst, vec_sort_strncmp);
+	}
 	return (0);
 }

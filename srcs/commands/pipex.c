@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 12:08:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 14:13:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,12 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_retur
 		ft_free_split(pipeinfo->command_strs);
 		return (-1);
 	}
-	// TODO make copy of env
-	pipeinfo->env = env;
-	// vec_new(pipeinfo->env, pipeinfo->env->len, sizeof(int));
-	// if (vec_copy(pipeinfo->env, env) == -1)
-	// {
-	// 	ft_free_split(pipeinfo->command_strs);
-	// 	free(pipeinfo->process_ids);
-	// 	return (-1);
-	// }
+	if (vec_dup(pipeinfo->env, env) == -1)
+	{
+		ft_free_split(pipeinfo->command_strs);
+		free(pipeinfo->process_ids);
+		return (-1);
+	}
 	pipeinfo->last_return = last_return;
 	return (1);
 }

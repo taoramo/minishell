@@ -41,16 +41,14 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	☐ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?)
-		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
-	☐ Handle exit when command fails correctly (free etc)
 	☐ disable all error message printing while taking heredoc input
 	☐ cat < "hello" stuck with new order, might have to change extract files
 	☐ << operator input should be taken before anything else
 	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
 	☐ cat | cat
 	☐ cat | cat | cat
+	  export | tail, in other words piping from builtins doesn't work
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -95,3 +93,6 @@ Archived fixes:
 	✔ "‘|’ cat" should print error message @done(24-02-13 08:34)
 	✔ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty @done(24-02-14 09:45)
 	✔ export x="echo hello | cat" freezes, should work @done(24-02-14 10:31)
+	☐ Handle exit when command fails correctly (free etc)
+	☐ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?)
+		☐ If we are specific, it should print exit on the same line as minishell prompt

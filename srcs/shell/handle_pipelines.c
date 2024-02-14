@@ -104,11 +104,11 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 	strs = (char **)cmd_lines->memory;
 	if (check_andor_syntax(strs, cmd_lines->len) < 0)
 		return (handle_pipelines_error(cmd_lines));
+	if (check_parenth_syntax(cmd_lines) < 0)
+		return (handle_pipelines_error(cmd_lines));
 	while (i < cmd_lines->len)
 	{
 		j = 0;
-		if (check_parenth_syntax(strs[i]) < 0)
-			return (handle_pipelines_error(cmd_lines));
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;
 		while (ft_isspace(strs[i][j]))

@@ -50,7 +50,7 @@ int		next_cmd_line_length(const char *line);
 int		handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env);
 int		check_parenthesis_count(const char *line);
 int		check_open_quotes(const char *line);
-int		check_parenth_syntax(char *cmd_line);
+int		check_parenth_syntax(t_vec *cmd_lines);
 int		check_cmd_line_syntax(char *cmd_line);
 void	remove_parentheses(char *cmd_line);
 void	print_cmd_line(void *arg);

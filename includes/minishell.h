@@ -85,5 +85,7 @@ int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
 int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines);
+int		after_wildcard_pushing(t_vec *dst, char **strs, int i, int j);
+int		copy_env(t_vec *env, char **environ);
 
 #endif

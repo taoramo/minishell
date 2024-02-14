@@ -34,7 +34,8 @@ int	copy_env(t_vec *env, char **environ)
 	int			i;
 
 	i = 0;
-	vec_new(env, 64, sizeof(char *));
+	if (vec_new(env, 64, sizeof(char *)) < 0)
+		return (-1);
 	while (environ[i])
 	{
 		temp = ft_strdup(environ[i]);
@@ -66,13 +67,10 @@ int	interactive(int *last_return, t_vec *env)
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
-		{
-			free(line);
 			break ;
-		}
 		free(line);
 	}
-	write(1, "exit\n", 5);
+	write(2, "exit\n", 5);
 	toggle_carret(1);
 	clear_history();
 	return (0);

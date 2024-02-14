@@ -87,7 +87,8 @@ int	expand_str_envs(char **str_ptr, t_vec *env, int last_return)
 	t_vec	str_vec;
 	size_t	i;
 
-	vec_from(&str_vec, *str_ptr, ft_strlen(*str_ptr), sizeof(char));
+	if (vec_from(&str_vec, *str_ptr, ft_strlen(*str_ptr), sizeof(char)) < 0)
+		return (-1);
 	i = 0;
 	while (i < str_vec.len)
 	{
@@ -106,7 +107,8 @@ int	expand_str_envs(char **str_ptr, t_vec *env, int last_return)
 	}
 	free(*str_ptr);
 	char n = 0;
-	vec_push(&str_vec, &n);
+	if (vec_push(&str_vec, &n) < 0)
+		return (-1);
 	*str_ptr = (char *) str_vec.memory;
 	return (1);
 }
@@ -117,7 +119,7 @@ int	expand_envs(t_vec *argv, t_vec *env, int last_return)
 	size_t	i;
 
 	i = 0;
-	while(i < argv->len)
+	while (i < argv->len)
 	{
 		str_ptr = (char **)vec_get(argv, i);
 		if (ft_strchr(*str_ptr, '$') != 0)

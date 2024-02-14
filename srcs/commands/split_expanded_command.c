@@ -21,7 +21,8 @@ int	replace_argv(t_vec *argv, t_vec *src, size_t i)
 	j = 0;
 	while (j < src->len)
 	{
-		vec_insert(argv, (char **) vec_get(src, j), i + j);
+		if (vec_insert(argv, (char **) vec_get(src, j), i + j) < 0)
+			return (free_split_vec(argv));
 		j++;
 	}
 	return (1);

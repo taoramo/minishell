@@ -60,13 +60,12 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_retur
 		ft_free_split(pipeinfo->command_strs);
 		return (-1);
 	}
-	pipeinfo->env = env;
-	// if (vec_dup(pipeinfo->env, env) == -1)
-	// {
-	// 	ft_free_split(pipeinfo->command_strs);
-	// 	free(pipeinfo->process_ids);
-	// 	return (-1);
-	// }
+	if (copy_env(pipeinfo->env, (char **)env->memory) == -1)
+	{
+		ft_free_split(pipeinfo->command_strs);
+		free(pipeinfo->process_ids);
+		return (-1);
+	}
 	pipeinfo->last_return = last_return;
 	return (1);
 }

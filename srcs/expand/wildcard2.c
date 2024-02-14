@@ -68,3 +68,15 @@ int	is_wildcard_match(char *s, char *p)
 	}
 	return (check_rest_p(p, i.pindex));
 }
+
+int	after_wildcard_pushing(t_vec *dst, char **strs, int i, int j)
+{
+	if (!j)
+	{
+		if (vec_push(dst, &strs[i]) < 0)
+			return (-1);
+	}
+	else
+		free(strs[i]);
+	return (0);
+}

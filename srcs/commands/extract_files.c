@@ -37,7 +37,8 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 		return (-1);
 	redirect->origial_fd = original_fd;
 	redirect->new_fd = new_fd;
-	vec_push(&command->redirects, redirect);
+	if (vec_push(&command->redirects, redirect) < 0)
+		return (ft_error("minishell: malloc failed"));
 	return (1);
 }
 

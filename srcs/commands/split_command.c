@@ -14,12 +14,12 @@
 
 int	quote_length(char *str)
 {
-	char	*end_ptr;
+	int	i;
 
-	end_ptr = ft_memchr(str + 1, *str, ft_strlen(str + 1));
-	if (end_ptr == 0)
-		return (-1);
-	return (end_ptr - str);
+	i = 1;
+	while (str[i] && str[i] != str[0])
+		i++;
+	return (i);
 }
 
 int	redirect_length(char *str)

@@ -43,11 +43,7 @@ int	push_matches(t_vec *dst, char **strs, int i, DIR *ptr)
 		ep = readdir(ptr);
 	}
 	closedir(ptr);
-	if (!j)
-		vec_push(dst, &strs[i]);
-	else
-		free(strs[i]);
-	return (0);
+	return (after_wildcard_pushing(dst, strs, i, j));
 }
 
 int	push_expanded(t_vec *dst, char **strs, int i)

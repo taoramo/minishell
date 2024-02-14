@@ -66,7 +66,8 @@ char	*construct_path(t_vec *argv)
 	char	*buffer;
 
 	buffer = 0;
-	vec_new(&pathstrs, 32, sizeof(char *));
+	if (vec_new(&pathstrs, 32, sizeof(char *)) < 0)
+		return (0);
 	if (ft_strncmp(*(char **)vec_get(argv, 1), "/", 1))
 	{
 		buffer = getcwd(0, MAXPATHLEN);

@@ -84,5 +84,6 @@ int		handle_pipelines_error(t_vec *cmd_lines);
 int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
+int		after_wildcard_pushing(t_vec *dst, char **strs, int i, int j);
 
 #endif

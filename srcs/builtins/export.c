@@ -32,6 +32,8 @@ int	add_to_env(t_vec *env, char *str)
 	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
 		j++;
 	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
+	if (!new)
+		ft_error("minishell: export: malloc failed");
 	free(*(char **)vec_get(env, j));
 	vec_remove(env, j);
 	if (vec_insert(env, &new, j) < 0)
@@ -98,21 +100,21 @@ void	print_env(char **environment, size_t i)
 int	ft_export(t_vec *argv, t_vec *env)
 {
 	char	**arguments;
-	char	**environment;
 	t_vec	sorted;
 	size_t	i;
 
 	arguments = (char **)argv->memory;
 	if (arguments[1] == 0)
 	{
-		vec_new(&sorted, env->len, env->elem_size);
-		vec_copy(&sorted, env);
+		if (vec_new(&sorted, env->len, env->elem_size) < 0)
+			return (ft_error("minishell: export: malloc failed"));
+		if (vec_copy(&sorted, env) < 0)
+			return (ft_error("minishell: export: malloc failed"));
 		vec_sort(&sorted, vec_sort_strncmp);
-		environment = (char **)sorted.memory;
 		i = 0;
 		while (i < env->len)
 		{
-			print_env(environment, i);
+			print_env((char **)sorted.memory, i);
 			i++;
 		}
 		vec_free(&sorted);

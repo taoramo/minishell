@@ -45,6 +45,7 @@ Fixes:
 	☐ disable all error message printing while taking heredoc input
 	☐ << operator input should be taken before anything else
 	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
+	☐ cat < "hello" should try open hello, not "hello"
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

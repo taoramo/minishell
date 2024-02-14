@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 14:58:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 19:08:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,8 @@ int	get_heredoc_fd(char *str)
 			i += 2;
 			while (ft_isspace(str[i]))
 				i++;
+			if (fd != 0)
+				close(fd);
 			fd = read_heredoc(&str[i]);
 			if (fd == -1)
 				return (-1);
@@ -114,17 +116,46 @@ int	get_heredoc_fd(char *str)
 int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 {
 	size_t	i;
-	char	*str;
+	int		j;
+	char	**strs;
 	int		fd;
+	t_vec	*fds;
 
-	vec_new(heredoc_fds, cmd_lines->len, sizeof(int));
+	if (vec_new(heredoc_fds, cmd_lines->len, sizeof(t_vec)) == -1)
+		return (-1);
 	i = 0;
 	while (i < cmd_lines->len)
 	{
-		str = *(char **)vec_get(cmd_lines, i);
-		fd = get_heredoc_fd(str);
-		vec_push(heredoc_fds, &fd);
+		fds = ft_calloc(1, sizeof(t_vec));
+		vec_new(fds, 1, sizeof(int));
+		strs = ft_split(*(char **)vec_get(cmd_lines, i), '|');
+		j = 0;
+		while (strs[j] != 0)
+		{
+			fd = get_heredoc_fd(strs[j]);
+			if (fd == -1)
+				return (-1);
+			vec_push(fds, &fd);
+			j++;
+		}
+		vec_push(heredoc_fds, fds);
+		ft_free_split(strs);
 		i++;
 	}
+
+	// size_t y = 0;
+	// while (y < heredoc_fds->len)
+	// {
+	// 	ft_printf("heredoc_fds %d\n", y);
+	// 	t_vec command_heredoc_fds = *(t_vec *) vec_get(heredoc_fds, y);
+	// 	size_t x = 0;
+	// 	while (x < command_heredoc_fds.len)
+	// 	{
+	// 		ft_printf("fds x = %d\n", *(int *)vec_get(&command_heredoc_fds, x));
+	// 		x++;
+	// 	}
+	// 	y++;
+	// }
+
 	return (1);
 }

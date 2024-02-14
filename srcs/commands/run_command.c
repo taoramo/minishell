@@ -62,7 +62,9 @@ int	run_command(char *str, t_vec *env, int last_return)
 	int			ret;
 	t_command	command;
 
-	if (ft_strchr(str, '|') != 0)
+	if (ft_strchr(str, '|') != 0
+		&& !ft_is_inside(str, ft_strchr(str, '|') - str, '"')
+		&& !ft_is_inside(str, ft_strchr(str, '|') - str, 39))
 		return (pipex(str, env, last_return));
 	ret = prepare_command(&command, str, env, last_return);
 	if (ret != 0)

@@ -44,8 +44,28 @@ int	count_commands(char **strs)
 void free_pipe(t_pipe *pipeinfo)
 {
 	ft_free_split(pipeinfo->command_strs);
-	free_split_vec(pipeinfo->env);
+	free_split_vec(&pipeinfo->env);
 	free(pipeinfo->process_ids);
+}
+
+int	copy_split_vec(t_vec *dst, t_vec *src)
+{
+	size_t	i;
+	char	*str;
+
+	if (vec_new(dst, src->len, sizeof(char *)) < 0)
+		return (-1);
+	i = 0;
+	while (i < src->len)
+	{
+		str = ft_strdup(*(char **)vec_get(src, i));
+		if (!str)
+			return (free_split_vec(dst));
+		if (vec_push(dst, &str) < 0)
+			return (free_split_vec(dst));
+		i++;
+	}
+	return (0);
 }
 
 int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_return)
@@ -60,7 +80,7 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_retur
 		ft_free_split(pipeinfo->command_strs);
 		return (-1);
 	}
-	if (copy_env(pipeinfo->env, (char **)env->memory) == -1)
+	if (copy_split_vec(&pipeinfo->env, env) == -1)
 	{
 		ft_free_split(pipeinfo->command_strs);
 		free(pipeinfo->process_ids);

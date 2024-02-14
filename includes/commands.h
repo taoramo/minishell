@@ -41,7 +41,7 @@ typedef struct s_pipe
 	int		*process_ids;
 	int		pipe_fds[2];
 	int		last_return;
-	t_vec	*env;
+	t_vec	env;
 }	t_pipe;
 
 int		ft_isspace(int c);

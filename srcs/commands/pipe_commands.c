@@ -34,7 +34,7 @@ int first_pipe_commmand(t_pipe *pipeinfo, int i)
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, pipeinfo->last_return);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], &pipeinfo->env, pipeinfo->last_return);
 	if (ret != 0)
 	{
 		handle_parent(0, pipeinfo->pipe_fds, 0);
@@ -53,7 +53,7 @@ int last_pipe_command(t_pipe *pipeinfo, int i)
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, 0);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], &pipeinfo->env, 0);
 	if (ret != 0)
 	{
 		handle_parent(1, pipeinfo->pipe_fds, 0);
@@ -78,7 +78,7 @@ int	middle_pipe_command(t_pipe *pipeinfo, int i)
 		perror("pipe failed");
 		return (-1);
 	}
-	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, 0);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], &pipeinfo->env, 0);
 	if (ret != 0)
 	{
 		handle_parent(2, pipeinfo->pipe_fds, pipe2_fds);

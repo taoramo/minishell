@@ -48,7 +48,6 @@ Fixes:
 	☐ Error checks everywhere
 	☐ Handle exit when command fails correctly (free etc)
 	☐ disable all error message printing while taking heredoc input
-	☐ export x="echo hello | cat" freezes, should work
 	☐ cat < "hello" stuck with new order, might have to change extract files
 
 Unsure:
@@ -93,3 +92,4 @@ Archived fixes:
 		✔ fixed in "check_cmd_line_syntax", check that this change does not break any error checking @done(24-02-13 08:21)
 	✔ "‘|’ cat" should print error message @done(24-02-13 08:34)
 	✔ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty @done(24-02-14 09:45)
+	✔ export x="echo hello | cat" freezes, should work @done(24-02-14 10:31)

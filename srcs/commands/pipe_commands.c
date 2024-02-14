@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 08:57:57 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 11:56:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,45 +29,45 @@ int	run_single_pipe_command(t_command *command, int pipe_fds[], int pipe2_fds[],
 	return (process_id);
 }
 
-int first_pipe_commmand(char *str, int pipe_fds[], t_vec *env, int last_return)
+int first_pipe_commmand(t_pipe *pipeinfo, int i)
 {
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_command(&command, str, env, last_return);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, pipeinfo->last_return);
 	if (ret != 0)
 	{
-		handle_parent(0, pipe_fds, 0);
+		handle_parent(0, pipeinfo->pipe_fds, 0);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 0, pipe_fds, 0));
+			return (run_builtin_pipe(&command, 0, pipeinfo->pipe_fds, 0));
 	}
-	return (run_single_pipe_command(&command, pipe_fds, 0, 0));
+	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, 0, 0));
 }
 
-int last_pipe_command(char *str, int pipe_fds[], t_vec *env)
+int last_pipe_command(t_pipe *pipeinfo, int i)
 {
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_command(&command, str, env, 0);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, 0);
 	if (ret != 0)
 	{
-		handle_parent(1, pipe_fds, 0);
+		handle_parent(1, pipeinfo->pipe_fds, 0);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 1, pipe_fds, 0));
+			return (run_builtin_pipe(&command, 1, pipeinfo->pipe_fds, 0));
 	}
-	return (run_single_pipe_command(&command, pipe_fds, 0, 1));
+	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, 0, 1));
 }
 
-int	middle_pipe_command(char *str, int pipe_fds[], t_vec *env)
+int	middle_pipe_command(t_pipe *pipeinfo, int i)
 {
 	int			pipe2_fds[2];
 	t_command	command;
@@ -78,40 +78,39 @@ int	middle_pipe_command(char *str, int pipe_fds[], t_vec *env)
 		perror("pipe failed");
 		return (-1);
 	}
-	ret = prepare_command(&command, str, env, 0);
+	ret = prepare_command(&command, pipeinfo->command_strs[i], pipeinfo->env, 0);
 	if (ret != 0)
 	{
-		handle_parent(2, pipe_fds, pipe2_fds);
+		handle_parent(2, pipeinfo->pipe_fds, pipe2_fds);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 2, pipe_fds, pipe2_fds));
+			return (run_builtin_pipe(&command, 2, pipeinfo->pipe_fds, pipe2_fds));
 	}
-	return (run_single_pipe_command(&command, pipe_fds, pipe2_fds, 2));
+	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, pipe2_fds, 2));
 }
 
-int	pipe_commands(char **strs, int **p_ids, t_vec *env, int last_return)
+int	pipe_commands(t_pipe *pipeinfo)
 {
-	int	pipe_fds[2];
 	int	i;
 
-	if (pipe(pipe_fds) < 0)
+	if (pipe(pipeinfo->pipe_fds) < 0)
 	{
 		perror("pipe failed");
 		return (-1);
 	}
 	i = 0;
-	while (i < count_commands(strs))
+	while (i < pipeinfo->command_count)
 	{
 		if (i == 0)
-			(*p_ids)[i] = first_pipe_commmand(strs[i], pipe_fds, env, last_return);
-		else if (i == count_commands(strs) - 1)
-			(*p_ids)[i] = last_pipe_command(strs[i], pipe_fds, env);
+			pipeinfo->process_ids[i] = first_pipe_commmand(pipeinfo, i);
+		else if (i == pipeinfo->command_count - 1)
+			pipeinfo->process_ids[i] = last_pipe_command(pipeinfo, i);
 		else
-			(*p_ids)[i] = middle_pipe_command(strs[i], pipe_fds, env);
-		if ((*p_ids)[i] == -1)
+			pipeinfo->process_ids[i] = middle_pipe_command(pipeinfo, i);
+		if (pipeinfo->process_ids[i] == -1)
 			return (-1);
 		i++;
 	}

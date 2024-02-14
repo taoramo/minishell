@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 18:38:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 12:13:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,16 @@ typedef struct s_redirect
 	int	new_fd;
 }	t_redirect;
 
+typedef struct s_pipe
+{
+	char	**command_strs;
+	int		command_count;
+	int		*process_ids;
+	int		pipe_fds[2];
+	int		last_return;
+	t_vec	*env;
+}	t_pipe;
+
 int		ft_isspace(int c);
 int		quote_length(char *str);
 
@@ -56,7 +66,7 @@ int		run_builtin_pipe(t_command *command,
 
 int		pipex(char *pipe_str, t_vec *env, int last_return);
 int		count_commands(char **strs);
-int		pipe_commands(char **strs, int **p_ids, t_vec *env, int last_return);
+int		pipe_commands(t_pipe *pipeinfo);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
 void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[]);
 void	handle_child(t_command *command,

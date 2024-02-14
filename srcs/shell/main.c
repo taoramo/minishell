@@ -25,8 +25,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		free_split_vec(env);
 		return (ft_error("malloc"));
 	}
-	*last_return = make_cmd_line_groups(&cmd_lines, line, last_return, env);
-	return (*last_return);
+	return (make_cmd_line_groups(&cmd_lines, line, last_return, env));
 }
 
 int	copy_env(t_vec *env, char **environ)
@@ -54,9 +53,9 @@ int	interactive(int *last_return, t_vec *env)
 
 	using_history();
 	read_history(0);
-	while (1)
+	*last_return = 0;
+	while (*last_return != INT_MIN)
 	{
-		*last_return = 0;
 		signal_interactive();
 		line = readline("minishell> ");
 		if (line && ft_strlen(line) > 0)
@@ -67,14 +66,16 @@ int	interactive(int *last_return, t_vec *env)
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
+		{
+			free(line);
 			break ;
+		}
 		free(line);
 	}
 	write(1, "exit\n", 5);
 	toggle_carret(1);
 	clear_history();
-	free(line);
-	return (*last_return);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -89,16 +90,12 @@ int	main(int argc, char **argv, char **envp)
 	}
 	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))
-	{
-		last_return = parse_line(argv[2], &last_return, &env);
-		free_split_vec(&env);
-		return (last_return);
-	}
+		parse_line(argv[2], &last_return, &env);
 	if (argc == 1)
-	{
-		last_return = interactive(&last_return, &env);
-		free_split_vec(&env);
-		return (last_return);
-	}
+		interactive(&last_return, &env);
 	free_split_vec(&env);
+	if (last_return != INT_MIN)
+		return (last_return);
+	else
+		return (0);
 }

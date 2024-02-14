@@ -57,7 +57,8 @@ int	reset_stdfds(int stdfd_copy[])
 
 int	builtin_index(char *command)
 {
-	static const char	*builtins[7] = {"echo", "cd", "pwd", "env", "unset", "export", NULL};
+	static const char	*builtins[8] = {"echo", "cd", "pwd",
+		"env", "unset", "export", "exit", NULL};
 	int					i;
 
 	i = 0;
@@ -87,6 +88,8 @@ int	run_builtin_command(t_command *command)
 		return (ft_unset(&command->argv, command->env));
 	if (command_index == 5)
 		return (ft_export(&command->argv, command->env));
+	if (command_index == 6)
+		return (INT_MIN);
 	return (1);
 }
 
@@ -104,7 +107,8 @@ int	run_builtin(t_command *command)
 	return (ret);
 }
 
-int	run_builtin_pipe(t_command *command, int pos, int pipe_fds[], int pipe2_fds[])
+int	run_builtin_pipe(t_command *command,
+		int pos, int pipe_fds[], int pipe2_fds[])
 {
 	int			stdfd_copy[3];
 

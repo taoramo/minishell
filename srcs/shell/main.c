@@ -66,10 +66,7 @@ int	interactive(int *last_return, t_vec *env)
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
-		{
-			free(line);
 			break ;
-		}
 		free(line);
 	}
 	write(1, "exit\n", 5);

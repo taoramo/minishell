@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/12 10:03:25 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 14:45:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,15 +96,18 @@ int	check_andor_syntax(char **strs, size_t len)
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
-	size_t		i;
-	size_t		j;
-	char		**strs;
+	size_t	i;
+	size_t	j;
+	char	**strs;
+	t_vec	heredoc_fds;
 
 	i = 0;
 	strs = (char **)cmd_lines->memory;
 	if (check_andor_syntax(strs, cmd_lines->len) < 0)
 		return (handle_pipelines_error(cmd_lines));
 	if (check_parenth_syntax(cmd_lines) < 0)
+		return (handle_pipelines_error(cmd_lines));
+	if (get_heredocs(&heredoc_fds, cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
 	while (i < cmd_lines->len)
 	{

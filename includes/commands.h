@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 12:13:58 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 14:27:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_pipe
 
 int		ft_isspace(int c);
 int		quote_length(char *str);
+int		redirect_length(char *str);
 
 int		prepare_command(t_command *command,
 			char *command_str, t_vec *env, int last_return);
@@ -53,8 +54,6 @@ int		split_command(t_vec *strs, char *str);
 int		split_expanded_command(t_vec *argv);
 int		extract_files(t_command *command);
 int		add_path(char **command_ptr, t_vec *env);
-
-int		infile_from_stdin(char *limiter);
 
 int		run_command(char *str, t_vec *env, int last_return);
 void	apply_redirect(void	*param);

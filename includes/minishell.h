@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/12 10:07:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/14 13:11:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ int		handle_pipelines_error(t_vec *cmd_lines);
 int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
+int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines);
 
 #endif

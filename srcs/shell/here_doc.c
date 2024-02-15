@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 08:55:33 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:10:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,8 +127,6 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 	int		fd;
 	t_vec	*fds;
 
-	if (vec_new(heredoc_fds, cmd_lines->len, sizeof(t_vec)) == -1)
-		return (-1);
 	i = 0;
 	while (i < cmd_lines->len)
 	{

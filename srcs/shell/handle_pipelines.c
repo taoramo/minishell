@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 09:04:05 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:10:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,19 @@ int	handle_parentheses(char *cmd_line, int *last_return, t_vec *env)
 		return (0);
 }
 
-int	next_cmd_line_action(char *cmd_line,
-	int *last_return, t_vec *env)
+int	next_cmd_line_action(char *cmd_line, t_envinfo envinfo)
 {
 	if (*cmd_line == '(')
 	{
-		if (handle_parentheses(cmd_line, last_return, env) < 0)
+		if (handle_parentheses(cmd_line, envinfo.last_return, envinfo.env) < 0)
 			return (-1);
 	}
 	else if (check_cmd_line_syntax(cmd_line) < 0)
 		return (-1);
 	else
-		*last_return = run_command(cmd_line, env, *last_return);
+	{
+		*envinfo.last_return = run_command(cmd_line, envinfo);
+	}
 	return (0);
 }
 
@@ -94,10 +95,10 @@ int	check_andor_syntax(char **strs, size_t len)
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
-	size_t	i;
-	size_t	j;
-	char	**strs;
-	t_vec	heredoc_fds;
+	size_t		i;
+	size_t		j;
+	char		**strs;
+	t_envinfo	envinfo;
 
 	i = 0;
 	strs = (char **)cmd_lines->memory;
@@ -105,8 +106,12 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		return (handle_pipelines_error(cmd_lines));
 	if (check_parenth_syntax(cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
-	if (get_heredocs(&heredoc_fds, cmd_lines) < 0)
+	if (vec_new(&envinfo.heredoc_fds, cmd_lines->len, sizeof(t_vec)) == -1)
+		return (-1);
+	if (get_heredocs(&envinfo.heredoc_fds, cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
+	envinfo.env = env;
+	envinfo.last_return = last_return;
 	while (i < cmd_lines->len && *last_return != INT_MIN)
 	{
 		j = 0;
@@ -114,11 +119,11 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 			j = j + 2;
 		while (ft_isspace(strs[i][j]))
 			j++;
-		if (next_cmd_line_action(&strs[i][j], last_return, env) < 0)
+		if (next_cmd_line_action(&strs[i][j], envinfo) < 0)
 			return (handle_pipelines_error(cmd_lines));
 		i++;
-		next_cmd_line(cmd_lines, &i, last_return);
+		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	return (*last_return);
+	return (*envinfo.last_return);
 }

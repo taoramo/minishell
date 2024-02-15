@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 14:23:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:11:34 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	copy_split_vec(t_vec *dst, t_vec *src)
 	return (0);
 }
 
-int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_return)
+int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)
 {
 	pipeinfo->command_strs = ft_split(pipe_str, '|');
 	if (pipeinfo->command_strs == 0)
@@ -80,24 +80,25 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_vec *env, int last_retur
 		ft_free_split(pipeinfo->command_strs);
 		return (-1);
 	}
-	if (copy_split_vec(&pipeinfo->env, env) == -1)
+	if (copy_split_vec(&pipeinfo->env, envinfo.env) == -1)
 	{
 		ft_free_split(pipeinfo->command_strs);
 		free(pipeinfo->process_ids);
 		return (-1);
 	}
-	pipeinfo->last_return = last_return;
+	pipeinfo->last_return = *envinfo.last_return;
+	pipeinfo->heredoc_fds = &envinfo.heredoc_fds;
 	return (1);
 }
 
-int	pipex(char *pipe_str, t_vec *env, int last_return)
+int	pipex(char *pipe_str, t_envinfo envinfo)
 {
 	t_pipe	pipeinfo;
 	int		ret;
 
 	if (pipe_str[0] == '|')
 		return (ft_error("minishell: syntax error near unexpected token `|'"));
-	if (initialize_pipe(&pipeinfo, pipe_str, env, last_return) == -1)
+	if (initialize_pipe(&pipeinfo, pipe_str, envinfo) == -1)
 		return (-1);
 	if (pipe_commands(&pipeinfo) == -1)
 	{

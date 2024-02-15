@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 19:45:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 09:57:03 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	run_single_command(t_command *command)
 	return (1);
 }
 
-int	run_command(char *str, t_vec *env, int last_return)
+int	run_command(char *str, t_envinfo envinfo)
 {
 	int			ret;
 	t_command	command;
@@ -63,8 +63,8 @@ int	run_command(char *str, t_vec *env, int last_return)
 	if (ft_strchr(str, '|') != 0
 		&& !ft_is_inside(str, ft_strchr(str, '|') - str, '"')
 		&& !ft_is_inside(str, ft_strchr(str, '|') - str, 39))
-		return (pipex(str, env, last_return));
-	ret = prepare_command(&command, str, env, last_return);
+		return (pipex(str, envinfo));
+	ret = prepare_command(&command, str, envinfo);
 	if (ret != 0)
 		return (ret);
 	if (command.argv.len == 0)

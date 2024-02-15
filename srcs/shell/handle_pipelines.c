@@ -93,6 +93,49 @@ int	check_andor_syntax(char **strs, size_t len)
 	return (1);
 }
 
+int	check_redirect_cmdline(char *cmd_line)
+{
+	int		i;
+	char	c;
+
+	i = 0;
+	while (cmd_line[i])
+	{
+		if (cmd_line[i] == '<' || cmd_line[i] == '>')
+		{
+			c = cmd_line[i];
+			i++;
+			if (cmd_line[i] && cmd_line[i + 1] == cmd_line[i])
+				i++;
+			while (ft_isspace(cmd_line[i]))
+				i++;
+			if (!cmd_line[i] || cmd_line[i] == '|' || cmd_line[i] == '&' || cmd_line[i] == '(' || cmd_line[i] == ')')
+			{
+				write(2, "minishell: syntax error near unexpected token `", 47);
+				write(2, &c, 1);
+				write(2, "'\n", 2);
+				return (-1);
+			}
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	check_redirect(t_vec *cmd_lines)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < cmd_lines->len)
+	{
+		if (check_redirect_cmdline(*(char **)vec_get(cmd_lines, i)) < 0)
+			return (-1);
+		i++;
+	}
+	return (0);
+}
+
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
 	size_t		i;
@@ -103,9 +146,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 
 	i = 0;
 	strs = (char **)cmd_lines->memory;
-	if (check_andor_syntax(strs, cmd_lines->len) < 0)
-		return (handle_pipelines_error(cmd_lines));
-	if (check_parenth_syntax(cmd_lines) < 0)
+	if (check_andor_syntax(strs, cmd_lines->len) < 0 || check_parenth_syntax(cmd_lines) < 0 || check_redirect(cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
 	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
 		return (-1);

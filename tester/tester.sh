@@ -104,6 +104,9 @@ eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 echo $NOTEXIST > $BASH_OUTPUT
 check_output
 
+rm -f infile1
+rm -f infile2
+
 #------ REDIRECT ------#
 
 printf $HEADER_COLOR"\n#------ REDIRECT ------#\n\n"$NC

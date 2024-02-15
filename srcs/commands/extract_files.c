@@ -6,11 +6,33 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:36:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:11:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+char	*get_redirect_filename(char	*str)
+{
+	char	*filename;
+	char	*no_quotes;
+	int		i;
+
+	while (ft_isspace(*str))
+		str++;
+	i = 0;
+	while(str[i] != 0 && !ft_isspace(str[i]) 
+			&& !(str[i] == '<' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\'')))
+			&& !(str[i] == '>' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\''))))
+		i++;
+	no_quotes = remove_outer_quotes(str);
+	if (no_quotes == 0)
+		return (0);
+	i -= ft_strlen(str) - ft_strlen(no_quotes);
+	filename = ft_substr(no_quotes, 0, i);
+	free(no_quotes);
+	return (filename);
+}
 
 int	set_redirect(t_command *command, int original_fd, char **red_comm_file, int heredoc_fd)
 {
@@ -54,10 +76,7 @@ int	get_redirect_command_file(char *red_comm_file[], char *str)
 	red_comm_file[0] = ft_substr(str, 0, i);
 	if (red_comm_file[0] == 0)
 		return (-1);
-	str += i;
-	while (ft_isspace(*str))
-		str++;
-	red_comm_file[1] = ft_strdup(str);
+	red_comm_file[1] = get_redirect_filename(&str[i]);
 	if (red_comm_file[1] == 0)
 	{
 		free(red_comm_file[0]);

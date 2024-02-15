@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:52:17 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 13:28:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 13:46:46 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*remove_outer_quotes(char *str)
 	int		i;
 	int		len;
 
-	new_str = ft_calloc(ft_strlen(str) - 2 + 1, sizeof(char));
+	new_str = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	if (new_str == 0)
 		return (0);
 	i = 0;

@@ -49,6 +49,9 @@ Fixes:
 	☐ cat <"i"n'fil'e"<dfs>" (should try open "infile<dfs>")
 	☐ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2)
 	☐ check heredoc closing (and other files as well..)
+	☐ cat <> hello (should not handle, error?)
+	☐ cat >< hello (error)
+	☐ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands)
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:41:05 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 13:36:23 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,38 +64,11 @@ int	infile_from_stdin(char *limiter)
 	return (pipe_fds[0]);
 }
 
-int read_heredoc(char *str)
-{
-	char	*limiter;
-	char	*no_quotes;
-	int		fd;
-	int		i;
-
-	if (*str == 0)
-	{
-		ft_putstr_fd("bash: syntax error near unexpected token `newline'\n", 2);
-		return (-1);
-	}
-	i = 0;
-	while(str[i] != 0 && !ft_isspace(str[i]) 
-			&& (str[i] != '<' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\'')))
-			&& (str[i] != '>' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\''))))
-		i++;
-	no_quotes = remove_outer_quotes(str);
-	i -= ft_strlen(str) - ft_strlen(no_quotes);
-	limiter = ft_substr(no_quotes, 0, i);
-	free(no_quotes);
-	if (limiter == 0)
-		return (0);
-	fd = infile_from_stdin(limiter);
-	free(limiter);
-	return (fd);
-}
-
 int	get_heredoc_fd(char *str)
 {
-	int fd;
-	int	i;
+	int 	fd;
+	int		i;
+	char	*limiter;
 
 	fd = 0;
 	i = 0;
@@ -106,11 +79,13 @@ int	get_heredoc_fd(char *str)
 		if (str[i] == '<' && str[i + 1] == '<')
 		{
 			i += 2;
-			while (ft_isspace(str[i]))
-				i++;
 			if (fd != 0)
 				close(fd);
-			fd = read_heredoc(&str[i]);
+			limiter = get_redirect_filename(&str[i]);
+			if (limiter == 0)
+				return (-1);
+			fd = infile_from_stdin(limiter);
+			free(limiter);
 			if (fd == -1)
 				return (-1);
 		}

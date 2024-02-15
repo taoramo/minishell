@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 11:41:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:17:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	builtin_index(char *command)
 	i = 0;
 	while (builtins[i] != 0)
 	{
-		if (ft_strncmp(command, builtins[i], ft_strlen(builtins[i])) == 0)
+		if (ft_strncmp(command, builtins[i], ft_strlen(command)) == 0)
 			return (i);
 		i++;
 	}

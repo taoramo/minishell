@@ -161,7 +161,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 	envinfo.last_return = last_return;
 	while (i < cmd_lines->len && *last_return != INT_MIN)
 	{
-		envinfo.heredoc_fds = *(t_vec *)vec_get(&heredoc_fd_list, i);
+		envinfo.heredoc_fds = (t_vec *)vec_get(&heredoc_fd_list, i);
 		j = 0;
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;
@@ -173,5 +173,6 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
+	vec_free(&heredoc_fd_list);
 	return (*envinfo.last_return);
 }

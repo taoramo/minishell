@@ -46,7 +46,7 @@ int	expand_command(t_command *command, t_envinfo envinfo, int i)
 		return (-1);
 	if (expand_star(&command->argv) == -1)
 		return (-1);
-	if (prepare_redirects(command, *(int *)vec_get(&envinfo.heredoc_fds, i)) == -1)
+	if (prepare_redirects(command, *(int *)vec_get(envinfo.heredoc_fds, i)) == -1)
 		return (-1);
 	if (split_expanded_command(&command->argv) == -1)
 		return (-1);
@@ -81,7 +81,7 @@ int	prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i)
 
 	envinfo.env = &pipeinfo->env;
 	envinfo.last_return = &pipeinfo->last_return;
-	envinfo.heredoc_fds = *pipeinfo->heredoc_fds;
+	envinfo.heredoc_fds = pipeinfo->heredoc_fds;
 	ret = prepare_command(command, pipeinfo->command_strs[i], envinfo, i);
 	pipeinfo->last_return = 0;
 	return (ret);

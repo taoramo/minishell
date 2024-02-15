@@ -65,12 +65,12 @@ int	add_redirect_char(t_vec *dst, char *arg)
 		str = ft_strjoin(">> ", last);
 	if (!ft_strncmp(arg, "> ", 2))
 		str = ft_strjoin("> ", last);
+	free(last);
 	if (!str)
 		return (-1);
 	if (vec_push(dst, &str) < 0)
 		return (-1);
 	vec_remove(dst, 0);
-	free(last);
 	return (0);
 }
 

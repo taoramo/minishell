@@ -49,7 +49,7 @@ typedef struct s_envinfo
 {
 	t_vec	*env;
 	int		*last_return;
-	t_vec	heredoc_fds;
+	t_vec	*heredoc_fds;
 }	t_envinfo;
 
 int		ft_isspace(int c);

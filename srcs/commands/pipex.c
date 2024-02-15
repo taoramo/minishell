@@ -87,7 +87,7 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)
 		return (-1);
 	}
 	pipeinfo->last_return = *envinfo.last_return;
-	pipeinfo->heredoc_fds = &envinfo.heredoc_fds;
+	pipeinfo->heredoc_fds = envinfo.heredoc_fds;
 	return (1);
 }
 

@@ -36,9 +36,9 @@ char	**strs_addstr(char **strs, char *str)
 	while (strs[i] != 0)
 	{
 		tmp = ft_strjoin(strs[i], str);
+		free(strs[i]);
 		if (tmp == 0)
 			return (0);
-		free(strs[i]);
 		strs[i] = tmp;
 		i++;
 	}
@@ -56,6 +56,7 @@ char	**get_paths(t_vec *env)
 	if (i == env->len)
 		return (ft_calloc(1, sizeof(char *)));
 	paths = ft_split(path_str, ':');
+	free(path_str);
 	if (paths == 0)
 		return (0);
 	if (strs_addstr(paths, "/") == 0)

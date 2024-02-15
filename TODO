@@ -42,16 +42,9 @@ Bonus:
 
 Fixes:
 	☐ Error checks everywhere
-	☐ disable all error message printing while taking heredoc input
-	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
-	☐ cat < "hello" (should try open hello, not "hello")
 	☐ cat <infile<infile2 (should try open "infile")
 	☐ cat <"i"n'fil'e"<dfs>" (should try open "infile<dfs>")
-	☐ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2)
 	☐ check heredoc closing (and other files as well..)
-	☐ cat <> hello (should not handle, error?)
-	☐ cat >< hello (error)
-	☐ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands)
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -104,3 +97,10 @@ Archived fixes:
 	✔ cat | cat | cat @done(24-02-15 11:25)
 	✔ << operator input should be taken before anything else @done(24-02-15 11:25)
 	✔ "echo hello" (should try find command "echo hello") @done(24-02-15 12:18)
+	☐ cat <> hello (should not handle, error?)
+	☐ cat >< hello (error)
+	☐ cat < "hello" (should try open hello, not "hello")
+	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
+	☐ disable all error message printing while taking heredoc input
+	☐ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2)
+	☐ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands)

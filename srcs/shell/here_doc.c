@@ -100,13 +100,12 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 	int		j;
 	char	**strs;
 	int		fd;
-	t_vec	*fds;
+	t_vec	fds;
 
 	i = 0;
 	while (i < cmd_lines->len)
 	{
-		fds = ft_calloc(1, sizeof(t_vec));
-		vec_new(fds, 1, sizeof(int));
+		vec_new(&fds, 1, sizeof(int));
 		strs = ft_split(*(char **)vec_get(cmd_lines, i), '|');
 		j = 0;
 		while (strs[j] != 0)
@@ -114,11 +113,13 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 			fd = get_heredoc_fd(strs[j]);
 			if (fd == -1)
 				return (-1);
-			vec_push(fds, &fd);
+			vec_push(&fds, &fd);
 			j++;
 		}
-		vec_push(heredoc_fds, fds);
+		vec_push(heredoc_fds, &fds);
 		ft_free_split(strs);
+		vec_free(&fds);
+		ft_bzero(&fds, sizeof(t_vec));
 		i++;
 	}
 	return (1);

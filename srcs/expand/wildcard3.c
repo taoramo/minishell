@@ -18,10 +18,10 @@ int	expnd_rdrct(t_vec *dst, char *path, char *arg)
 		expanded = ft_strjoin("< ", path);
 	if (arg[0] == '>')
 		expanded = ft_strjoin("> ", path);
-	if (!expanded)
-		return (-1);
 	free(path);
 	free(arg);
+	if (!expanded)
+		return (-1);
 	if (vec_push(dst, &expanded) < 0)
 		return (-1);
 	return (1);

@@ -69,17 +69,22 @@ int	is_wildcard_match(char *s, char *p)
 	return (check_rest_p(p, i.pindex));
 }
 
-int	after_wildcard_pushing(t_vec *dst, char **strs, int i, int j)
+int	after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect)
 {
-	if (!j)
+	char	*ptr;
+
+	if (!j && !redirect)
 	{
-		if (vec_push(dst, &strs[i]) < 0)
+		ptr = ft_strdup(arg);
+		if (!ptr)
+			return (-1);
+		if (vec_push(dst, &ptr) < 0)
 			return (-1);
 	}
-	else
+	else if (!redirect)
 	{
-		free(strs[i]);
+		free(arg);
 		vec_sort(dst, vec_sort_strncmp);
 	}
-	return (0);
+	return (j);
 }

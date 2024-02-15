@@ -85,7 +85,12 @@ int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
 int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines);
-int		after_wildcard_pushing(t_vec *dst, char **strs, int i, int j);
+int		after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect);
 int		copy_env(t_vec *env, char **environ);
+int		exp_wc_err(t_vec *new, char *msg);
+int		expnd_rdrct(t_vec *dst, char *path, char *arg);
+int		ambiguous_wildcard(char *arg);
+int		is_rdrct(char *arg);
+int		add_redirect_char(t_vec *dst, char *arg);
 
 #endif

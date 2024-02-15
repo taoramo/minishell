@@ -6,15 +6,72 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 16:54:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 18:35:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	is_delimeter(char c)
+int	substr_isdigit(char *str, int len)
 {
-	return (c == 0 || ft_isspace(c) || c == '>' || c == '<' || c == '|');
+	while (*str != 0 && len > 0)
+	{
+		if (!ft_isdigit(*str))
+			return (0);
+		len--;
+		str++;
+	}
+	return (1);
+}
+
+int	format_redirect(t_vec *strs, char *str, size_t *i)
+{
+	int		n;
+	int		r;
+	int		f;
+	char	*substr;
+
+	ft_printf("redstr = %s\n", str);
+
+	n = 0;
+	while (str[n] != 0 && str[n] != '>' && str[n] != '<')
+		n++;
+	r = 1;
+	if (!ft_strncmp(&str[n], ">>", 2) || !ft_strncmp(&str[n], "<<", 2))
+		r = 2;
+	f = ft_strlen(&str[n + r]);
+	ft_printf("n = %d, r = %d, f = %d\n", n, r, f);
+
+	vec_remove(strs, *i);
+
+	if (n > 0 && !substr_isdigit(str, n))
+	{
+		substr = ft_substr(str, 0, n);
+		vec_insert(strs, &substr, *i);
+		*i += 1;
+	}
+
+	vec_iter(strs, vec_print_elem_str);
+		
+
+	return (1);	
+}
+
+int	join_redirects(t_vec *strs)
+{
+	size_t	i;
+	char	*str;
+
+	i = 0;
+	while (i < strs->len)
+	{
+		str = *(char **)vec_get(strs, i);
+		if (ft_strchr(str, '>') || ft_strchr(str, '<'))
+			format_redirect(strs, str, &i);
+		i++;
+	}
+
+	return (1);
 }
 
 int	quote_length(char *str)
@@ -27,67 +84,16 @@ int	quote_length(char *str)
 	return (i);
 }
 
-int	add_redirect(t_vec *strs, char *str, int i)
-{
-	int		numlen;
-	char	*num;
-	char	*redirect;
-	char	*filename;
-
-	numlen = 1;
-	while (i - numlen >= 0)
-	{
-		if (!ft_isdigit(str[i - numlen]))
-		{
-			numlen = 1;
-			break ;
-		}
-		numlen++;
-	}
-	numlen -= 1;
-	
-	if (numlen > 0)
-		num = ft_substr(str, i - numlen, numlen);
-	
-	if (!ft_strncmp(&str[i], ">>", 2) || !ft_strncmp(&str[i], "<<", 2))
-	{
-		redirect = ft_substr(str, i, 2);
-		filename = get_redirect_filename(&str[i+2]);
-	}
-	else
-	{
-		redirect = ft_substr(str, i, 1);
-		filename = get_redirect_filename(&str[i+1]);
-	}
-
-	if (numlen > 0)
-		redirect = ft_strjoin(num, redirect);
-	redirect = ft_strjoin(redirect, filename);
-
-	ft_printf("redirect = %s\n", redirect);
-	
-	vec_push(strs, &redirect);
-
-	while (str[i] == '>' || str[i] == '<' || ft_isspace(str[i]))
-		i++;
-	while (str[i] != 0 && str[i] != '>' && str[i] != '<' && !ft_isspace(str[i]))
-		i++;
-	ft_printf("str[i] = %s\n", &str[i]);
-
-	return (i);
-}
-
 int	add_str(t_vec *strs, char *str, int i)
 {
 	char	*substr;
 	
-	if (str[i] == '<' || str[i] == '>')
-		return (add_redirect(strs, str, i));
 	substr = ft_substr(str, 0, i);
 	if (substr == 0)
 		return (-1);
 	if (vec_push(strs, &substr) == -1)
 		return (-1);
+	ft_printf("substr = %s\n", substr);
 	return (0);
 }
 
@@ -103,7 +109,7 @@ int	split_command(t_vec *strs, char *str)
 		i++;
 		if (str[i] == '\"' || str[i] == '\'')
 			i += quote_length(&str[i]);
-		if (is_delimeter(str[i]))
+		if (str[i] == 0 || ft_isspace(str[i]))
 		{
 			if (add_str(strs, str, i) == -1)
 			{
@@ -116,5 +122,6 @@ int	split_command(t_vec *strs, char *str)
 			i = 0;
 		}
 	}
+	join_redirects(strs);
 	return (1);
 }

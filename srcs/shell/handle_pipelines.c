@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 10:10:40 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:26:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 	size_t		i;
 	size_t		j;
 	char		**strs;
+	t_vec		heredoc_fd_list;
 	t_envinfo	envinfo;
 
 	i = 0;
@@ -106,14 +107,15 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		return (handle_pipelines_error(cmd_lines));
 	if (check_parenth_syntax(cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
-	if (vec_new(&envinfo.heredoc_fds, cmd_lines->len, sizeof(t_vec)) == -1)
+	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
 		return (-1);
-	if (get_heredocs(&envinfo.heredoc_fds, cmd_lines) < 0)
+	if (get_heredocs(&heredoc_fd_list, cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
 	envinfo.env = env;
 	envinfo.last_return = last_return;
 	while (i < cmd_lines->len && *last_return != INT_MIN)
 	{
+		envinfo.heredoc_fds = *(t_vec *)vec_get(&heredoc_fd_list, i);
 		j = 0;
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;

@@ -6,13 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 13:05:28 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:36:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
+int	set_redirect(t_command *command, int original_fd, char **red_comm_file, int heredoc_fd)
 {
 	int			new_fd;
 	t_redirect	*redirect;
@@ -21,7 +21,7 @@ int	set_redirect(t_command *command, int original_fd, char **red_comm_file)
 	if (ft_strncmp(red_comm_file[0], ">>", 2) == 0)
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_APPEND, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<<", 2) == 0)
-		return (1);
+		new_fd = heredoc_fd;
 	else if (ft_strncmp(red_comm_file[0], ">", 1) == 0)
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<", 1) == 0)
@@ -84,14 +84,14 @@ int	get_redirect_fd(char *str)
 	return (red_fd);
 }
 
-int	extract_files(t_command *command)
+int	extract_files(t_command *command, int heredoc_fd)
 {
 	char	**strs;
 	size_t	i;
 	int		red_fd;
 	char	*red_comm_file[2];
 	int		ret;
-
+	
 	strs = *(char ***) &command->argv;
 	i = 0;
 	while (i < command->argv.len)
@@ -101,7 +101,7 @@ int	extract_files(t_command *command)
 		{
 			if (get_redirect_command_file(red_comm_file, strs[i]) == -1)
 				return (-1);
-			ret = set_redirect(command, red_fd, red_comm_file);
+			ret = set_redirect(command, red_fd, red_comm_file, heredoc_fd);
 			free(red_comm_file[0]);
 			free(red_comm_file[1]);
 			if (ret == -1)

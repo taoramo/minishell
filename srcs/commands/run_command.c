@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 09:57:03 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:27:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	run_command(char *str, t_envinfo envinfo)
 		&& !ft_is_inside(str, ft_strchr(str, '|') - str, '"')
 		&& !ft_is_inside(str, ft_strchr(str, '|') - str, 39))
 		return (pipex(str, envinfo));
-	ret = prepare_command(&command, str, envinfo);
+	ret = prepare_command(&command, str, envinfo, 0);
 	if (ret != 0)
 		return (ret);
 	if (command.argv.len == 0)

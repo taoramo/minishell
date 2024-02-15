@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:10:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:41:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,20 +146,5 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 		ft_free_split(strs);
 		i++;
 	}
-
-	// size_t y = 0;
-	// while (y < heredoc_fds->len)
-	// {
-	// 	ft_printf("heredoc_fds %d\n", y);
-	// 	t_vec command_heredoc_fds = *(t_vec *) vec_get(heredoc_fds, y);
-	// 	size_t x = 0;
-	// 	while (x < command_heredoc_fds.len)
-	// 	{
-	// 		ft_printf("fds x = %d\n", *(int *)vec_get(&command_heredoc_fds, x));
-	// 		x++;
-	// 	}
-	// 	y++;
-	// }
-
 	return (1);
 }

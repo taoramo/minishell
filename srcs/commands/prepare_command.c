@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:11:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:28:49 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ int	prepare_argv(t_command *command, char *command_str)
 	return (1);
 }
 
-int	prepare_redirects(t_command *command)
+int	prepare_redirects(t_command *command, int heredoc_fd)
 {
 	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
 	{
 		free_split_vec(&command->argv);
 		return (-1);
 	}
-	if (extract_files(command) == -1)
+	if (extract_files(command, heredoc_fd) == -1)
 	{
 		free_split_vec(&command->argv);
 		vec_free(&command->redirects);
@@ -50,7 +50,7 @@ int	expand_command(t_vec *argv, t_vec *env,  int last_return)
 	return (1);
 }
 
-int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo)
+int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo, int i)
 {
 	if (prepare_argv(command, command_str) == -1)
 		return (1);
@@ -59,7 +59,7 @@ int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo)
 		free_split_vec(&command->argv);
 		return (-1);
 	}
-	if (prepare_redirects(command) == -1)
+	if (prepare_redirects(command, *(int *)vec_get(&envinfo.heredoc_fds, i)) == -1)
 		return (1);
 	if (command->argv.len != 0 && add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
 	{
@@ -71,7 +71,7 @@ int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo)
 	return (0);
 }
 
-int	prepare_pipe_command(t_command *command, char *command_str, t_pipe *pipeinfo)
+int	prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i)
 {
 	t_envinfo	envinfo;
 	int			ret;
@@ -79,7 +79,7 @@ int	prepare_pipe_command(t_command *command, char *command_str, t_pipe *pipeinfo
 	envinfo.env = &pipeinfo->env;
 	envinfo.last_return = &pipeinfo->last_return;
 	envinfo.heredoc_fds = *pipeinfo->heredoc_fds;
-	ret = prepare_command(command, command_str, envinfo);
+	ret = prepare_command(command, pipeinfo->command_strs[i], envinfo, i);
 	pipeinfo->last_return = 0;
 	return (ret);
 }

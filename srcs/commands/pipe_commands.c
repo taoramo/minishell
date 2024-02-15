@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 09:56:25 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:18:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int first_pipe_commmand(t_pipe *pipeinfo, int i)
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_pipe_command(&command, pipeinfo->command_strs[i], pipeinfo);
+	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
 		handle_parent(0, pipeinfo->pipe_fds, 0);
@@ -53,7 +53,7 @@ int last_pipe_command(t_pipe *pipeinfo, int i)
 	t_command	command;
 	int			ret;
 	
-	ret = prepare_pipe_command(&command, pipeinfo->command_strs[i], pipeinfo);
+	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
 		handle_parent(1, pipeinfo->pipe_fds, 0);
@@ -78,7 +78,7 @@ int	middle_pipe_command(t_pipe *pipeinfo, int i)
 		perror("pipe failed");
 		return (-1);
 	}
-	ret = prepare_pipe_command(&command, pipeinfo->command_strs[i], pipeinfo);
+	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
 		handle_parent(2, pipeinfo->pipe_fds, pipe2_fds);

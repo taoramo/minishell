@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:09:24 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:39:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 
 	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
 	{
+		*last_return = 1;
 		return (-1);
 	}
 	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
@@ -25,7 +26,12 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		free_split_vec(env);
 		return (ft_error("malloc"));
 	}
-	return (make_cmd_line_groups(&cmd_lines, line, last_return, env));
+	if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
+	{
+		*last_return = 1;
+		return (-1);
+	}
+	return (1);
 }
 
 int	copy_env(t_vec *env, char **environ)

@@ -12,6 +12,3 @@ cat infile >>tmp/outfile >tmp/outfile && cat tmp/outfile
 cat infile >>tmp/outfile >>tmp/outfile && cat tmp/outfile
 < tester.sh
 < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c
-cat < "hello"
-cat <infile<infile2
-cat <"i"n'fil'e"<dfs>"

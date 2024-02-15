@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/12 13:14:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:56:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	add_to_env(t_vec *env, char *str)
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 	{
 		ft_error("minishell: export: not a valid identifier");
-		return (0);
+		return (-1);
 	}
 	while (str[i] && str[i] != '=')
 		i++;

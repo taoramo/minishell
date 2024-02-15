@@ -57,5 +57,7 @@ void	handle_child(t_command *command, int pipe_fds[], int pipe2_fds[], int pos)
 		close(pipe2_fds[0]);
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	}
+	if (command->argv.len == 0)
+		exit(1);
 	execute_command(command->argv, command->env);
 }

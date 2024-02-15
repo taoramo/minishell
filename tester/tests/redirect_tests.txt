@@ -1,14 +1,17 @@
-grep W < infile > tmp/outfile
-> tmp/outfile grep W < infile
-< infile >tmp/outfile grep W
-grep <infile >tmp/outfile W
-grep W < infile < tmp/outfile
-cat infile >tmp/outfile >tmp/outfile2
-cat infile >tmp/outfile >>tmp/outfile2
-cat infile >>tmp/outfile >tmp/outfile2
-cat infile >>tmp/outfile >>tmp/outfile2
-cat infile >tmp/outfile >>tmp/outfile
-cat infile >>tmp/outfile >tmp/outfile
-cat infile >>tmp/outfile >>tmp/outfile
+grep W < infile > tmp/outfile && cat tmp/outfile
+> tmp/outfile grep W < infile && cat tmp/outfile
+< infile >tmp/outfile grep W && cat tmp/outfile
+grep <infile >tmp/outfile W && cat tmp/outfile
+grep W < ./tester.sh < infile
+cat infile >tmp/outfile >tmp/outfile2 && cat tmp/outfile && cat tmp/outfile2
+cat infile >tmp/outfile >>tmp/outfile2 && cat tmp/outfile && cat tmp/outfile2
+cat infile >>tmp/outfile >tmp/outfile2 && cat tmp/outfile && cat tmp/outfile2
+cat infile >>tmp/outfile >>tmp/outfile2 && cat tmp/outfile && cat tmp/outfile2
+cat infile >tmp/outfile >>tmp/outfile && cat tmp/outfile
+cat infile >>tmp/outfile >tmp/outfile && cat tmp/outfile
+cat infile >>tmp/outfile >>tmp/outfile && cat tmp/outfile
 < tester.sh
 < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c
+cat < "hello"
+cat <infile<infile2
+cat <"i"n'fil'e"<dfs>"

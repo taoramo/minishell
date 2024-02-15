@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 14:27:26 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:28:31 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,29 @@ typedef struct s_pipe
 	int		pipe_fds[2];
 	int		last_return;
 	t_vec	env;
+	t_vec	*heredoc_fds;
 }	t_pipe;
+
+typedef struct s_envinfo
+{
+	t_vec	*env;
+	int		*last_return;
+	t_vec	heredoc_fds;
+}	t_envinfo;
 
 int		ft_isspace(int c);
 int		quote_length(char *str);
 int		redirect_length(char *str);
 
-int		prepare_command(t_command *command,
-			char *command_str, t_vec *env, int last_return);
+int		prepare_command(t_command *command, char *command_str,
+			t_envinfo envinfo, int i);
+int		prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i);
 int		split_command(t_vec *strs, char *str);
 int		split_expanded_command(t_vec *argv);
-int		extract_files(t_command *command);
+int		extract_files(t_command *command, int heredoc_fd);
 int		add_path(char **command_ptr, t_vec *env);
 
-int		run_command(char *str, t_vec *env, int last_return);
+int		run_command(char *str, t_envinfo envinfo);
 void	apply_redirect(void	*param);
 pid_t	execute_command(t_vec argv, t_vec *env);
 
@@ -63,7 +72,7 @@ int		run_builtin(t_command *command);
 int		run_builtin_pipe(t_command *command,
 			int pos, int pipe_fds[], int pipe2_fds[]);
 
-int		pipex(char *pipe_str, t_vec *env, int last_return);
+int		pipex(char *pipe_str, t_envinfo envinfo);
 int		count_commands(char **strs);
 int		pipe_commands(t_pipe *pipeinfo);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);

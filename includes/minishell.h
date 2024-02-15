@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/14 13:11:04 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 08:42:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ int		contains_equals(const char *str);
 int		expand_star(t_vec *argv);
 int		is_wildcard_match(char *string, char *pattern);
 int		remove_quotes(t_vec *argv);
+char	*remove_outer_quotes(char *str);
 int		expand_envs(t_vec *argv, t_vec *env, int last_return);
 void	toggle_carret(int is_on);
 int		vec_sort_strncmp(void *one, void *two);

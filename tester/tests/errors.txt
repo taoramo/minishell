@@ -29,3 +29,4 @@ echo hello ||| echo wow
 echo ok | hello ||| echo wow
 echo hello && | echo wow
 rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
+"echo hello > out" && cat out

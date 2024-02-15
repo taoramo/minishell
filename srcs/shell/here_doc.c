@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 19:08:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:41:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	infile_from_stdin(char *limiter)
 int read_heredoc(char *str)
 {
 	char	*limiter;
+	char	*no_quotes;
 	int		fd;
 	int		i;
 
@@ -76,9 +77,14 @@ int read_heredoc(char *str)
 		return (-1);
 	}
 	i = 0;
-	while(str[i] != 0 && !ft_isspace(str[i]) && str[i] != '<' && str[i] != '>')
+	while(str[i] != 0 && !ft_isspace(str[i]) 
+			&& (str[i] != '<' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\'')))
+			&& (str[i] != '>' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\''))))
 		i++;
-	limiter = ft_substr(str, 0, i);
+	no_quotes = remove_outer_quotes(str);
+	i -= ft_strlen(str) - ft_strlen(no_quotes);
+	limiter = ft_substr(no_quotes, 0, i);
+	free(no_quotes);
 	if (limiter == 0)
 		return (0);
 	fd = infile_from_stdin(limiter);
@@ -121,8 +127,6 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 	int		fd;
 	t_vec	*fds;
 
-	if (vec_new(heredoc_fds, cmd_lines->len, sizeof(t_vec)) == -1)
-		return (-1);
 	i = 0;
 	while (i < cmd_lines->len)
 	{
@@ -142,20 +146,5 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines)
 		ft_free_split(strs);
 		i++;
 	}
-
-	// size_t y = 0;
-	// while (y < heredoc_fds->len)
-	// {
-	// 	ft_printf("heredoc_fds %d\n", y);
-	// 	t_vec command_heredoc_fds = *(t_vec *) vec_get(heredoc_fds, y);
-	// 	size_t x = 0;
-	// 	while (x < command_heredoc_fds.len)
-	// 	{
-	// 		ft_printf("fds x = %d\n", *(int *)vec_get(&command_heredoc_fds, x));
-	// 		x++;
-	// 	}
-	// 	y++;
-	// }
-
 	return (1);
 }

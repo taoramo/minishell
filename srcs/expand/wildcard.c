@@ -59,17 +59,18 @@ int	add_redirect_char(t_vec *dst, char *arg)
 	last = *(char **)vec_get(dst, dst->len - 1);
 	if (!ft_strncmp(arg, "<<", 2))
 		str = ft_strjoin("<< ", last);
-	if (!ft_strncmp(arg, "<", 2))
+	if (!ft_strncmp(arg, "< ", 2))
 		str = ft_strjoin("< ", last);
 	if (!ft_strncmp(arg, ">>", 2))
 		str = ft_strjoin(">> ", last);
-	if (!ft_strncmp(arg, ">", 2))
+	if (!ft_strncmp(arg, "> ", 2))
 		str = ft_strjoin("> ", last);
 	if (!str)
 		return (-1);
-	vec_pop(0, dst);
 	if (vec_push(dst, &str) < 0)
 		return (-1);
+	vec_remove(dst, 0);
+	free(last);
 	return (0);
 }
 
@@ -111,10 +112,13 @@ int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
 int	expand_star(t_vec *argv)
 {
 	t_vec			dst;
+	t_vec			newargv;
 	size_t			i;
 	char			**strs;
 
 	if (vec_new(&dst, 32, sizeof(char *)) < 0)
+		return (ft_error("minishell: error allocating memory"));
+	if (vec_new(&newargv, 32, sizeof(char *)) < 0)
 		return (ft_error("minishell: error allocating memory"));
 	i = 0;
 	strs = (char **)argv->memory;
@@ -125,11 +129,13 @@ int	expand_star(t_vec *argv)
 			if (push_expanded(&dst, strs, i) < 0)
 				return (ft_error("minishell: error creating argv"));
 		}
-		else if (push_argv_elem(&dst, argv, i) < 0)
+		else if (push_argv_elem(&newargv, argv, i) < 0)
 			return (-1);
 		i++;
 	}
+	vec_append(&newargv, &dst);
 	vec_free(argv);
-	ft_memcpy(argv, &dst, sizeof(t_vec));
+	ft_memcpy(argv, &newargv, sizeof(t_vec));
+	vec_free(&dst);
 	return (0);
 }

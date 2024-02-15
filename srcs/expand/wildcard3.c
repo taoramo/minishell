@@ -34,7 +34,7 @@ int	ambiguous_wildcard(char *arg)
 	i = 0;
 	while (arg[i] && (arg[i] == '<' || arg[i] == '>' || ft_isspace(arg[i])))
 		i++;
-	ft_printf("minishell: %s: ambiguous wildcard", &arg[i]);
+	ft_printf("minishell: %s: ambiguous wildcard\n", &arg[i]);
 	return (-1);
 }
 

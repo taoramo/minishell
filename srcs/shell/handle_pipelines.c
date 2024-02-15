@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/14 14:45:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 09:04:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	}
 }
 
-int	handle_parentheses(char *cmd_line,
-	int *last_return, t_vec *env, size_t j)
+int	handle_parentheses(char *cmd_line, int *last_return, t_vec *env)
 {
-	ft_memmove(cmd_line, &cmd_line[j], ft_strlen(&cmd_line[j]));
 	remove_parentheses(cmd_line);
 	if (parse_line(cmd_line, last_return, env) < 0)
 		return (-1);
@@ -52,17 +50,17 @@ int	handle_parentheses(char *cmd_line,
 }
 
 int	next_cmd_line_action(char *cmd_line,
-	int *last_return, t_vec *env, size_t j)
+	int *last_return, t_vec *env)
 {
-	if (cmd_line[j] == '(')
+	if (*cmd_line == '(')
 	{
-		if (handle_parentheses(cmd_line, last_return, env, j) < 0)
+		if (handle_parentheses(cmd_line, last_return, env) < 0)
 			return (-1);
 	}
 	else if (check_cmd_line_syntax(cmd_line) < 0)
 		return (-1);
 	else
-		*last_return = run_command(&cmd_line[j], env, *last_return);
+		*last_return = run_command(cmd_line, env, *last_return);
 	return (0);
 }
 
@@ -116,7 +114,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 			j = j + 2;
 		while (ft_isspace(strs[i][j]))
 			j++;
-		if (next_cmd_line_action(strs[i], last_return, env, j) < 0)
+		if (next_cmd_line_action(&strs[i][j], last_return, env) < 0)
 			return (handle_pipelines_error(cmd_lines));
 		i++;
 		next_cmd_line(cmd_lines, &i, last_return);

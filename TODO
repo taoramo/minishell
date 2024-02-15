@@ -47,6 +47,7 @@ Fixes:
 	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
 	☐ cat < "hello" should try open hello, not "hello"
 	☐ cat <infile<infile2 should try open "infile"
+	☐ cat <"i"n'fil'e"<dfs>" should try open "infile<dfs>"
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

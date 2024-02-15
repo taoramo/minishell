@@ -93,6 +93,14 @@ int	check_andor_syntax(char **strs, size_t len)
 	return (1);
 }
 
+int	redirect_check_error(char c)
+{
+	write(2, "minishell: syntax error near unexpected token `", 47);
+	write(2, &c, 1);
+	write(2, "'\n", 2);
+	return (-1);
+}
+
 int	check_redirect_cmdline(char *cmd_line)
 {
 	int		i;
@@ -104,18 +112,15 @@ int	check_redirect_cmdline(char *cmd_line)
 		if (cmd_line[i] == '<' || cmd_line[i] == '>')
 		{
 			c = cmd_line[i];
-			i++;
+			if ((c == '<' && cmd_line[i + 1] == '>') || (c == '>' && cmd_line[i + 1] == '<'))
+				return (redirect_check_error(c));
 			if (cmd_line[i] && cmd_line[i + 1] == cmd_line[i])
 				i++;
+			i++;
 			while (ft_isspace(cmd_line[i]))
 				i++;
 			if (!cmd_line[i] || cmd_line[i] == '|' || cmd_line[i] == '&' || cmd_line[i] == '(' || cmd_line[i] == ')')
-			{
-				write(2, "minishell: syntax error near unexpected token `", 47);
-				write(2, &c, 1);
-				write(2, "'\n", 2);
-				return (-1);
-			}
+				return (redirect_check_error(c));
 		}
 		i++;
 	}

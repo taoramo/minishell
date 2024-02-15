@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/14 19:08:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 08:55:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	infile_from_stdin(char *limiter)
 int read_heredoc(char *str)
 {
 	char	*limiter;
+	char	*no_quotes;
 	int		fd;
 	int		i;
 
@@ -76,9 +77,14 @@ int read_heredoc(char *str)
 		return (-1);
 	}
 	i = 0;
-	while(str[i] != 0 && !ft_isspace(str[i]) && str[i] != '<' && str[i] != '>')
+	while(str[i] != 0 && !ft_isspace(str[i]) 
+			&& (str[i] != '<' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\'')))
+			&& (str[i] != '>' && (!ft_is_inside(str, i, '\"') && !ft_is_inside(str, i, '\''))))
 		i++;
-	limiter = ft_substr(str, 0, i);
+	no_quotes = remove_outer_quotes(str);
+	i -= ft_strlen(str) - ft_strlen(no_quotes);
+	limiter = ft_substr(no_quotes, 0, i);
+	free(no_quotes);
 	if (limiter == 0)
 		return (0);
 	fd = infile_from_stdin(limiter);

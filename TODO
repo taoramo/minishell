@@ -46,6 +46,7 @@ Fixes:
 	☐ << operator input should be taken before anything else
 	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
 	☐ cat < "hello" should try open hello, not "hello"
+	☐ cat <infile<infile2 should try open "infile"
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING

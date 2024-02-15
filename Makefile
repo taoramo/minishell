@@ -11,7 +11,7 @@ INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I/usr/local/opt/readl
 SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c error.c handle_pipelines.c syntax_check.c here_doc.c) \
 	   $(addprefix commands/, prepare_command.c ft_isspace.c extract_files.c split_command.c split_expanded_command.c add_path.c run_command.c pipex.c pipe_commands.c pipe_commands2.c run_builtin.c) \
 	   $(addprefix builtins/, builtins.c builtins2.c export.c export_utils.c cd.c) \
-	   $(addprefix expand/, expand_envs.c wildcard.c wildcard2.c remove_quotes.c))
+	   $(addprefix expand/, expand_envs.c wildcard.c wildcard2.c wildcard3.c remove_quotes.c))
 
 OBJS = $(SRCS:.c=.o)
 
@@ -22,7 +22,7 @@ all: $(NAME)
 $(OBJS): $(SRCS)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(OBJS) $(LIBS) -o $(NAME)
+	$(CC) $(OBJS) $(LIBS) $(CFLAGS) -o $(NAME)
 
 $(LIBFT):
 	make -C ./libft/

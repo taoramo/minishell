@@ -12,16 +12,7 @@
 
 #include "minishell.h"
 
-static int	exp_wc_err(t_vec *new, char *msg)
-{
-	free_split_vec(new);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
-}
-
-int	push_matches(t_vec *dst, char **strs, int i, DIR *ptr)
+int	push_matches(t_vec *dst, char *arg, DIR *ptr, int redirect)
 {
 	struct dirent	*ep;
 	int				j;
@@ -31,25 +22,64 @@ int	push_matches(t_vec *dst, char **strs, int i, DIR *ptr)
 	j = 0;
 	while (ep)
 	{
-		if (is_wildcard_match(ep->d_name, strs[i]))
+		if (is_wildcard_match(ep->d_name, arg))
 		{
 			path = ft_strdup(ep->d_name);
 			if (!path)
 				return (exp_wc_err(dst, "error allocating memory"));
-			if (vec_push(dst, &path) < 0)
+			if (!j && redirect && vec_push(dst, &path) < 0)
+				return (exp_wc_err(dst, "error allocating memory"));
+			if (j > 0 && redirect)
+				return (ambiguous_wildcard(arg));
+			if (!redirect && ft_strlen(path) && vec_push(dst, &path) < 0)
 				return (exp_wc_err(dst, "error parsing wildcard"));
 			j++;
 		}
 		ep = readdir(ptr);
 	}
 	closedir(ptr);
-	return (after_wildcard_pushing(dst, strs, i, j));
+	return (after_wildcard_pushing(dst, arg, j, redirect));
+}
+
+char	*skip_redirect(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (arg[i] && (arg[i] == '<' || arg[i] == '>' || ft_isspace(arg[i])))
+		i++;
+	return (&arg[i]);
+}
+
+int	add_redirect_char(t_vec *dst, char *arg)
+{
+	char	*str;
+	char	*last;
+
+	last = *(char **)vec_get(dst, dst->len - 1);
+	if (!ft_strncmp(arg, "<<", 2))
+		str = ft_strjoin("<< ", last);
+	if (!ft_strncmp(arg, "< ", 2))
+		str = ft_strjoin("< ", last);
+	if (!ft_strncmp(arg, ">>", 2))
+		str = ft_strjoin(">> ", last);
+	if (!ft_strncmp(arg, "> ", 2))
+		str = ft_strjoin("> ", last);
+	if (!str)
+		return (-1);
+	if (vec_push(dst, &str) < 0)
+		return (-1);
+	vec_remove(dst, 0);
+	free(last);
+	return (0);
 }
 
 int	push_expanded(t_vec *dst, char **strs, int i)
 {
 	DIR				*ptr;
 	struct dirent	*ep;
+	int				redirect;
+	int				result;
 
 	ptr = opendir("./");
 	ep = readdir(ptr);
@@ -57,7 +87,16 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 	(void)ep;
 	if (!ptr)
 		return (exp_wc_err(dst, "error opening directory"));
-	return (push_matches(dst, strs, i, ptr));
+	redirect = is_rdrct(strs[i]);
+	if (redirect)
+		result = push_matches(dst, skip_redirect(strs[i]), ptr, redirect);
+	else
+		result = push_matches(dst, strs[i], ptr, redirect);
+	if (redirect && result == 1 && add_redirect_char(dst, strs[i]) < 0)
+		return (-1);
+	if (redirect && !result && vec_push(dst, &strs[i]) < 0)
+		return (-1);
+	return (0);
 }
 
 int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
@@ -73,25 +112,30 @@ int	push_argv_elem(t_vec *dst, t_vec *argv, int i)
 int	expand_star(t_vec *argv)
 {
 	t_vec			dst;
+	t_vec			newargv;
 	size_t			i;
 	char			**strs;
 
 	if (vec_new(&dst, 32, sizeof(char *)) < 0)
 		return (ft_error("minishell: error allocating memory"));
+	if (vec_new(&newargv, 32, sizeof(char *)) < 0)
+		return (ft_error("minishell: error allocating memory"));
 	i = 0;
+	strs = (char **)argv->memory;
 	while (i < argv->len)
 	{
-		strs = (char **)argv->memory;
-		if (ft_strchr(strs[i], '*'))
+		if (ft_strchr(strs[i], '*') && !ft_is_inside(strs[i], ft_strchr(strs[i], '*') - strs[i], '"') && !ft_is_inside(strs[i], ft_strchr(strs[i], '*') - strs[i], 39))
 		{
 			if (push_expanded(&dst, strs, i) < 0)
-				return (ft_error("minishell: error creaing argv"));
+				return (ft_error("minishell: error creating argv"));
 		}
-		else if (push_argv_elem(&dst, argv, i) < 0)
+		else if (push_argv_elem(&newargv, argv, i) < 0)
 			return (-1);
 		i++;
 	}
+	vec_append(&newargv, &dst);
 	vec_free(argv);
-	ft_memcpy(argv, &dst, sizeof(t_vec));
+	ft_memcpy(argv, &newargv, sizeof(t_vec));
+	vec_free(&dst);
 	return (0);
 }

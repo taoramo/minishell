@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 14:11:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 14:21:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	*get_redirect_filename(char	*str)
 			&& !(str[i] == '<' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\'')))
 			&& !(str[i] == '>' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\''))))
 		i++;
+	if (!ft_strchr(str, '\"') && !ft_strchr(str, '\''))
+		return (ft_substr(str, 0, i));
 	no_quotes = remove_outer_quotes(str);
 	if (no_quotes == 0)
 		return (0);

@@ -32,3 +32,4 @@ rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
 "echo hello > out" && cat out
 echo hello && echo (wow)
 export +=asdf
+touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf && rm -f asdfasdfasdfsadf  && rm -f asdfasdfasdfsadf*

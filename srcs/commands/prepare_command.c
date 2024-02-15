@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:28:49 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:59:53 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,18 @@ int	prepare_redirects(t_command *command, int heredoc_fd)
 	return (1);
 }
 
-int	expand_command(t_vec *argv, t_vec *env,  int last_return)
+int	expand_command(t_command *command, t_envinfo envinfo, int i)
 {
-	expand_envs(argv, env, last_return);
-	expand_star(argv);
-	split_expanded_command(argv);
-	remove_quotes(argv);
-
+	if (expand_envs(&command->argv, envinfo.env, *envinfo.last_return) == -1)
+		return (-1);
+	if (expand_star(&command->argv) == -1)
+		return (-1);
+	if (prepare_redirects(command, *(int *)vec_get(&envinfo.heredoc_fds, i)) == -1)
+		return (-1);
+	if (split_expanded_command(&command->argv) == -1)
+		return (-1);
+	if (remove_quotes(&command->argv) == -1)
+		return (-1);
 	return (1);
 }
 
@@ -54,13 +59,11 @@ int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo, in
 {
 	if (prepare_argv(command, command_str) == -1)
 		return (1);
-	if (expand_command(&command->argv, envinfo.env, *envinfo.last_return) == -1)
+	if (expand_command(command, envinfo, i) == -1)
 	{
 		free_split_vec(&command->argv);
-		return (-1);
-	}
-	if (prepare_redirects(command, *(int *)vec_get(&envinfo.heredoc_fds, i)) == -1)
 		return (1);
+	}
 	if (command->argv.len != 0 && add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
 	{
 		free_split_vec(&command->argv);

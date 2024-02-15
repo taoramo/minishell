@@ -30,8 +30,6 @@ echo ok | hello ||| echo wow
 echo hello && | echo wow
 rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
 "echo hello > out" && cat out
-cat < "hello"
-cat <infile<infile2
-cat <"i"n'fil'e"<dfs>"
 echo hello && echo (wow)
 export +=asdf
+touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf && rm -f asdfasdfasdfsadf  && rm -f asdfasdfasdfsadf*

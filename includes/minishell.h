@@ -93,5 +93,6 @@ int		expnd_rdrct(t_vec *dst, char *path, char *arg);
 int		ambiguous_wildcard(char *arg);
 int		is_rdrct(char *arg);
 int		add_redirect_char(t_vec *dst, char *arg);
+void	signal_heredoc(int is_on);
 
 #endif

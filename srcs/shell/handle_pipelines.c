@@ -65,103 +65,21 @@ int	next_cmd_line_action(char *cmd_line, t_envinfo envinfo)
 	return (0);
 }
 
-int	check_andor_syntax(char **strs, size_t len)
+int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
+	t_vec *heredoc_fd_list, int *last_return)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < len)
-	{
-		j = 0;
-		if (strs[i][0] == '&' || strs[i][0] == '|')
-		{
-			j = j + 2;
-			if (strs[i][2] == '|')
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][2] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-			while (ft_isspace(strs[i][j]))
-				j++;
-			if (strs[i][j] == '|')
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][j] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-		}
-		i++;
-	}
-	return (1);
-}
-
-int	redirect_check_error(char c)
-{
-	write(2, "minishell: syntax error near unexpected token `", 47);
-	write(2, &c, 1);
-	write(2, "'\n", 2);
-	return (-1);
-}
-
-int	check_redirect_cmdline(char *cmd_line)
-{
-	int		i;
-	char	c;
-
-	i = 0;
-	while (cmd_line[i])
-	{
-		if (cmd_line[i] == '<' || cmd_line[i] == '>')
-		{
-			c = cmd_line[i];
-			if ((c == '<' && cmd_line[i + 1] == '>') || (c == '>' && cmd_line[i + 1] == '<'))
-				return (redirect_check_error(c));
-			if (cmd_line[i] && cmd_line[i + 1] == cmd_line[i])
-				i++;
-			i++;
-			while (ft_isspace(cmd_line[i]))
-				i++;
-			if (!cmd_line[i] || cmd_line[i] == '|' || cmd_line[i] == '&' || cmd_line[i] == '(' || cmd_line[i] == ')')
-				return (redirect_check_error(c));
-		}
-		i++;
-	}
-	return (1);
-}
-
-int	check_redirect(t_vec *cmd_lines)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < cmd_lines->len)
-	{
-		if (check_redirect_cmdline(*(char **)vec_get(cmd_lines, i)) < 0)
-			return (-1);
-		i++;
-	}
-	return (0);
-}
-
-int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
-{
+	t_envinfo	envinfo;
 	size_t		i;
 	size_t		j;
 	char		**strs;
-	t_vec		heredoc_fd_list;
-	t_envinfo	envinfo;
 
 	i = 0;
-	strs = (char **)cmd_lines->memory;
-	if (check_andor_syntax(strs, cmd_lines->len) < 0 || check_parenth_syntax(cmd_lines) < 0 || check_redirect(cmd_lines) < 0)
-		return (handle_pipelines_error(cmd_lines));
-	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
-		return (-1);
-	if (get_heredocs(&heredoc_fd_list, cmd_lines) < 0)
-		return (handle_pipelines_error(cmd_lines));
 	envinfo.env = env;
 	envinfo.last_return = last_return;
+	strs = (char **)cmd_lines->memory;
 	while (i < cmd_lines->len && *last_return != INT_MIN)
 	{
-		envinfo.heredoc_fds = (t_vec *)vec_get(&heredoc_fd_list, i);
+		envinfo.heredoc_fds = (t_vec *)vec_get(heredoc_fd_list, i);
 		j = 0;
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;
@@ -173,6 +91,25 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	vec_free(&heredoc_fd_list);
+	vec_free(heredoc_fd_list);
+	return (0);
+}
+
+int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
+{
+	char		**strs;
+	t_vec		heredoc_fd_list;
+	t_envinfo	envinfo;
+
+	strs = (char **)cmd_lines->memory;
+	if (check_andor_syntax(strs, cmd_lines->len) < 0
+		|| check_parenth_syntax(cmd_lines) < 0 || check_redirect(cmd_lines) < 0)
+		return (handle_pipelines_error(cmd_lines));
+	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
+		return (-1);
+	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
+		return (handle_pipelines_error(cmd_lines));
+	if (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return) < 0)
+		return (-1);
 	return (*envinfo.last_return);
 }

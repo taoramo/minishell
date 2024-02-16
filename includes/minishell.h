@@ -85,7 +85,7 @@ int		handle_pipelines_error(t_vec *cmd_lines);
 int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
-int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines);
+int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j);
 int		after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect);
 int		copy_env(t_vec *env, char **environ);
 int		exp_wc_err(t_vec *new, char *msg);
@@ -98,5 +98,8 @@ void	vec_free_iter(void *arg);
 void	print_quit_signal(int signal);
 int		copy_split_vec(t_vec *dst, t_vec *src);
 int		push_expanded(t_vec *dst, char **strs, int i);
+int		check_andor_syntax(char **strs, size_t len);
+int		check_redirect(t_vec *cmd_lines);
+int		check_redirect_cmdline(char *cmd_line);
 
 #endif

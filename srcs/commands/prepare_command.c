@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:59:53 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 09:12:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int	prepare_argv(t_command *command, char *command_str)
 	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
 		return (-1);
 	if (split_command(&command->argv, command_str) == -1)
+	{
+		free_split_vec(&command->argv);
+		return (-1);
+	}
+	if (isolate_redirects(&command->argv) == -1)
 	{
 		free_split_vec(&command->argv);
 		return (-1);

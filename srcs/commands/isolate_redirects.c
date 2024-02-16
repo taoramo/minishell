@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 09:25:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 10:33:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,40 @@ int	substr_isdigit(char *str, int len)
 	return (1);
 }
 
+int	contains_unquoted(char *str, char c)
+{
+	char	*found;
+
+	found = ft_strchr(str, c);
+	while (found)
+	{
+		if (!ft_is_inside(str, found - str, '\"')
+			&& !ft_is_inside(str, found - str, '\''))
+			return (1);
+		found++;
+		found = ft_strchr(found, c);
+	}
+	return (0);
+}
+
+int ft_is_inside_any(char *str, int i)
+{
+	return (ft_is_inside(str, i, '\"')
+			|| ft_is_inside(str, i, '\''));
+}
+
 int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i)
 {
 	int		n;
 	char	*substr;
 
 	n = 0;
-	while (str[n] != 0 && str[n] != '>' && str[n] != '<')
+	while ((str[n] != 0 && str[n] != '>' && str[n] != '<')
+		|| ft_is_inside_any(str, n))
 		n++;
 	if (!substr_isdigit(str, n))
 	{
-		substr = ft_substr(str, 0, n);
-		if (substr == 0)
+		substr = ft_substr(str, 0, n);		if (substr == 0)
 			return (-1);
 		if (vec_insert(strs, &substr, *i) == -1)
 			return (-1);
@@ -60,33 +82,68 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	if (f > 0)
 	{
 		substr = ft_strdup(str);
-		vec_insert(strs, &substr, *i);
+		if (substr == 0)
+			return (-1);
+		if (vec_insert(strs, &substr, *i) == -1)
+			return (-1);
 	}
 	else
 	{
 		substr = ft_strjoin(str, *(char **)vec_get(strs, *i));
-		vec_remove(strs, *i);
-		vec_insert(strs, &substr, *i);
+		if (substr == 0)
+			return (-1);
+		if (vec_remove(strs, *i) == -1 || vec_insert(strs, &substr, *i) == -1)
+			return (-1);
 	}
+	return (1);
+}
+
+int	split_multiple_redirects(t_vec *strs, char *str, size_t *i)
+{
+	int		s;
+	int		e;
+	char	*substr;
+
+	s = 0;
+	e = 0;
+	if (vec_remove(strs, *i) == -1)
+		return (-1);
+	while (str[e] != 0)
+	{
+		while (str[e] == '<' || str[e] == '>')
+			e++;
+		while ((str[e] != 0 && str[e] != '<' && str[e] != '>')
+			|| ft_is_inside_any(str, e))
+			e++;
+		substr = ft_substr(str, s, e - s);
+		if (substr == 0)
+			return (-1);
+		if (vec_insert(strs, &substr, *i) == -1)
+			return (-1);
+		s = e;
+	}
+	free(str);
 	return (1);
 }
 
 int	format_redirect(t_vec *strs, char *str, size_t *i)
 {
-	int	removed;
-	int	prefix;
+	int	rem;
+	int	pre;
 
-	vec_remove(strs, *i);
-	removed = remove_invalid_prefix(strs, str, i);
-	if (removed == -1)
+	if (vec_remove(strs, *i) == -1)
+			return (-1);
+	rem = remove_invalid_prefix(strs, str, i);
+	if (rem == -1)
 		return (-1);
-	str = &str[removed];
-	prefix = 0;
-	while (str[prefix] != 0 && str[prefix] != '>' && str[prefix] != '<')
-		prefix++;
-	if (insert_redirect(strs, str, prefix, i) == -1)
+	pre = 0;
+	while (str[rem + pre] != 0 && str[rem + pre] != '>' && str[rem + pre] != '<')
+		pre++;
+	if (insert_redirect(strs, &str[rem], pre, i) == -1)
 		return (-1);
 	free(str);
+	if (split_multiple_redirects(strs, *(char **)vec_get(strs, *i), i) == -1)
+		return (-1);
 	return (1);
 }
 
@@ -99,14 +156,11 @@ int	isolate_redirects(t_vec *strs)
 	while (i < strs->len)
 	{
 		str = *(char **)vec_get(strs, i);
-		if ((ft_strchr(str, '>') 
-				&& !ft_is_inside(str, ft_strchr(str, '>') - str, '"')
-				&& !ft_is_inside(str, ft_strchr(str, '>') - str, 39)) 
-				|| (ft_strchr(str, '<')
-				&& !ft_is_inside(str, ft_strchr(str, '<') - str, '"')
-				&& !ft_is_inside(str, ft_strchr(str, '<') - str, 39)))
+		if (contains_unquoted(str, '>') || contains_unquoted(str, '<'))
+		{
 			if (format_redirect(strs, str, &i) == -1)
 				return (-1);
+		}
 		i++;
 	}
 	return (1);

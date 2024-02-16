@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 13:34:25 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 08:01:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int		prepare_command(t_command *command, char *command_str,
 			t_envinfo envinfo, int i);
 int		prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i);
 int		split_command(t_vec *strs, char *str);
+int		isolate_redirects(t_vec *strs);
 int		split_expanded_command(t_vec *argv);
 int		extract_files(t_command *command, int heredoc_fd);
 char	*get_redirect_filename(char	*str);

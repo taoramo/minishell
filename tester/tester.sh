@@ -185,4 +185,6 @@ rm -f b
 rm -f c
 rm -f "outfile && echo hello > outfile && cat outfile"
 
+rm -f asd*
+
 echo ""

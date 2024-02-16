@@ -6,65 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 14:31:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:36:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	read_input(char *limiter, int *pipe_fds)
-{
-	char	*read_str;
-
-	while (1)
-	{
-		ft_printf("> ");
-		read_str = get_next_line(0);
-		if (read_str == 0)
-			return (-1);
-		if (ft_strncmp(read_str, limiter, ft_strlen(read_str)) == 0)
-			break ;
-		if (write(pipe_fds[1], read_str, ft_strlen(read_str)) == -1)
-		{
-			free(read_str);
-			return (-1);
-		}
-		free(read_str);
-	}
-	free(read_str);
-	return (1);
-}
-
-int	infile_from_stdin(char *limiter)
-{
-	int		pipe_fds[2];
-	char	*nl_limiter;
-
-	nl_limiter = ft_strjoin(limiter, "\n");
-	if (nl_limiter == 0)
-		return (-1);
-	if (pipe(pipe_fds) < 0)
-	{
-		free(nl_limiter);
-		perror("pipe failed");
-		return (-1);
-	}
-	signal_heredoc(0);
-	if (read_input(nl_limiter, pipe_fds) == -1)
-	{
-		free(nl_limiter);
-		close(pipe_fds[0]);
-		close(pipe_fds[1]);
-		toggle_carret(1);
-		return (-1);
-	}
-	signal_heredoc(1);
-	free(nl_limiter);
-	close(pipe_fds[1]);
-	return (pipe_fds[0]);
-}
-
-int	handle_heredoc_fd(char *str, int fd)
+int	get_heredoc_from_limiter(char *str, int fd)
 {
 	char	*limiter;
 
@@ -73,7 +21,7 @@ int	handle_heredoc_fd(char *str, int fd)
 	limiter = get_redirect_filename(&str[2]);
 	if (limiter == 0)
 		return (-1);
-	fd = infile_from_stdin(limiter);
+	fd = heredoc_input(limiter);
 	free(limiter);
 	if (fd == -1)
 		return (-1);
@@ -93,7 +41,7 @@ int	get_heredoc_fd(char *str)
 			i += quote_length(&str[i]);
 		if (!ft_strncmp(&str[i], "<<", 2))
 		{
-			fd = handle_heredoc_fd(&str[i], fd);
+			fd = get_heredoc_from_limiter(&str[i], fd);
 			if (fd == -1)
 				return (-1);
 		}
@@ -102,7 +50,7 @@ int	get_heredoc_fd(char *str)
 	return (fd);
 }
 
-int	push_heredoc_fds(t_vec *heredoc_fds, t_vec *fds, char **strs)
+int	push_heredoc_fds_list(t_vec *heredoc_fds, t_vec *fds, char **strs)
 {
 	if (vec_push(heredoc_fds, fds) < 0)
 		return (-1);
@@ -111,7 +59,7 @@ int	push_heredoc_fds(t_vec *heredoc_fds, t_vec *fds, char **strs)
 	return (0);
 }
 
-int	get_fds_vec(char *str, t_vec *fds)
+int	add_heredoc_fd(char *str, t_vec *fds)
 {
 	int	fd;
 
@@ -123,7 +71,7 @@ int	get_fds_vec(char *str, t_vec *fds)
 	return (0);
 }
 
-int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j)
+int	get_heredocs(t_vec *heredoc_fd_list, t_vec *cmd_lines, size_t i, int j)
 {
 	char	**strs;
 	t_vec	fds;
@@ -138,10 +86,10 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j)
 		j = 0;
 		while (strs[j] != 0)
 		{
-			get_fds_vec(strs[j], &fds);
+			add_heredoc_fd(strs[j], &fds);
 			j++;
 		}
-		if (push_heredoc_fds(heredoc_fds, &fds, strs))
+		if (push_heredoc_fds_list(heredoc_fd_list, &fds, strs))
 			return (-1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/16 13:38:17 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:32:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int		env_entry_exists(char *str, t_vec *env);
 int		remove_entry(char *str, t_vec *env);
 int		contains_plusequals(char *str);
 int		get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j);
+int		heredoc_input(char *limiter);
 int		after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect);
 int		copy_env(t_vec *env, char **environ);
 int		exp_wc_err(t_vec *new, char *msg);

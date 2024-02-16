@@ -132,7 +132,7 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j)
 	{
 		if (vec_new(&fds, 1, sizeof(int)) < 0)
 			return (-1);
-		strs = ft_split(*(char **)vec_get(cmd_lines, i), '|');
+		strs = ft_split_pipe(*(char **)vec_get(cmd_lines, i), '|');
 		if (!strs)
 			return (-1);
 		j = 0;

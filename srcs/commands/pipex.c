@@ -50,7 +50,7 @@ void	free_pipe(t_pipe *pipeinfo)
 
 int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)
 {
-	pipeinfo->command_strs = ft_split(pipe_str, '|');
+	pipeinfo->command_strs = ft_split_pipe(pipe_str, '|');
 	if (pipeinfo->command_strs == 0)
 		return (-1);
 	pipeinfo->command_count = count_commands(pipeinfo->command_strs);

@@ -49,7 +49,8 @@ int	is_wildcard_match(char *s, char *p)
 	init_i(&i);
 	while (i.sindex < ft_strlen(s))
 	{
-		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex])
+		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex]
+			&& s[i.sindex] != '*')
 		{
 			++i.pindex;
 			++i.sindex;

@@ -37,6 +37,9 @@ int	expand_args(t_vec *dst, t_vec *argv, t_vec *newargv)
 		{
 			if (push_expanded(dst, strs, i) < 0)
 				return (ft_error("minishell: error creating argv"));
+			if (vec_append(newargv, dst) < 0)
+				return (ft_error("minishell: error allocating memory"));
+			vec_clear(dst);
 		}
 		else if (push_argv_elem(newargv, argv, i) < 0)
 			return (-1);
@@ -56,7 +59,6 @@ int	expand_star(t_vec *argv)
 		return (ft_error("minishell: error allocating memory"));
 	if (expand_args(&dst, argv, &newargv) < 0)
 		return (-1);
-	vec_append(&newargv, &dst);
 	vec_free(argv);
 	ft_memcpy(argv, &newargv, sizeof(t_vec));
 	vec_free(&dst);

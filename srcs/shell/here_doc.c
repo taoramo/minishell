@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 13:36:23 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 14:31:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	infile_from_stdin(char *limiter)
 		close(pipe_fds[0]);
 		close(pipe_fds[1]);
 		toggle_carret(1);
-		return (-2);
+		return (-1);
 	}
 	signal_heredoc(1);
 	free(nl_limiter);
@@ -64,21 +64,20 @@ int	infile_from_stdin(char *limiter)
 	return (pipe_fds[0]);
 }
 
-int	handle_heredoc_fd(char *str, int fd, int *i)
+int	handle_heredoc_fd(char *str, int fd)
 {
 	char	*limiter;
 
-	*i = *i + 2;
 	if (fd != 0)
 		close(fd);
-	limiter = get_redirect_filename(&str[*i]);
+	limiter = get_redirect_filename(&str[2]);
 	if (limiter == 0)
 		return (-1);
 	fd = infile_from_stdin(limiter);
 	free(limiter);
 	if (fd == -1)
 		return (-1);
-	return (0);
+	return (fd);
 }
 
 int	get_heredoc_fd(char *str)
@@ -92,9 +91,10 @@ int	get_heredoc_fd(char *str)
 	{
 		if (str[i] == '\"' || str[i] == '\'')
 			i += quote_length(&str[i]);
-		if (str[i] == '<' && str[i + 1] == '<')
+		if (!ft_strncmp(&str[i], "<<", 2))
 		{
-			if (handle_heredoc_fd(str, fd, &i) < 0)
+			fd = handle_heredoc_fd(&str[i], fd);
+			if (fd == -1)
 				return (-1);
 		}
 		i++;

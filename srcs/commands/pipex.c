@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:11:34 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:32:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	count_commands(char **strs)
 void	free_pipe(t_pipe *pipeinfo)
 {
 	ft_free_split(pipeinfo->command_strs);
-	free_split_vec(&pipeinfo->env);
 	free(pipeinfo->process_ids);
 }
 
@@ -60,12 +59,7 @@ int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)
 		ft_free_split(pipeinfo->command_strs);
 		return (-1);
 	}
-	if (copy_split_vec(&pipeinfo->env, envinfo.env) == -1)
-	{
-		ft_free_split(pipeinfo->command_strs);
-		free(pipeinfo->process_ids);
-		return (-1);
-	}
+	pipeinfo->env = envinfo.env;
 	pipeinfo->last_return = *envinfo.last_return;
 	pipeinfo->heredoc_fds = envinfo.heredoc_fds;
 	return (1);

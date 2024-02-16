@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 08:01:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:25:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_pipe
 	int		*process_ids;
 	int		pipe_fds[2];
 	int		last_return;
-	t_vec	env;
+	t_vec	*env;
 	t_vec	*heredoc_fds;
 }	t_pipe;
 

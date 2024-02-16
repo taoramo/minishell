@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 10:41:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 12:40:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ int	split_multiple_redirects(t_vec *strs, char *str, size_t *i)
 	e = 0;
 	if (vec_remove(strs, *i) == -1)
 		return (-1);
+	while (ft_isdigit(str[e]))
+			e++;
 	while (str[e] != 0)
 	{
 		while (str[e] == '<' || str[e] == '>')

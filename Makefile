@@ -6,7 +6,7 @@ READLINE = -lreadline -L ~/.brew/opt/readline/lib -L/usr/local/opt/readline/lib
 
 LIBS = $(LIBFT) $(READLINE)
 
-INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I./libft/
+INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I/usr/local/opt/readline/include -I./libft/
 
 SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c signal2.c error.c handle_pipelines.c syntax_check.c syntax_check2.c here_doc.c) \
 	   $(addprefix commands/, prepare_command.c ft_isspace.c extract_files.c split_command.c isolate_redirects.c split_expanded_command.c add_path.c run_command.c pipex.c pipe_commands.c pipe_commands2.c run_builtin.c builtin_fds.c ft_split_pipe.c) \
@@ -15,7 +15,7 @@ SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits $(INCLUDES)
+CFLAGS = -Wextra -Wall -Werror -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 

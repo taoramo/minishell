@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 09:12:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:30:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i)
 	t_envinfo	envinfo;
 	int			ret;
 
-	envinfo.env = &pipeinfo->env;
+	envinfo.env = pipeinfo->env;
 	envinfo.last_return = &pipeinfo->last_return;
 	envinfo.heredoc_fds = pipeinfo->heredoc_fds;
 	ret = prepare_command(command, pipeinfo->command_strs[i], envinfo, i);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 12:17:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:02:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	builtin_index(char *command)
 		"env", "unset", "export", "exit", NULL};
 	int					i;
 
+	if (strlen(command) == 0)
+		return (-1);
 	i = 0;
 	while (builtins[i] != 0)
 	{

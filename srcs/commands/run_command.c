@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 13:50:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:39:15 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ pid_t	execute_command(t_vec argv, t_vec *env)
 	char	**strs;
 	char	**envp;
 	char	*nulterm;
+	t_vec	sub_env;
 
+	if (copy_split_vec(&sub_env, env) == -1)
+		exit(1);
 	nulterm = 0;
 	if (vec_push(&argv, &nulterm) == -1)
 		exit(1);

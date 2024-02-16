@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 12:41:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:03:25 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ int	add_path(char **command_ptr, t_vec *env)
 	char	**paths;
 	int		i;
 
+	if (ft_strlen(*command_ptr) == 0)
+		return (minishell_error(*command_ptr, "command not found"));
 	if (builtin_index(*command_ptr) != -1)
 		return (1);
 	paths = get_paths(env);

@@ -27,7 +27,7 @@ void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd)
 	vec_iter(&command->redirects, apply_redirect);
 }
 
-void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[])
+void	handle_parent(int pipe_fds[], int pipe2_fds[], int pos)
 {
 	if (pos == 0)
 		close(pipe_fds[1]);

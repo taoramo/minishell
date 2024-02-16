@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:02:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:46:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	run_builtin(t_command *command)
 }
 
 int	run_builtin_pipe(t_command *command,
-		int pos, int pipe_fds[], int pipe2_fds[])
+		int pipe_fds[], int pipe2_fds[], int pos)
 {
 	int			stdfd_copy[3];
 
@@ -79,7 +79,7 @@ int	run_builtin_pipe(t_command *command,
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	run_builtin_command(command);
-	handle_parent(pos, pipe_fds, pipe2_fds);
+	handle_parent(pipe_fds, pipe2_fds, pos);
 	reset_stdfds(stdfd_copy);
 	return (0);
 }

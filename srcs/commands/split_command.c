@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 09:17:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 10:41:54 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	quote_length(char *str)
 int	add_str(t_vec *strs, char *str, int i)
 {
 	char	*substr;
-	
+
 	substr = ft_substr(str, 0, i);
 	if (substr == 0)
 		return (-1);
@@ -37,7 +37,7 @@ int	add_str(t_vec *strs, char *str, int i)
 int	split_command(t_vec *strs, char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i] != 0)
 	{

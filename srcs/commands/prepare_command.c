@@ -46,7 +46,8 @@ int	expand_command(t_command *command, t_envinfo envinfo, int i)
 		return (-1);
 	if (expand_star(&command->argv) == -1)
 		return (-1);
-	if (prepare_redirects(command, *(int *)vec_get(envinfo.heredoc_fds, i)) == -1)
+	if (prepare_redirects(command,
+			*(int *)vec_get(envinfo.heredoc_fds, i)) == -1)
 		return (-1);
 	if (split_expanded_command(&command->argv) == -1)
 		return (-1);
@@ -55,7 +56,8 @@ int	expand_command(t_command *command, t_envinfo envinfo, int i)
 	return (1);
 }
 
-int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo, int i)
+int	prepare_command(t_command *command,
+	char *command_str, t_envinfo envinfo, int i)
 {
 	if (prepare_argv(command, command_str) == -1)
 		return (1);
@@ -64,7 +66,8 @@ int	prepare_command(t_command *command, char *command_str, t_envinfo envinfo, in
 		free_split_vec(&command->argv);
 		return (1);
 	}
-	if (command->argv.len != 0 && add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
+	if (command->argv.len != 0
+		&& add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
 	{
 		free_split_vec(&command->argv);
 		vec_free(&command->redirects);

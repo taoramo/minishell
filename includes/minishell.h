@@ -94,5 +94,9 @@ int		ambiguous_wildcard(char *arg);
 int		is_rdrct(char *arg);
 int		add_redirect_char(t_vec *dst, char *arg);
 void	signal_heredoc(int is_on);
+void	vec_free_iter(void *arg);
+void	print_quit_signal(int signal);
+int		copy_split_vec(t_vec *dst, t_vec *src);
+int		push_expanded(t_vec *dst, char **strs, int i);
 
 #endif

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wildcard3.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/16 09:15:16 by toramo            #+#    #+#             */
+/*   Updated: 2024/02/16 09:15:17 by toramo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	exp_wc_err(t_vec *new, char *msg)
@@ -40,7 +52,12 @@ int	ambiguous_wildcard(char *arg)
 
 int	is_rdrct(char *arg)
 {
-	if (arg[0] == '<' || arg[0] == '>')
+	int	i;
+
+	i = 0;
+	while (arg[i] && ft_isdigit(arg[i]))
+		i++;
+	if (arg[i] == '<' || arg[i] == '>')
 		return (1);
 	return (0);
 }

@@ -80,5 +80,7 @@ void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
 void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[]);
 void	handle_child(t_command *command,
 			int pipe_fds[], int pipe2_fds[], int pos);
+int		save_stdfds(int stdfd_copy[]);
+int		reset_stdfds(int stdfd_copy[]);
 
 #endif

@@ -41,7 +41,8 @@ void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[])
 	}
 }
 
-void	handle_child(t_command *command, int pipe_fds[], int pipe2_fds[], int pos)
+void	handle_child(t_command *command,
+	int pipe_fds[], int pipe2_fds[], int pos)
 {
 	if (pos == 0)
 	{

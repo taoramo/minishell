@@ -48,7 +48,7 @@ int	remove_quotes(t_vec *argv)
 	size_t	i;
 
 	i = 0;
-	while(i < argv->len)
+	while (i < argv->len)
 	{
 		str_ptr = (char **)vec_get(argv, i);
 		if (ft_strchr(*str_ptr, '\"') || ft_strchr(*str_ptr, '\''))

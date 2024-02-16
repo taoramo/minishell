@@ -41,31 +41,11 @@ int	count_commands(char **strs)
 	return (i);
 }
 
-void free_pipe(t_pipe *pipeinfo)
+void	free_pipe(t_pipe *pipeinfo)
 {
 	ft_free_split(pipeinfo->command_strs);
 	free_split_vec(&pipeinfo->env);
 	free(pipeinfo->process_ids);
-}
-
-int	copy_split_vec(t_vec *dst, t_vec *src)
-{
-	size_t	i;
-	char	*str;
-
-	if (vec_new(dst, src->len, sizeof(char *)) < 0)
-		return (-1);
-	i = 0;
-	while (i < src->len)
-	{
-		str = ft_strdup(*(char **)vec_get(src, i));
-		if (!str)
-			return (free_split_vec(dst));
-		if (vec_push(dst, &str) < 0)
-			return (free_split_vec(dst));
-		i++;
-	}
-	return (0);
 }
 
 int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)

@@ -12,7 +12,8 @@
 
 #include "commands.h"
 
-int	run_single_pipe_command(t_command *command, int pipe_fds[], int pipe2_fds[], int pos)
+int	run_single_pipe_command(t_command *command,
+	int pipe_fds[], int pipe2_fds[], int pos)
 {
 	int	process_id;
 
@@ -29,11 +30,11 @@ int	run_single_pipe_command(t_command *command, int pipe_fds[], int pipe2_fds[],
 	return (process_id);
 }
 
-int first_pipe_commmand(t_pipe *pipeinfo, int i)
+int	first_pipe_commmand(t_pipe *pipeinfo, int i)
 {
 	t_command	command;
 	int			ret;
-	
+
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
@@ -48,11 +49,11 @@ int first_pipe_commmand(t_pipe *pipeinfo, int i)
 	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, 0, 0));
 }
 
-int last_pipe_command(t_pipe *pipeinfo, int i)
+int	last_pipe_command(t_pipe *pipeinfo, int i)
 {
 	t_command	command;
 	int			ret;
-	
+
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
@@ -87,9 +88,11 @@ int	middle_pipe_command(t_pipe *pipeinfo, int i)
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 2, pipeinfo->pipe_fds, pipe2_fds));
+			return (run_builtin_pipe(&command, 2,
+					pipeinfo->pipe_fds, pipe2_fds));
 	}
-	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, pipe2_fds, 2));
+	return (run_single_pipe_command(&command,
+			pipeinfo->pipe_fds, pipe2_fds, 2));
 }
 
 int	pipe_commands(t_pipe *pipeinfo)

@@ -97,7 +97,8 @@ int	check_pipe_as_last(char *str)
 
 	ptr = ft_strrchr(str, '|');
 	i = ptr - str;
-	while (ptr != ft_strrchr(ptr, '|') && ptr > str && !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
+	while (ptr != ft_strrchr(ptr, '|') && ptr > str
+		&& !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
 	{
 		ptr = ft_strrchr(str, '|');
 		i = ptr - str;

@@ -207,4 +207,6 @@ rm -f "outfile && echo hello > outfile && cat outfile"
 
 rm -f asd*
 
+rm -f out
+
 echo ""

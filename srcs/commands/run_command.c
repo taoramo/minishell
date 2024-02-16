@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:27:04 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 13:50:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ int	run_command(char *str, t_envinfo envinfo)
 	int			ret;
 	t_command	command;
 
-	if (ft_strchr(str, '|') != 0
-		&& !ft_is_inside(str, ft_strchr(str, '|') - str, '"')
-		&& !ft_is_inside(str, ft_strchr(str, '|') - str, 39))
+	if (contains_unquoted(str, 0, '|'))
 		return (pipex(str, envinfo));
 	ret = prepare_command(&command, str, envinfo, 0);
 	if (ret != 0)

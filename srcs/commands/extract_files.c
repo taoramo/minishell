@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 12:05:30 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 12:43:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ char	*get_redirect_filename(char	*str)
 	return (no_quotes);
 }
 
-int	set_redirect(t_command *command, int original_fd, char **red_comm_file, int heredoc_fd)
+int	set_redirect(t_command *command, int original_fd,
+	char **red_comm_file, int heredoc_fd)
 {
 	int			new_fd;
 	t_redirect	*redirect;
@@ -98,7 +99,7 @@ int	extract_files(t_command *command, int heredoc_fd)
 	int		original_fd;
 	char	*red_comm_file[2];
 	int		ret;
-	
+
 	strs = *(char ***) &command->argv;
 	i = 0;
 	while (i < command->argv.len)

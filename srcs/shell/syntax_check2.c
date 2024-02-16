@@ -74,7 +74,7 @@ int	check_andor_syntax(char **strs, size_t len)
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 		{
 			j = j + 2;
-			if (strs[i][2] == '|')
+			if (strs[i][2] == '|' || (strs[i][0] == '|' && strs[i][1] != '|'))
 				return (ft_error("syntax error near unexpected token `|’"));
 			if (strs[i][2] == '&')
 				return (ft_error("syntax error near unexpected token `&’"));
@@ -88,4 +88,27 @@ int	check_andor_syntax(char **strs, size_t len)
 		i++;
 	}
 	return (1);
+}
+
+int	check_pipe_as_last(char *str)
+{
+	char	*ptr;
+	int		i;
+
+	ptr = ft_strrchr(str, '|');
+	i = ptr - str;
+	while (ptr != ft_strrchr(ptr, '|') && ptr > str && !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
+	{
+		ptr = ft_strrchr(str, '|');
+		i = ptr - str;
+	}
+	if (ptr > str)
+	{
+		i++;
+		while (str[i] && ft_isspace(str[i]))
+			i++;
+		if (!str[i])
+			return (ft_error("syntax error near ynexpected token `|'"));
+	}
+	return (0);
 }

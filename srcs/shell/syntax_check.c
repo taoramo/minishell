@@ -95,6 +95,8 @@ int	check_parenth_syntax(t_vec *cmd_lines)
 		cmd_line = *(char **)vec_get(cmd_lines, k);
 		if (check_line_parenth_syntax(cmd_line) < 0)
 			return (-1);
+		if (check_pipe_as_last(cmd_line) < 0)
+			return (-1);
 		k++;
 	}
 	return (1);

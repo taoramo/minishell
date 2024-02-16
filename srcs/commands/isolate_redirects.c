@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 09:18:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 09:25:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	format_redirect(t_vec *strs, char *str, size_t *i)
 	if (insert_redirect(strs, str, prefix, i) == -1)
 		return (-1);
 	free(str);
+	return (1);
 }
 
 int	isolate_redirects(t_vec *strs)

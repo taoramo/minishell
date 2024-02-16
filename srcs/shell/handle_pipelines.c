@@ -92,14 +92,13 @@ int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
 	}
 	free_split_vec(cmd_lines);
 	vec_free(heredoc_fd_list);
-	return (0);
+	return (*envinfo.last_return);
 }
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
 	char		**strs;
 	t_vec		heredoc_fd_list;
-	t_envinfo	envinfo;
 
 	strs = (char **)cmd_lines->memory;
 	if (check_andor_syntax(strs, cmd_lines->len) < 0
@@ -109,7 +108,5 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		return (-1);
 	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
 		return (handle_pipelines_error(cmd_lines));
-	if (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return) < 0)
-		return (-1);
-	return (*envinfo.last_return);
+	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
 }

@@ -104,9 +104,8 @@ int	get_heredoc_fd(char *str)
 
 void	push_heredoc_fds(t_vec *heredoc_fds, t_vec *fds, char **strs)
 {
-	vec_push(heredoc_fds, &fds);
+	vec_push(heredoc_fds, fds);
 	ft_free_split(strs);
-	vec_free(fds);
 	ft_bzero(fds, sizeof(t_vec));
 }
 

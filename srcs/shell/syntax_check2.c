@@ -20,27 +20,27 @@ int	redirect_check_error(char c)
 	return (-1);
 }
 
-int	check_redirect_cmdline(char *cmd_line)
+int	check_redirect_cmdline(char *s)
 {
 	int		i;
 	char	c;
 
 	i = 0;
-	while (cmd_line[i])
+	while (s[i])
 	{
-		if (cmd_line[i] == '<' || cmd_line[i] == '>')
+		if (s[i] == '<' || s[i] == '>')
 		{
-			c = cmd_line[i];
-			if ((c == '<' && cmd_line[i + 1] == '>')
-				|| (c == '>' && cmd_line[i + 1] == '<'))
+			c = s[i];
+			if ((c == '<' && s[i + 1] == '>') || (c == '>' && s[i + 1] == '<')
+				|| !ft_strncmp(&s[i], "<<<", 3) || !ft_strncmp(&s[i], ">>>", 3))
 				return (redirect_check_error(c));
-			if (cmd_line[i] && cmd_line[i + 1] == cmd_line[i])
+			if (s[i] && s[i + 1] == s[i])
 				i++;
 			i++;
-			while (ft_isspace(cmd_line[i]))
+			while (ft_isspace(s[i]))
 				i++;
-			if (!cmd_line[i] || cmd_line[i] == '|' || cmd_line[i] == '&'
-				|| cmd_line[i] == '(' || cmd_line[i] == ')')
+			if (!s[i] || s[i] == '|' || s[i] == '&'
+				|| s[i] == '(' || s[i] == ')')
 				return (redirect_check_error(c));
 		}
 		i++;

@@ -102,17 +102,30 @@ int	get_heredoc_fd(char *str)
 	return (fd);
 }
 
-void	push_heredoc_fds(t_vec *heredoc_fds, t_vec *fds, char **strs)
+int	push_heredoc_fds(t_vec *heredoc_fds, t_vec *fds, char **strs)
 {
-	vec_push(heredoc_fds, fds);
+	if (vec_push(heredoc_fds, fds) < 0)
+		return (-1);
 	ft_free_split(strs);
 	ft_bzero(fds, sizeof(t_vec));
+	return (0);
+}
+
+int	get_fds_vec(char *str, t_vec *fds)
+{
+	int	fd;
+
+	fd = get_heredoc_fd(str);
+	if (fd == -1)
+		return (-1);
+	if (vec_push(fds, &fd) < 0)
+		return (-1);
+	return (0);
 }
 
 int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j)
 {
 	char	**strs;
-	int		fd;
 	t_vec	fds;
 
 	while (i < cmd_lines->len)
@@ -125,14 +138,11 @@ int	get_heredocs(t_vec *heredoc_fds, t_vec *cmd_lines, size_t i, int j)
 		j = 0;
 		while (strs[j] != 0)
 		{
-			fd = get_heredoc_fd(strs[j]);
-			if (fd == -1)
-				return (-1);
-			if (vec_push(&fds, &fd) < 0)
-				return (-1);
+			get_fds_vec(strs[j], &fds);
 			j++;
 		}
-		push_heredoc_fds(heredoc_fds, &fds, strs);
+		if (push_heredoc_fds(heredoc_fds, &fds, strs))
+			return (-1);
 		i++;
 	}
 	return (1);

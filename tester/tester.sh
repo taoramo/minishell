@@ -115,12 +115,32 @@ while read -r line; do
 	eval $line > $BASH_OUTPUT
 	rm -f tmp/outfile
 	rm -f tmp/outfile2
+	rm -f out1
+	rm -f out2
+	rm -f out3
+	rm -f out4
+	rm -f out5
+	rm -f out6
+	rm -f out7
+	rm -f out8
+	rm -f out9
+	rm -f out10
 	# comment out $ and " for -c input
 	line_commented=${line//\$/\\\$}
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	rm -f tmp/outfile
 	rm -f tmp/outfile2
+	rm -f out1
+	rm -f out2
+	rm -f out3
+	rm -f out4
+	rm -f out5
+	rm -f out6
+	rm -f out7
+	rm -f out8
+	rm -f out9
+	rm -f out10
 	check_output
 done < $TEST_DIR/redirect_tests.txt
 

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 14:21:10 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 12:05:30 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,14 @@
 
 char	*get_redirect_filename(char	*str)
 {
-	char	*filename;
 	char	*no_quotes;
-	int		i;
 
-	while (ft_isspace(*str))
-		str++;
-	i = 0;
-	while(str[i] != 0 && !ft_isspace(str[i]) 
-			&& !(str[i] == '<' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\'')))
-			&& !(str[i] == '>' && (ft_is_inside(str, i, '\"') || ft_is_inside(str, i, '\''))))
-		i++;
 	if (!ft_strchr(str, '\"') && !ft_strchr(str, '\''))
-		return (ft_substr(str, 0, i));
+		return (ft_strdup(str));
 	no_quotes = remove_outer_quotes(str);
 	if (no_quotes == 0)
 		return (0);
-	i -= ft_strlen(str) - ft_strlen(no_quotes);
-	filename = ft_substr(no_quotes, 0, i);
-	free(no_quotes);
-	return (filename);
+	return (no_quotes);
 }
 
 int	set_redirect(t_command *command, int original_fd, char **red_comm_file, int heredoc_fd)
@@ -90,26 +78,24 @@ int	get_redirect_command_file(char *red_comm_file[], char *str)
 int	get_redirect_fd(char *str)
 {
 	int		i;
-	int		red_fd;
 
 	if (*str == '>')
 		return (1);
 	else if (*str == '<')
 		return (0);
 	i = 0;
-	while (str[i] >= '0' && str[i] <= '9')
+	while (ft_isdigit(str[i]))
 		i++;
 	if (i == 0 || str[i] == 0 || (str[i] != '<' && str[i] != '>'))
 		return (-1);
-	red_fd = ft_atoi(str);
-	return (red_fd);
+	return (ft_atoi(str));
 }
 
 int	extract_files(t_command *command, int heredoc_fd)
 {
 	char	**strs;
 	size_t	i;
-	int		red_fd;
+	int		original_fd;
 	char	*red_comm_file[2];
 	int		ret;
 	
@@ -117,12 +103,12 @@ int	extract_files(t_command *command, int heredoc_fd)
 	i = 0;
 	while (i < command->argv.len)
 	{
-		red_fd = get_redirect_fd(strs[i]);
-		if (red_fd >= 0)
+		original_fd = get_redirect_fd(strs[i]);
+		if (original_fd >= 0)
 		{
 			if (get_redirect_command_file(red_comm_file, strs[i]) == -1)
 				return (-1);
-			ret = set_redirect(command, red_fd, red_comm_file, heredoc_fd);
+			ret = set_redirect(command, original_fd, red_comm_file, heredoc_fd);
 			free(red_comm_file[0]);
 			free(red_comm_file[1]);
 			if (ret == -1)

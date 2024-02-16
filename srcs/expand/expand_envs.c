@@ -12,26 +12,6 @@
 
 #include "minishell.h"
 
-char	*get_env_name(t_vec *str_vec, size_t start)
-{
-	size_t	i;
-	char	c;
-
-	i = 0;
-	start++;
-	while (start + i < str_vec->len)
-	{
-		c = *(char *)vec_get(str_vec, start + i);
-		if (c == '\'' || c == '\"' || c == '$')
-			return (ft_substr((char *) str_vec->memory, start, i));
-		if (c == '*' && !ft_is_inside((char *) str_vec->memory, start + i, '\'')
-			&& !ft_is_inside((char *) str_vec->memory, start + i, '\"'))
-			return (ft_substr((char *) str_vec->memory, start, i));
-		i++;
-	}
-	return (ft_substr((char *) str_vec->memory, start, i));
-}
-
 int	replace_vec_str(t_vec *str_vec, char *new, size_t i, size_t remove_len)
 {
 	size_t	j;
@@ -53,6 +33,20 @@ int	replace_vec_str(t_vec *str_vec, char *new, size_t i, size_t remove_len)
 	return (1);
 }
 
+int	expand_last_return(t_vec *str_vec, int last_return, size_t *i)
+{
+	char	*env_expanded;
+	int		ret;
+
+	env_expanded = ft_itoa(last_return);
+	if (!env_expanded)
+		return (-1);
+	ret = replace_vec_str(str_vec, env_expanded, *i, 2);
+	*i += 1;
+	free(env_expanded);
+	return (ret);
+}
+
 int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 {
 	char	*env_name;
@@ -62,15 +56,7 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 	if (*i + 1 >= str_vec->len)
 		return (1);
 	if (*(char *)vec_get(str_vec, *i + 1) == '?')
-	{
-		env_expanded = ft_itoa(last_return);
-		if (!env_expanded)
-			return (-1);
-		ret = replace_vec_str(str_vec, env_expanded, *i, 2);
-		*i += 1;
-		free(env_expanded);
-		return (ret);
-	}
+		return (expand_last_return(str_vec, last_return, i));
 	env_name = get_env_name(str_vec, *i);
 	if (env_name == 0)
 		return (-1);
@@ -84,35 +70,32 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 	return (ret);
 }
 
-int	expand_str_envs(char **str_ptr, t_vec *env, int last_return)
+int	expand_str_envs(char **str_ptr, t_vec *env, int last_return, t_vec *str_vec)
 {
-	t_vec	str_vec;
 	size_t	i;
 	char	n;
 
 	n = 0;
-	if (vec_from(&str_vec, *str_ptr, ft_strlen(*str_ptr), sizeof(char)) < 0)
-		return (-1);
 	i = 0;
-	while (i < str_vec.len)
+	while (i < str_vec->len)
 	{
-		if (*(char *)vec_get(&str_vec, i) == '\'')
+		if (*(char *)vec_get(str_vec, i) == '\'')
 		{
 			i++;
-			while (i < str_vec.len && *(char *)vec_get(&str_vec, i) != '\'')
+			while (i < str_vec->len && *(char *)vec_get(str_vec, i) != '\'')
 				i++;
 		}
-		if (i < str_vec.len && *(char *)vec_get(&str_vec, i) == '$')
+		if (i < str_vec->len && *(char *)vec_get(str_vec, i) == '$')
 		{
-			if (expand_substr_env(&str_vec, &i, env, last_return) == -1)
+			if (expand_substr_env(str_vec, &i, env, last_return) == -1)
 				return (-1);
 		}
 		i++;
 	}
 	free(*str_ptr);
-	if (vec_push(&str_vec, &n) < 0)
+	if (vec_push(str_vec, &n) < 0)
 		return (-1);
-	*str_ptr = (char *) str_vec.memory;
+	*str_ptr = (char *) str_vec->memory;
 	return (1);
 }
 
@@ -120,13 +103,19 @@ int	expand_envs(t_vec *argv, t_vec *env, int last_return)
 {
 	char	**str_ptr;
 	size_t	i;
+	t_vec	str_vec;
 
 	i = 0;
 	while (i < argv->len)
 	{
 		str_ptr = (char **)vec_get(argv, i);
 		if (ft_strchr(*str_ptr, '$') != 0)
-			expand_str_envs(str_ptr, env, last_return);
+		{
+			if (vec_from(&str_vec, *str_ptr,
+					ft_strlen(*str_ptr), sizeof(char)) < 0)
+				return (-1);
+			expand_str_envs(str_ptr, env, last_return, &str_vec);
+		}
 		i++;
 	}
 	return (1);

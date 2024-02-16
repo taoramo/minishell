@@ -101,5 +101,6 @@ int		push_expanded(t_vec *dst, char **strs, int i);
 int		check_andor_syntax(char **strs, size_t len);
 int		check_redirect(t_vec *cmd_lines);
 int		check_redirect_cmdline(char *cmd_line);
+char	*get_env_name(t_vec *str_vec, size_t start);
 
 #endif

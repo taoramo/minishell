@@ -11,7 +11,7 @@ INCLUDES = -I ~/.brew/opt/readline/include -I ./includes/ -I/usr/local/opt/readl
 SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_supergroups.c minishell_vec_utils.c ft_is_inside.c signal.c signal2.c error.c handle_pipelines.c syntax_check.c syntax_check2.c here_doc.c) \
 	   $(addprefix commands/, prepare_command.c ft_isspace.c extract_files.c split_command.c isolate_redirects.c split_expanded_command.c add_path.c run_command.c pipex.c pipe_commands.c pipe_commands2.c run_builtin.c builtin_fds.c) \
 	   $(addprefix builtins/, builtins.c builtins2.c export.c export_utils.c cd.c) \
-	   $(addprefix expand/, expand_envs.c wildcard.c wildcard2.c wildcard3.c wildcard4.c remove_quotes.c))
+	   $(addprefix expand/, expand_envs.c expand_envs2.c wildcard.c wildcard2.c wildcard3.c wildcard4.c remove_quotes.c))
 
 OBJS = $(SRCS:.c=.o)
 

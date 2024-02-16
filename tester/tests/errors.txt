@@ -34,3 +34,5 @@ echo hello && echo (wow)
 export +=asdf
 touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf
 | echo hello
+echo hello | ""
+"" hello

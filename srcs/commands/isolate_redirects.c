@@ -6,20 +6,20 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 12:40:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 13:42:27 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i)
+int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i, int skip)
 {
 	int		n;
 	char	*substr;
 	int		is_digit;
 
 	is_digit = 1;
-	n = 0;
+	n = skip;
 	while ((str[n] != 0 && str[n] != '>' && str[n] != '<')
 		|| ft_is_inside_any(str, n))
 	{
@@ -70,44 +70,12 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	return (1);
 }
 
-int	split_multiple_redirects(t_vec *strs, char *str, size_t *i)
-{
-	int		s;
-	int		e;
-	char	*substr;
-
-	s = 0;
-	e = 0;
-	if (vec_remove(strs, *i) == -1)
-		return (-1);
-	while (ft_isdigit(str[e]))
-			e++;
-	while (str[e] != 0)
-	{
-		while (str[e] == '<' || str[e] == '>')
-			e++;
-		while ((str[e] != 0 && str[e] != '<' && str[e] != '>')
-			|| ft_is_inside_any(str, e))
-			e++;
-		substr = ft_substr(str, s, e - s);
-		if (substr == 0)
-			return (-1);
-		if (vec_insert(strs, &substr, *i) == -1)
-			return (-1);
-		s = e;
-	}
-	free(str);
-	return (1);
-}
-
-int	format_redirect(t_vec *strs, char *str, size_t *i)
+int	format_redirect(t_vec *strs, char *str, size_t *i, int skip)
 {
 	int	rem;
 	int	pre;
 
-	if (vec_remove(strs, *i) == -1)
-		return (-1);
-	rem = remove_invalid_prefix(strs, str, i);
+	rem = remove_invalid_prefix(strs, str, i, skip);
 	if (rem == -1)
 		return (-1);
 	pre = 0;
@@ -116,25 +84,31 @@ int	format_redirect(t_vec *strs, char *str, size_t *i)
 		pre++;
 	if (insert_redirect(strs, &str[rem], pre, i) == -1)
 		return (-1);
-	free(str);
-	if (split_multiple_redirects(strs, *(char **)vec_get(strs, *i), i) == -1)
-		return (-1);
 	return (1);
 }
 
 int	isolate_redirects(t_vec *strs)
 {
 	size_t	i;
+	size_t	j;
 	char	*str;
 
 	i = 0;
 	while (i < strs->len)
 	{
+		j = 0;
 		str = *(char **)vec_get(strs, i);
-		if (contains_unquoted(str, '>') || contains_unquoted(str, '<'))
+		while (contains_unquoted(str, j, '>') || contains_unquoted(str, j, '<'))
 		{
-			if (format_redirect(strs, str, &i) == -1)
+			if (vec_remove(strs, i) == -1)
 				return (-1);
+			if (format_redirect(strs, str, &i, j) == -1)
+				return (-1);
+			free(str);
+			str = *(char **)vec_get(strs, i);
+			j = 1;
+			if (str[1] != 0 && (str[1] == '<' || str[1] == '>'))
+				j = 2;
 		}
 		i++;
 	}

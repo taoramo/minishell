@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:08:48 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/16 10:40:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 13:37:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ int	ft_is_inside_any(char *str, int i)
 		|| ft_is_inside(str, i, '\''));
 }
 
-int	contains_unquoted(char *str, char c)
+int	contains_unquoted(char *str, int start, char c)
 {
 	char	*found;
 
-	found = ft_strchr(str, c);
+	found = ft_strchr(&str[start], c);
 	while (found)
 	{
 		if (!ft_is_inside(str, found - str, '\"')

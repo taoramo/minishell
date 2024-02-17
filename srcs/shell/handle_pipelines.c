@@ -108,5 +108,6 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		return (-1);
 	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
 		return (handle_pipelines_error(cmd_lines));
+	vec_free(&heredoc_fd_list);
 	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
 }

@@ -36,3 +36,4 @@ touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf
 | echo hello
 echo hello | ""
 "" hello
+exp

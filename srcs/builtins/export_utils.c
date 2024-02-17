@@ -58,3 +58,21 @@ int	contains_plusequals(char *str)
 		return (1);
 	return (0);
 }
+
+int	add_new_from_plusequals(t_vec *env, char *str)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	new = ft_strdup(str);
+	if (!new)
+		return (-1);
+	while (new[i] != '+')
+		i++;
+	ft_memmove(&new[i], &new[i + 1], ft_strlen(&new[i + 1]));
+	new[ft_strlen(str) - 1] = 0;
+	if (vec_push(env, &new) < 0)
+		return (-1);
+	return (0);
+}

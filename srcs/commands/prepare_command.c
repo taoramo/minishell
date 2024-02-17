@@ -31,7 +31,7 @@ int	prepare_argv(t_command *command, char *command_str)
 
 int	prepare_redirects(t_command *command, int heredoc_fd)
 {
-	if (vec_new(&command->redirects, 0, sizeof(t_redirect)) == -1)
+	if (vec_new(&command->redirects, 4, sizeof(t_redirect)) == -1)
 	{
 		free_split_vec(&command->argv);
 		return (-1);

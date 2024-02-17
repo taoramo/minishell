@@ -14,7 +14,7 @@
 
 int	print_syntax_error(char c)
 {
-	write(2, "syntax error near unexpected token `", 36);
+	write(2, "minishell: syntax error near unexpected token `", 47);
 	write(2, &c, 1);
 	write(2, "'\n", 2);
 	return (-1);

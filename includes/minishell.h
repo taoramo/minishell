@@ -109,5 +109,6 @@ char	**ft_split_pipe(const char *s, char c);
 int		check_pipe_as_last(char *str);
 void	vec_iter_free(void *arg);
 void	free_heredoc_fd_list(t_vec *heredoc_fd_list);
+int		add_new_from_plusequals(t_vec *env, char *str);
 
 #endif

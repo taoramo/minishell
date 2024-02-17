@@ -23,7 +23,7 @@ int	builtin_index(char *command)
 	i = 0;
 	while (builtins[i] != 0)
 	{
-		if (ft_strncmp(command, builtins[i], ft_strlen(command)) == 0)
+		if (ft_strncmp(command, builtins[i], ft_strlen(builtins[i])) == 0)
 			return (i);
 		i++;
 	}

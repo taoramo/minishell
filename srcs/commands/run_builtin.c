@@ -14,17 +14,26 @@
 
 int	builtin_index(char *command)
 {
+	size_t				len;
 	static const char	*builtins[8] = {"echo", "cd", "pwd",
 		"env", "unset", "export", "exit", NULL};
 	int					i;
 
 	if (strlen(command) == 0)
 		return (-1);
+	len = 0;
+	while (command[len] && !ft_isspace(command[len]))
+		len++;
 	i = 0;
 	while (builtins[i] != 0)
 	{
-		if (ft_strncmp(command, builtins[i], ft_strlen(builtins[i])) == 0)
+		if ((i != 7 && ft_strncmp(command, builtins[i],
+					ft_strlen(command)) == 0))
+		{
+			if (len > ft_strlen(builtins[i]))
+				return (-1);
 			return (i);
+		}
 		i++;
 	}
 	return (-1);

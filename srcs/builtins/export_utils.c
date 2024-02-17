@@ -21,7 +21,11 @@ int	env_entry_exists(char *str, t_vec *env)
 	i = 0;
 	while (i < env->len)
 	{
-		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
+		if (!contains_plusequals(str)
+			&& !ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
+			return (1);
+		if (contains_plusequals(str)
+			&& !ft_strncmp(str, entries[i], ft_strlen_member(str, '+')))
 			return (1);
 		i++;
 	}

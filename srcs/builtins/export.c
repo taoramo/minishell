@@ -19,11 +19,6 @@ int	add_to_existing(t_vec *env, char *str)
 	char	*new;
 
 	i = 0;
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-	{
-		ft_error("minishell: export: not a valid identifier");
-		return (-1);
-	}
 	while (str[i] && str[i] != '=')
 		i++;
 	if (str[i] == '=' && i > 1)
@@ -31,6 +26,10 @@ int	add_to_existing(t_vec *env, char *str)
 	j = 0;
 	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
 		j++;
+	if (j == env->len)
+		return (-1);
+	if (j < env->len && contains_equals(*(char **)vec_get(env, j)))
+		i++;
 	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
 	if (!new)
 		ft_error("minishell: export: malloc failed");
@@ -43,16 +42,18 @@ int	add_to_existing(t_vec *env, char *str)
 
 int	add_to_env(t_vec *env, char *str)
 {
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+	{
+		ft_error("minishell: export: not a valid identifier");
+		return (-1);
+	}
 	if (env_entry_exists(str, env))
 	{
 		if (add_to_existing(env, str) < 0)
 			return (-1);
 	}
-	else
-	{
-		if (add_new_from_plusequals(env, str) < 0)
-			return (-1);
-	}
+	else if (add_new_from_plusequals(env, str) < 0)
+		return (-1);
 	return (1);
 }
 

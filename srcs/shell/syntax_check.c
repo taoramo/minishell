@@ -113,6 +113,9 @@ int	check_cmd_line_syntax(char *cmd_line)
 			|| (i != 0 && cmd_line[i] == '&'
 				&& ft_strncmp(&cmd_line[i - 1], " && ", 4)))
 			return (ft_error("syntax error near unexpected token `&’"));
+		if ((cmd_line[0] == '|' && cmd_line[1] == '|'
+				&& (cmd_line[2] == '|' || cmd_line[2] == '&')))
+			return (ft_error("syntax error near unexpected token `|’"));
 		if (!ft_strncmp(&cmd_line[i], "&&", 2)
 			|| !ft_strncmp(&cmd_line[i], "||", 2))
 			i = i + 2;

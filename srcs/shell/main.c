@@ -16,7 +16,8 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 {
 	t_vec	cmd_lines;
 
-	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
+	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
+		|| check_consecutive_andor(line) < 0)
 	{
 		*last_return = 1;
 		return (-1);

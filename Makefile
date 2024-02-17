@@ -17,7 +17,7 @@ SRCS = $(addprefix srcs/, $(addprefix shell/, main.c parse_parentheses.c expand_
 
 OBJS = $(SRCS:.c=.o)
 
-CFLAGS = -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES) -fsanitize=address
+CFLAGS = -Wextra -Wall -Wunreachable-code -Wpedantic -Wtype-limits -g3 $(INCLUDES)
 
 all: $(NAME)
 

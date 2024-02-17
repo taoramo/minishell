@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   here_doc.c                                         :+:      :+:    :+:   */
+/*   here_doc_input.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/05 10:14:08 by hpatsi           ###   ########.fr       */
+/*   Created: 2024/02/16 16:28:40 by hpatsi            #+#    #+#             */
+/*   Updated: 2024/02/16 16:32:32 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "commands.h"
+#include "minishell.h"
 
-int	read_input(char *limiter, int *pipe_fds)
+int	read_heredoc_input(char *limiter, int *pipe_fds)
 {
 	char	*read_str;
 
@@ -35,7 +35,7 @@ int	read_input(char *limiter, int *pipe_fds)
 	return (1);
 }
 
-int	infile_from_stdin(char *limiter)
+int	heredoc_input(char *limiter)
 {
 	int		pipe_fds[2];
 	char	*nl_limiter;
@@ -49,16 +49,16 @@ int	infile_from_stdin(char *limiter)
 		perror("pipe failed");
 		return (-1);
 	}
-	toggle_carret(0);
-	if (read_input(nl_limiter, pipe_fds) == -1)
+	signal_heredoc(0);
+	if (read_heredoc_input(nl_limiter, pipe_fds) == -1)
 	{
 		free(nl_limiter);
 		close(pipe_fds[0]);
 		close(pipe_fds[1]);
 		toggle_carret(1);
-		return (-2);
+		return (-1);
 	}
-	toggle_carret(1);
+	signal_heredoc(1);
 	free(nl_limiter);
 	close(pipe_fds[1]);
 	return (pipe_fds[0]);

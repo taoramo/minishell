@@ -10,10 +10,8 @@ ec"ho" hello
 e"ch""o" he"llo""o"
 echo $HOME
 echo $doesnotexist
-echo $HOME*
 echo *$HOME
 echo '$HOME*'
-echo "$HOME*"
 echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?
 echo *
@@ -22,3 +20,8 @@ awk '{print NR " - " $1 }' infile
 awk '{ if (length($0) > max) max = length($0) } END { print max }' infile
 awk 'BEGIN { for(i=1;i<=5;i++) print "10 x", i, "is",10*i; }'
 echo "hello " amazing > tmp/outfile " > tmp/outfile 'wow' " < infile '$?' "= $?"
+echo wow > hello && cat < "hello" && rm -f hello
+echo wow > infile1 && echo ok > infile2 && cat <infile1<infile2 && rm -f infile1 && rm -f infile2
+echo wow > "infile<dfs>" && cat <"i"n'fil'e"<dfs>" && rm -f "infile<dfs>"
+echo hello|cat
+echo "wow>">out && cat out

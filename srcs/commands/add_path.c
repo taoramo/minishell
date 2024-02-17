@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/09 12:41:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:03:25 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ char	**strs_addstr(char **strs, char *str)
 	while (strs[i] != 0)
 	{
 		tmp = ft_strjoin(strs[i], str);
+		free(strs[i]);
 		if (tmp == 0)
 			return (0);
-		free(strs[i]);
 		strs[i] = tmp;
 		i++;
 	}
@@ -56,6 +56,7 @@ char	**get_paths(t_vec *env)
 	if (i == env->len)
 		return (ft_calloc(1, sizeof(char *)));
 	paths = ft_split(path_str, ':');
+	free(path_str);
 	if (paths == 0)
 		return (0);
 	if (strs_addstr(paths, "/") == 0)
@@ -88,6 +89,8 @@ int	add_path(char **command_ptr, t_vec *env)
 	char	**paths;
 	int		i;
 
+	if (ft_strlen(*command_ptr) == 0)
+		return (minishell_error(*command_ptr, "command not found"));
 	if (builtin_index(*command_ptr) != -1)
 		return (1);
 	paths = get_paths(env);

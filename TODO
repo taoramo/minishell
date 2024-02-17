@@ -22,8 +22,6 @@ Features:
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
-	☐ << operators always take input first, even if you have the bonus’ && / || operators it will first take every heredoc’s input that’s on the inputted line and then goes through the multiple cmd pipelines. It is interesting because it’s the only redirection that takes such precedence (trying to be user-friendly? idk)
-	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
 	✔ you can have multiple heredocs within one pipeline which means managing multiple temp files @done(24-02-12 13:42)
 
 
@@ -36,21 +34,17 @@ Built-in functions:
 	✔ export with no options @done(24-02-08 16:29)
 	✔ unset with no options @done(24-02-08 16:29)
 	✔ env with no options or arguments @done(24-02-06 14:35)
-	☐ exit with no options
+	✔ exit with no options @done(24-02-14 12:36)
 
 Bonus:
 	✔ && and || with parenthesis for priorities. @done(24-01-30 13:59)
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	☐ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?)
-		☐ If we are specific, it should print exit on the same line as minishell prompt
 	☐ Error checks everywhere
-	☐ Handle exit when command fails correctly (free etc)
-	☐ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty
-	☐ disable all error message printing while taking heredoc input
-	☐ export x="echo hello | cat" freezes, should work
-	☐ cat < "hello" stuck with new order, might have to change extract files
+	☐ cat <infile<infile2 (should try open "infile")
+	☐ cat <"i"n'fil'e"<dfs>" (should try open "infile<dfs>")
+	☐ check heredoc closing (and other files as well..)
 
 Unsure:
 	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
@@ -93,3 +87,20 @@ Archived fixes:
 	✔ When giving a piped command: "syntax error near unexpected token `|’" (probably in function check_cmd_line_syntax) @done(24-02-01 11:07)
 		✔ fixed in "check_cmd_line_syntax", check that this change does not break any error checking @done(24-02-13 08:21)
 	✔ "‘|’ cat" should print error message @done(24-02-13 08:34)
+	✔ "echo hi > a | grep h > b > a > c < a" a, b, and c should be empty @done(24-02-14 09:45)
+	✔ export x="echo hello | cat" freezes, should work @done(24-02-14 10:31)
+	✔ Handle exit when command fails correctly (free etc) @done(24-02-15 11:25)
+	✔ ctrl-D should print "exit" before exiting (does not anymore, because of "^C" fix?) @done(24-02-15 11:25)
+		✔ If we are specific, it should print exit on the same line as minishell prompt @done(24-02-15 11:25)
+	✔ cat < "hello" stuck with new order, might have to change extract files @done(24-02-15 11:25)
+	✔ cat | cat @done(24-02-15 11:25)
+	✔ cat | cat | cat @done(24-02-15 11:25)
+	✔ << operator input should be taken before anything else @done(24-02-15 11:25)
+	✔ "echo hello" (should try find command "echo hello") @done(24-02-15 12:18)
+	☐ cat <> hello (should not handle, error?)
+	☐ cat >< hello (error)
+	☐ cat < "hello" (should try open hello, not "hello")
+	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
+	☐ disable all error message printing while taking heredoc input
+	☐ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2)
+	☐ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands)

@@ -6,23 +6,28 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 17:16:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:32:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-static int	wait_for_children(int *process_ids, int len)
+int	wait_for_children(t_pipe *pipeinfo)
 {
 	int	i;
 	int	ret;
 
 	i = 0;
-	while (i < len)
+	while (i < pipeinfo->command_count)
 	{
-		waitpid(process_ids[i], &ret, 0);
+		if (pipeinfo->process_ids[i] <= 127)
+			ret = pipeinfo->process_ids[i];
+		else
+			waitpid(pipeinfo->process_ids[i], &ret, 0);
 		i++;
 	}
+	if (ret <= 127)
+		return (ret);
 	return (WEXITSTATUS(ret));
 }
 
@@ -36,33 +41,45 @@ int	count_commands(char **strs)
 	return (i);
 }
 
-int	split_pipe(char ***strs, char *pipe_str)
+void	free_pipe(t_pipe *pipeinfo)
 {
-	*strs = ft_split(pipe_str, '|');
-	if (*strs == 0)
+	ft_free_split(pipeinfo->command_strs);
+	free(pipeinfo->process_ids);
+}
+
+int	initialize_pipe(t_pipe *pipeinfo, char *pipe_str, t_envinfo envinfo)
+{
+	pipeinfo->command_strs = ft_split_pipe(pipe_str, '|');
+	if (pipeinfo->command_strs == 0)
 		return (-1);
+	pipeinfo->command_count = count_commands(pipeinfo->command_strs);
+	pipeinfo->process_ids = ft_calloc(pipeinfo->command_count + 1, sizeof(int));
+	if (pipeinfo->process_ids == 0)
+	{
+		ft_free_split(pipeinfo->command_strs);
+		return (-1);
+	}
+	pipeinfo->env = envinfo.env;
+	pipeinfo->last_return = *envinfo.last_return;
+	pipeinfo->heredoc_fds = envinfo.heredoc_fds;
 	return (1);
 }
 
-int	pipex(char *pipe_str, t_vec *env, int last_return)
+int	pipex(char *pipe_str, t_envinfo envinfo)
 {
-	int		*process_ids;
+	t_pipe	pipeinfo;
 	int		ret;
-	char	**strs;
 
 	if (pipe_str[0] == '|')
 		return (ft_error("minishell: syntax error near unexpected token `|'"));
-	if (split_pipe(&strs, pipe_str) == -1)
+	if (initialize_pipe(&pipeinfo, pipe_str, envinfo) == -1)
 		return (-1);
-	process_ids = ft_calloc(count_commands(strs) + 1, sizeof(int));
-	if (process_ids == 0)
-		return (-1);
-	if (pipe_commands(strs, &process_ids, env, last_return) == -1)
+	if (pipe_commands(&pipeinfo) == -1)
 	{
-		free(process_ids);
+		free_pipe(&pipeinfo);
 		return (-1);
 	}
-	ret = wait_for_children(process_ids, count_commands(strs));
-	free(process_ids);
+	ret = wait_for_children(&pipeinfo);
+	free_pipe(&pipeinfo);
 	return (ret);
 }

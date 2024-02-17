@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:09:24 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:39:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 
 	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
 	{
+		*last_return = 1;
 		return (-1);
 	}
 	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
@@ -25,8 +26,12 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		free_split_vec(env);
 		return (ft_error("malloc"));
 	}
-	*last_return = make_cmd_line_groups(&cmd_lines, line, last_return, env);
-	return (*last_return);
+	if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
+	{
+		*last_return = 1;
+		return (-1);
+	}
+	return (1);
 }
 
 int	copy_env(t_vec *env, char **environ)
@@ -35,7 +40,8 @@ int	copy_env(t_vec *env, char **environ)
 	int			i;
 
 	i = 0;
-	vec_new(env, 64, sizeof(char *));
+	if (vec_new(env, 64, sizeof(char *)) < 0)
+		return (-1);
 	while (environ[i])
 	{
 		temp = ft_strdup(environ[i]);
@@ -54,9 +60,9 @@ int	interactive(int *last_return, t_vec *env)
 
 	using_history();
 	read_history(0);
-	while (1)
+	*last_return = 0;
+	while (*last_return != INT_MIN)
 	{
-		*last_return = 0;
 		signal_interactive();
 		line = readline("minishell> ");
 		if (line && ft_strlen(line) > 0)
@@ -70,11 +76,10 @@ int	interactive(int *last_return, t_vec *env)
 			break ;
 		free(line);
 	}
-	write(1, "exit\n", 5);
+	write(2, "exit\n", 5);
 	toggle_carret(1);
 	clear_history();
-	free(line);
-	return (*last_return);
+	return (0);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -111,4 +116,8 @@ int	main(int argc, char **argv, char **envp)
 		return (last_return);
 	} */
 	free_split_vec(&env);
+	if (last_return != INT_MIN)
+		return (last_return);
+	else
+		return (0);
 }

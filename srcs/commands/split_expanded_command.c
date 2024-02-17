@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:09:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 10:17:16 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 10:42:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 int	replace_argv(t_vec *argv, t_vec *src, size_t i)
 {
 	size_t	j;
-	
-	free( *(char **) vec_get(argv, i));
+
+	free (*(char **) vec_get(argv, i));
 	vec_remove(argv, i);
 	j = 0;
 	while (j < src->len)
 	{
-		vec_insert(argv, (char **) vec_get(src, j), i + j);
+		if (vec_insert(argv, (char **) vec_get(src, j), i + j) < 0)
+			return (free_split_vec(argv));
 		j++;
 	}
 	return (1);
@@ -31,7 +32,6 @@ int	split_expanded_command(t_vec *argv)
 {
 	t_vec	split;
 	size_t	i;
-	
 
 	i = 0;
 	while (i < argv->len)

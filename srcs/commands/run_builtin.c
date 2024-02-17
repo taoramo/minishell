@@ -6,64 +6,24 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 11:41:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:46:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
 
-int	save_stdfds(int stdfd_copy[])
-{
-	stdfd_copy[0] = dup(0);
-	if (stdfd_copy[0] == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	stdfd_copy[1] = dup(1);
-	if (stdfd_copy[1] == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	stdfd_copy[2] = dup(2);
-	if (stdfd_copy[2] == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	return (1);
-}
-
-int	reset_stdfds(int stdfd_copy[])
-{
-	if (dup2(stdfd_copy[0], 0) == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	if (dup2(stdfd_copy[1], 1) == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	if (dup2(stdfd_copy[2], 2) == -1)
-	{
-		perror("dup failed");
-		return (-1);
-	}
-	return (1);
-}
-
 int	builtin_index(char *command)
 {
-	static const char	*builtins[7] = {"echo", "cd", "pwd", "env", "unset", "export", NULL};
+	static const char	*builtins[8] = {"echo", "cd", "pwd",
+		"env", "unset", "export", "exit", NULL};
 	int					i;
 
+	if (strlen(command) == 0)
+		return (-1);
 	i = 0;
 	while (builtins[i] != 0)
 	{
-		if (ft_strncmp(command, builtins[i], ft_strlen(builtins[i])) == 0)
+		if (ft_strncmp(command, builtins[i], ft_strlen(command)) == 0)
 			return (i);
 		i++;
 	}
@@ -87,6 +47,8 @@ int	run_builtin_command(t_command *command)
 		return (ft_unset(&command->argv, command->env));
 	if (command_index == 5)
 		return (ft_export(&command->argv, command->env));
+	if (command_index == 6)
+		return (INT_MIN);
 	return (1);
 }
 
@@ -104,7 +66,8 @@ int	run_builtin(t_command *command)
 	return (ret);
 }
 
-int	run_builtin_pipe(t_command *command, int pos, int pipe_fds[], int pipe2_fds[])
+int	run_builtin_pipe(t_command *command,
+		int pipe_fds[], int pipe2_fds[], int pos)
 {
 	int			stdfd_copy[3];
 
@@ -116,7 +79,7 @@ int	run_builtin_pipe(t_command *command, int pos, int pipe_fds[], int pipe2_fds[
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	run_builtin_command(command);
-	handle_parent(pos, pipe_fds, pipe2_fds);
+	handle_parent(pipe_fds, pipe2_fds, pos);
 	reset_stdfds(stdfd_copy);
 	return (0);
 }

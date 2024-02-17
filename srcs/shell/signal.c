@@ -12,6 +12,27 @@
 
 #include "minishell.h"
 
+void	print_quit_signal(int signal)
+{
+	(void)signal;
+	write(2, "Quit :3", 7);
+	write(1, "\n", 1);
+	rl_on_new_line();
+}
+
+void	signal_heredoc(int is_on)
+{
+	struct sigaction	sa;
+
+	toggle_carret(is_on);
+	ft_bzero(&sa, sizeof(sa));
+	if (!is_on)
+		sa.sa_handler = SIG_IGN;
+	else
+		sa.sa_handler = print_quit_signal;
+	sigaction(SIGQUIT, &sa, 0);
+}
+
 void	toggle_carret(int is_on)
 {
 	struct termios	new_attr;
@@ -46,22 +67,4 @@ void	signal_interactive(void)
 	ft_bzero(&sb, sizeof(sa));
 	sb.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sb, 0);
-}
-
-void	print_new_line(int signal)
-{
-	(void)signal;
-	write(1, "\n", 1);
-	rl_on_new_line();
-}
-
-void	signal_non_interactive(void)
-{
-	struct sigaction	sa;
-
-	toggle_carret(1);
-	ft_bzero(&sa, sizeof(sa));
-	sa.sa_handler = print_new_line;
-	sigaction(SIGINT, &sa, 0);
-	sigaction(SIGQUIT, &sa, 0);
 }

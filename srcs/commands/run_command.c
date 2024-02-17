@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/12 14:18:31 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 15:39:15 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,23 @@
 
 pid_t	execute_command(t_vec argv, t_vec *env)
 {
-	int		ret;
 	char	**strs;
 	char	**envp;
 	char	*nulterm;
+	t_vec	sub_env;
 
-	nulterm = ft_calloc(1, sizeof(char *));
-	if (nulterm == 0)
-		return (-1);
-	if (vec_push(&argv, nulterm) == -1)
-	{
-		free(nulterm);
-		return (-1);
-	}
+	if (copy_split_vec(&sub_env, env) == -1)
+		exit(1);
+	nulterm = 0;
+	if (vec_push(&argv, &nulterm) == -1)
+		exit(1);
+	if (vec_push(env, &nulterm) == -1)
+		exit(1);
 	strs = (char **) argv.memory;
 	envp = (char **) env->memory;
-	ret = execve(strs[0], strs, envp);
-	vec_free(&argv);
-	return (ret);
+	execve(strs[0], strs, envp);
+	ft_putstr_fd("execve failed\n", 2);
+	exit(1);
 }
 
 void	apply_redirect(void	*param)
@@ -59,14 +58,14 @@ int	run_single_command(t_command *command)
 	return (1);
 }
 
-int	run_command(char *str, t_vec *env, int last_return)
+int	run_command(char *str, t_envinfo envinfo)
 {
 	int			ret;
 	t_command	command;
 
-	if (ft_strchr(str, '|') != 0)
-		return (pipex(str, env, last_return));
-	ret = prepare_command(&command, str, env, last_return);
+	if (contains_unquoted(str, 0, '|'))
+		return (pipex(str, envinfo));
+	ret = prepare_command(&command, str, envinfo, 0);
 	if (ret != 0)
 		return (ret);
 	if (command.argv.len == 0)

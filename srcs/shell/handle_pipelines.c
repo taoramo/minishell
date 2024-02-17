@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/12 10:03:25 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 10:26:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,8 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	}
 }
 
-int	handle_parentheses(char *cmd_line,
-	int *last_return, t_vec *env, size_t j)
+int	handle_parentheses(char *cmd_line, int *last_return, t_vec *env)
 {
-	ft_memmove(cmd_line, &cmd_line[j], ft_strlen(&cmd_line[j]));
 	remove_parentheses(cmd_line);
 	if (parse_line(cmd_line, last_return, env) < 0)
 		return (-1);
@@ -51,73 +49,65 @@ int	handle_parentheses(char *cmd_line,
 		return (0);
 }
 
-int	next_cmd_line_action(char *cmd_line,
-	int *last_return, t_vec *env, size_t j)
+int	next_cmd_line_action(char *cmd_line, t_envinfo envinfo)
 {
-	if (cmd_line[j] == '(')
+	if (*cmd_line == '(')
 	{
-		if (handle_parentheses(cmd_line, last_return, env, j) < 0)
+		if (handle_parentheses(cmd_line, envinfo.last_return, envinfo.env) < 0)
 			return (-1);
 	}
 	else if (check_cmd_line_syntax(cmd_line) < 0)
 		return (-1);
 	else
-		*last_return = run_command(&cmd_line[j], env, *last_return);
+	{
+		*envinfo.last_return = run_command(cmd_line, envinfo);
+	}
 	return (0);
 }
 
-int	check_andor_syntax(char **strs, size_t len)
+int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
+	t_vec *heredoc_fd_list, int *last_return)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < len)
-	{
-		j = 0;
-		if (strs[i][0] == '&' || strs[i][0] == '|')
-		{
-			j = j + 2;
-			if (strs[i][2] == '|')
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][2] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-			while (ft_isspace(strs[i][j]))
-				j++;
-			if (strs[i][j] == '|')
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][j] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-		}
-		i++;
-	}
-	return (1);
-}
-
-int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
-{
+	t_envinfo	envinfo;
 	size_t		i;
 	size_t		j;
 	char		**strs;
 
 	i = 0;
+	envinfo.env = env;
+	envinfo.last_return = last_return;
 	strs = (char **)cmd_lines->memory;
-	if (check_andor_syntax(strs, cmd_lines->len) < 0)
-		return (handle_pipelines_error(cmd_lines));
-	while (i < cmd_lines->len)
+	while (i < cmd_lines->len && *last_return != INT_MIN)
 	{
+		envinfo.heredoc_fds = (t_vec *)vec_get(heredoc_fd_list, i);
 		j = 0;
-		if (check_parenth_syntax(strs[i]) < 0)
-			return (handle_pipelines_error(cmd_lines));
 		if (strs[i][0] == '&' || strs[i][0] == '|')
 			j = j + 2;
 		while (ft_isspace(strs[i][j]))
 			j++;
-		if (next_cmd_line_action(strs[i], last_return, env, j) < 0)
+		if (next_cmd_line_action(&strs[i][j], envinfo) < 0)
 			return (handle_pipelines_error(cmd_lines));
 		i++;
-		next_cmd_line(cmd_lines, &i, last_return);
+		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	return (*last_return);
+	vec_free(heredoc_fd_list);
+	return (*envinfo.last_return);
+}
+
+int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
+{
+	char		**strs;
+	t_vec		heredoc_fd_list;
+
+	strs = (char **)cmd_lines->memory;
+	if (check_andor_syntax(strs, cmd_lines->len) < 0
+		|| check_parenth_syntax(cmd_lines) < 0 || check_redirect(cmd_lines) < 0)
+		return (handle_pipelines_error(cmd_lines));
+	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
+		return (-1);
+	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
+		return (handle_pipelines_error(cmd_lines));
+	vec_free(&heredoc_fd_list);
+	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
 }

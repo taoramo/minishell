@@ -6,58 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/12 13:14:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/15 12:56:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	env_entry_exists(char *str, t_vec *env)
-{
-	size_t	i;
-	char	**entries;
-
-	entries = (char **)env->memory;
-	i = 0;
-	while (i < env->len)
-	{
-		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	remove_entry(char *str, t_vec *env)
-{
-	size_t	i;
-	char	**entries;
-
-	entries = (char **)env->memory;
-	i = 0;
-	while (i < env->len)
-	{
-		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
-		{
-			vec_remove(env, i);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	contains_plusequals(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str[i] != '=')
-		i++;
-	if (str[i] && i > 0 && str[i - 1] == '+')
-		return (1);
-	return (0);
-}
 
 int	add_to_env(t_vec *env, char *str)
 {
@@ -69,7 +22,7 @@ int	add_to_env(t_vec *env, char *str)
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 	{
 		ft_error("minishell: export: not a valid identifier");
-		return (0);
+		return (-1);
 	}
 	while (str[i] && str[i] != '=')
 		i++;
@@ -79,6 +32,8 @@ int	add_to_env(t_vec *env, char *str)
 	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
 		j++;
 	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
+	if (!new)
+		ft_error("minishell: export: malloc failed");
 	free(*(char **)vec_get(env, j));
 	vec_remove(env, j);
 	if (vec_insert(env, &new, j) < 0)
@@ -145,21 +100,21 @@ void	print_env(char **environment, size_t i)
 int	ft_export(t_vec *argv, t_vec *env)
 {
 	char	**arguments;
-	char	**environment;
 	t_vec	sorted;
 	size_t	i;
 
 	arguments = (char **)argv->memory;
 	if (arguments[1] == 0)
 	{
-		vec_new(&sorted, env->len, env->elem_size);
-		vec_copy(&sorted, env);
+		if (vec_new(&sorted, env->len, env->elem_size) < 0)
+			return (ft_error("minishell: export: malloc failed"));
+		if (vec_copy(&sorted, env) < 0)
+			return (ft_error("minishell: export: malloc failed"));
 		vec_sort(&sorted, vec_sort_strncmp);
-		environment = (char **)sorted.memory;
 		i = 0;
 		while (i < env->len)
 		{
-			print_env(environment, i);
+			print_env((char **)sorted.memory, i);
 			i++;
 		}
 		vec_free(&sorted);

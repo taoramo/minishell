@@ -49,7 +49,8 @@ int	is_wildcard_match(char *s, char *p)
 	init_i(&i);
 	while (i.sindex < ft_strlen(s))
 	{
-		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex])
+		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex]
+			&& s[i.sindex] != '*')
 		{
 			++i.pindex;
 			++i.sindex;
@@ -67,4 +68,24 @@ int	is_wildcard_match(char *s, char *p)
 		}
 	}
 	return (check_rest_p(p, i.pindex));
+}
+
+int	after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect)
+{
+	char	*ptr;
+
+	if (!j && !redirect)
+	{
+		ptr = ft_strdup(arg);
+		if (!ptr)
+			return (-1);
+		if (vec_push(dst, &ptr) < 0)
+			return (-1);
+	}
+	else if (!redirect)
+	{
+		free(arg);
+		vec_sort(dst, vec_sort_strncmp);
+	}
+	return (j);
 }

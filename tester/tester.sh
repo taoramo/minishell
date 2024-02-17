@@ -89,26 +89,59 @@ while read -r line; do
 	check_output
 done < $TEST_DIR/input_tests.txt
 
+# cases differ from actual bash because of limitations
+line="echo \$HOME*"
+line_commented=${line//\$/\\\$}
+line_commented=${line_commented//\"/\\\"}
+eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+echo $HOME'*' > $BASH_OUTPUT
+check_output
+
+line="echo \"\$HOME*\""
+line_commented=${line//\$/\\\$}
+line_commented=${line_commented//\"/\\\"}
+eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+echo $NOTEXIST > $BASH_OUTPUT
+check_output
+
+rm -f infile1
+rm -f infile2
+
 #------ REDIRECT ------#
 
 printf $HEADER_COLOR"\n#------ REDIRECT ------#\n\n"$NC
 
-echo "aaaaa" > ./tmp/outfile
-echo "bbbbb" > ./tmp/outfile2
-cat ./tmp/outfile
-cat ./tmp/outfile2
-echo ""
-
 while read -r line; do
-	echo "aaaaa" > ./tmp/outfile
-	echo "bbbbb" > ./tmp/outfile2
-	echo -e $COMMAND_COLOR $line $NC
-	eval $line
-	echo -e cat ./tmp/outfile
-	cat ./tmp/outfile
-	echo -e cat ./tmp/outfile2
-	cat ./tmp/outfile2
-	echo ""
+	eval $line > $BASH_OUTPUT
+	rm -f tmp/outfile
+	rm -f tmp/outfile2
+	rm -f out1
+	rm -f out2
+	rm -f out3
+	rm -f out4
+	rm -f out5
+	rm -f out6
+	rm -f out7
+	rm -f out8
+	rm -f out9
+	rm -f out10
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+	rm -f tmp/outfile
+	rm -f tmp/outfile2
+	rm -f out1
+	rm -f out2
+	rm -f out3
+	rm -f out4
+	rm -f out5
+	rm -f out6
+	rm -f out7
+	rm -f out8
+	rm -f out9
+	rm -f out10
+	check_output
 done < $TEST_DIR/redirect_tests.txt
 
 #------ PIPES ------#
@@ -171,5 +204,9 @@ rm -f a
 rm -f b
 rm -f c
 rm -f "outfile && echo hello > outfile && cat outfile"
+
+rm -f asd*
+
+rm -f out
 
 echo ""

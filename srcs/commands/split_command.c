@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/07 13:26:35 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 10:41:54 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,65 +14,47 @@
 
 int	quote_length(char *str)
 {
-	char	*end_ptr;
-
-	end_ptr = ft_memchr(str + 1, *str, ft_strlen(str + 1));
-	if (end_ptr == 0)
-		return (-1);
-	return (end_ptr - str);
-}
-
-int	redirect_length(char *str)
-{
 	int	i;
 
-	i = 0;
-	while (str[i] == '>' || str[i] == '<')
-		i++;
-	while (ft_isspace(str[i]))
+	i = 1;
+	while (str[i] && str[i] != str[0])
 		i++;
 	return (i);
 }
 
-int	add_str(t_vec *strs, char *str, char *end)
+int	add_str(t_vec *strs, char *str, int i)
 {
 	char	*substr;
 
-	substr = ft_substr(str, 0, end - str);
+	substr = ft_substr(str, 0, i);
 	if (substr == 0)
 		return (-1);
 	if (vec_push(strs, &substr) == -1)
-	{
-		free(substr);
 		return (-1);
-	}
-	return (1);
+	return (0);
 }
 
 int	split_command(t_vec *strs, char *str)
 {
-	char	*end;
+	int	i;
 
-	while (ft_isspace(*str))
-		str++;
-	end = str;
-	while (*end != 0)
+	i = 0;
+	while (str[i] != 0)
 	{
-		if (*end == '\"' || *end == '\'')
-			end += quote_length(end);
-		if (*end == '>' || *end == '<'
-			|| !ft_strncmp(end, "<<", 2) || !ft_strncmp(end, ">>", 2))
-			end += redirect_length(end);
-		end++;
-		if (ft_isspace(*end) || *end == 0)
+		while (ft_isspace(str[i]))
+			i++;
+		str = &str[i];
+		i = 0;
+		while (str[i] != 0 && !ft_isspace(str[i]))
 		{
-			if (str < end)
-			{
-				if (add_str(strs, str, end) == -1)
-					return (-1);
-			}
-			str = end + 1;
+			if (str[i] == '\"' || str[i] == '\'')
+				i += quote_length(&str[i]);
+			i++;
 		}
+		if (i == 0)
+			break ;
+		if (add_str(strs, str, i) == -1)
+			return (-1);
 	}
 	return (1);
 }

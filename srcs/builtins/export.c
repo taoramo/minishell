@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	add_to_env(t_vec *env, char *str)
+int	add_to_existing(t_vec *env, char *str)
 {
 	int		i;
 	size_t	j;
@@ -39,6 +39,21 @@ int	add_to_env(t_vec *env, char *str)
 	if (vec_insert(env, &new, j) < 0)
 		return (ft_error("minishell: export: malloc failed"));
 	return (0);
+}
+
+int	add_to_env(t_vec *env, char *str)
+{
+	if (env_entry_exists(str, env))
+	{
+		if (add_to_existing(env, str) < 0)
+			return (-1);
+	}
+	else
+	{
+		if (add_new_from_plusequals(env, str) < 0)
+			return (-1);
+	}
+	return (1);
 }
 
 int	export_variable(t_vec *argv, t_vec *env, char **strs)

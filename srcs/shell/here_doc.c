@@ -86,7 +86,8 @@ int	get_heredocs(t_vec *heredoc_fd_list, t_vec *cmd_lines, size_t i, int j)
 		j = 0;
 		while (strs[j] != 0)
 		{
-			add_heredoc_fd(strs[j], &fds);
+			if (add_heredoc_fd(strs[j], &fds) < 0)
+				return (-1);
 			j++;
 		}
 		if (push_heredoc_fds_list(heredoc_fd_list, &fds, strs))

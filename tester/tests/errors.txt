@@ -37,3 +37,4 @@ touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf
 echo hello | ""
 "" hello
 exp
+|||| grep

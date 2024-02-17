@@ -29,8 +29,10 @@ int	check_consecutive_andor(const char *line)
 			consecutive++;
 			last_consecutive_i = i;
 		}
+		else
+			consecutive = 0;
 		if (consecutive > 2)
-			return (ft_error("syntax error near unexpected token '|'"));
+			return (print_syntax_error(line[i]));
 		i++;
 	}
 	return (0);

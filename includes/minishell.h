@@ -106,5 +106,7 @@ int		check_redirect_cmdline(char *cmd_line);
 char	*get_env_name(t_vec *str_vec, size_t start);
 char	**ft_split_pipe(const char *s, char c);
 int		check_pipe_as_last(char *str);
+void	vec_iter_free(void *arg);
+void	free_heredoc_fd_list(t_vec *heredoc_fd_list);
 
 #endif

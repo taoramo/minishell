@@ -39,7 +39,6 @@ int	prepare_redirects(t_command *command, int heredoc_fd)
 	if (extract_files(command, heredoc_fd) == -1)
 	{
 		free_split_vec(&command->argv);
-		vec_free(&command->redirects);
 		return (-1);
 	}
 	return (1);
@@ -51,7 +50,7 @@ int	expand_command(t_command *command, t_envinfo envinfo, int i)
 		return (-1);
 	if (expand_star(&command->argv) == -1)
 		return (-1);
-	if (prepare_redirects(command,
+	if (vec_get(envinfo.heredoc_fds, i) && prepare_redirects(command,
 			*(int *)vec_get(envinfo.heredoc_fds, i)) == -1)
 		return (-1);
 	if (split_expanded_command(&command->argv) == -1)
@@ -75,7 +74,6 @@ int	prepare_command(t_command *command,
 		&& add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
 	{
 		free_split_vec(&command->argv);
-		vec_free(&command->redirects);
 		return (127);
 	}
 	command->env = envinfo.env;

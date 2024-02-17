@@ -57,3 +57,14 @@ int	copy_split_vec(t_vec *dst, t_vec *src)
 	}
 	return (0);
 }
+
+void	vec_iter_free(void *arg)
+{
+	vec_free((t_vec *)arg);
+}
+
+void	free_heredoc_fd_list(t_vec *heredoc_fd_list)
+{
+	vec_iter(heredoc_fd_list, vec_iter_free);
+	vec_free(heredoc_fd_list);
+}

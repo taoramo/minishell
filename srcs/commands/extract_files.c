@@ -41,11 +41,8 @@ int	set_redirect(t_command *command, int original_fd,
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<", 1) == 0)
 		new_fd = open(red_comm_file[1], O_RDONLY);
-	if (new_fd < 0)
-	{
-		if (new_fd == -1)
-			return (minishell_error(red_comm_file[1], strerror(errno)));
-	}
+	if (new_fd == -1)
+		return (minishell_error(red_comm_file[1], strerror(errno)));
 	redirect = malloc(sizeof(t_redirect));
 	if (redirect == 0)
 		return (-1);
@@ -53,6 +50,7 @@ int	set_redirect(t_command *command, int original_fd,
 	redirect->new_fd = new_fd;
 	if (vec_push(&command->redirects, redirect) < 0)
 		return (ft_error("minishell: malloc failed"));
+	free(redirect);
 	return (1);
 }
 

@@ -62,9 +62,9 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	else
 	{
 		substr = ft_strjoin(str, *(char **)vec_get(strs, *i));
-		if (substr == 0)
-			return (-1);
-		if (vec_remove(strs, *i) == -1 || vec_insert(strs, &substr, *i) == -1)
+		free(*(char **)vec_get(strs, *i));
+		if (substr == 0 || vec_remove(strs, *i) == -1
+			|| vec_insert(strs, &substr, *i) == -1)
 			return (-1);
 	}
 	return (1);

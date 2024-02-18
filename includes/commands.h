@@ -78,7 +78,8 @@ int		pipex(char *pipe_str, t_envinfo envinfo);
 int		count_commands(char **strs);
 int		pipe_commands(t_pipe *pipeinfo);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
-void	handle_parent(int pipe_fds[], int pipe2_fds[], int pos);
+void	handle_parent(int pipe_fds[], int pipe2_fds[],
+			int pos, t_command *command);
 void	handle_child(t_command *command,
 			int pipe_fds[], int pipe2_fds[], int pos);
 int		save_stdfds(int stdfd_copy[]);

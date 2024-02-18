@@ -101,7 +101,7 @@ int	run_builtin_pipe(t_command *command,
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	run_builtin_command(command);
-	handle_parent(pipe_fds, pipe2_fds, pos);
+	handle_parent(pipe_fds, pipe2_fds, pos, command);
 	reset_stdfds(stdfd_copy);
 	return (0);
 }

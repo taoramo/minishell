@@ -26,7 +26,7 @@ int	run_single_pipe_command(t_command *command,
 	else if (process_id == 0)
 		handle_child(command, pipe_fds, pipe2_fds, pos);
 	else
-		handle_parent(pipe_fds, pipe2_fds, pos);
+		handle_parent(pipe_fds, pipe2_fds, pos, command);
 	return (process_id);
 }
 
@@ -38,7 +38,7 @@ int	first_pipe_commmand(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(pipeinfo->pipe_fds, 0, 0);
+		handle_parent(pipeinfo->pipe_fds, 0, 0, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)
@@ -57,7 +57,7 @@ int	last_pipe_command(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(pipeinfo->pipe_fds, 0, 1);
+		handle_parent(pipeinfo->pipe_fds, 0, 1, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)
@@ -82,7 +82,7 @@ int	middle_pipe_command(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(pipeinfo->pipe_fds, pipe2_fds, 2);
+		handle_parent(pipeinfo->pipe_fds, pipe2_fds, 2, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)

@@ -72,8 +72,6 @@ int	interactive(int *last_return, t_vec *env)
 {
 	char	*line;
 
-	using_history();
-	read_history(0);
 	*last_return = 0;
 	while (*last_return != INT_MIN)
 	{
@@ -83,7 +81,6 @@ int	interactive(int *last_return, t_vec *env)
 		{
 			signal_non_interactive();
 			add_history(line);
-			write_history(0);
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
@@ -92,7 +89,7 @@ int	interactive(int *last_return, t_vec *env)
 	}
 	write(2, "exit\n", 5);
 	toggle_carret(1);
-	clear_history();
+	rl_clear_history();
 	return (0);
 }
 

@@ -33,7 +33,7 @@ clean:
 
 fclean: clean
 	rm -rf $(NAME)
-	make fclean -C ./libft/
+	rm -rf $(LIBFT)
 
 re: fclean all
 

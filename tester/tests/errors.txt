@@ -43,7 +43,6 @@ echo hello &&
 && echo hello
  && echo hello
 echo hello && (echo wow || echo no) echo ok
-unset PATH && cat infile
 echo hello > >out
 echo hello > > out
 echo "test'"'

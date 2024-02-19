@@ -42,3 +42,4 @@ export spaces="    " && echo hello $spaces mom
 export tab="    " && echo hello $tab mom
 export z="  abc  " && echo hello $z mom
 export z="	abc	" && echo hello $z mom
+export z="   a b c   " && echo hello $z mom

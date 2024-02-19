@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 15:39:15 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:05:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	run_command(char *str, t_envinfo envinfo)
 		ret = run_builtin(&command);
 		return (free_run_command(&command, ret));
 	}
+	vec_iter(&command.redirects, close_redirect_files);
 	free_split_vec(&command.argv);
 	vec_free(&command.redirects);
 	waitpid(command.process_id, &ret, 0);

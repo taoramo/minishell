@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:46:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/19 16:47:27 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,12 @@ int	run_builtin(t_command *command)
 int	run_builtin_pipe(t_command *command,
 		int pipe_fds[], int pipe2_fds[], int pos)
 {
-	int			stdfd_copy[3];
+	int		stdfd_copy[3];
+	t_vec	sub_env;
 
+	if (copy_split_vec(&sub_env, command->env) == -1)
+		return (-1);
+	command->env = &sub_env;
 	save_stdfds(stdfd_copy);
 	if (pos == 0)
 		apply_pipe_redirect(command, 0, pipe_fds[1]);
@@ -103,5 +107,6 @@ int	run_builtin_pipe(t_command *command,
 	run_builtin_command(command);
 	handle_parent(pipe_fds, pipe2_fds, pos, command);
 	reset_stdfds(stdfd_copy);
+	free_split_vec(command->env);
 	return (0);
 }

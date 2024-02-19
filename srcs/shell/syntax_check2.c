@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 11:01:34 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/16 11:01:36 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/19 17:09:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_redirect_cmdline(char *s)
 			while (ft_isspace(s[i]))
 				i++;
 			if (!s[i] || s[i] == '|' || s[i] == '&'
-				|| s[i] == '(' || s[i] == ')')
+				|| s[i] == '(' || s[i] == ')' || s[i] == '>' || s[i] == '<')
 				return (redirect_check_error(c));
 		}
 		i++;

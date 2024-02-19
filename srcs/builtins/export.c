@@ -21,16 +21,15 @@ int	add_to_existing(t_vec *env, char *str)
 	i = 0;
 	while (str[i] && str[i] != '=')
 		i++;
-	if (str[i] == '=' && i > 1)
-		i = i - 2;
 	j = 0;
-	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
+	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j),
+			ft_strlen_member(*(char **)vec_get(env, j), '=')))
 		j++;
 	if (j == env->len)
 		return (-1);
 	if (j < env->len && contains_equals(*(char **)vec_get(env, j)))
 		i++;
-	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
+	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i]);
 	if (!newstr)
 		ft_error("minishell: export: malloc failed");
 	free(*(char **)vec_get(env, j));

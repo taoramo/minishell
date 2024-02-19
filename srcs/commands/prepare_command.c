@@ -14,7 +14,7 @@
 
 int	prepare_argv(t_command *command, char *command_str)
 {
-	if (vec_new(&command->argv, 0, sizeof(char *)) == -1)
+	if (vec_new(&command->argv, 4, sizeof(char *)) == -1)
 		return (-1);
 	if (split_command(&command->argv, command_str) == -1)
 	{

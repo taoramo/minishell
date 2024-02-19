@@ -36,7 +36,7 @@ int	split_expanded_command(t_vec *argv)
 	i = 0;
 	while (i < argv->len)
 	{
-		if (vec_new(&split, 0, sizeof(char *)) == -1)
+		if (vec_new(&split, 4, sizeof(char *)) == -1)
 			return (-1);
 		split_command(&split, *(char **) vec_get(argv, i));
 		if (split.len > 1)

@@ -81,7 +81,7 @@ char	*remove_outer_quotes(char *str);
 int		expand_envs(t_vec *argv, t_vec *env, int last_return);
 void	toggle_carret(int is_on);
 int		vec_sort_strncmp(void *one, void *two);
-char	*cd_error(char *str);
+int		cd_error(char *str);
 void	toggle_echo(int is_on);
 int		handle_pipelines_error(t_vec *cmd_lines);
 int		env_entry_exists(char *str, t_vec *env);

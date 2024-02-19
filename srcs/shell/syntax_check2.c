@@ -14,8 +14,13 @@
 
 int	redirect_check_error(char c)
 {
-	write(2, "minishell: syntax error near unexpected token `", 47);
-	write(2, &c, 1);
+	if (c != 0)
+	{
+		write(2, "minishell: syntax error near unexpected token `", 47);
+		write(2, &c, 1);
+	}
+	else
+		write(2, "minishell: syntax error", 23);
 	write(2, "'\n", 2);
 	return (-1);
 }
@@ -62,6 +67,28 @@ int	check_redirect(t_vec *cmd_lines)
 	return (0);
 }
 
+int	check_empty_andor(char **strs, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	char	c;
+
+	i = 0;
+	while (i < len)
+	{
+		j = 0;
+		c = strs[i][0];
+		while (strs[i][j] == '&' || strs[i][j] == '|')
+			j++;
+		while (ft_isspace(strs[i][j]))
+			j++;
+		if (strs[i][j] == 0)
+			return (redirect_check_error(c));
+		i++;
+	}
+	return (0);
+}
+
 int	check_andor_syntax(char **strs, size_t len)
 {
 	size_t	i;
@@ -87,7 +114,7 @@ int	check_andor_syntax(char **strs, size_t len)
 		}
 		i++;
 	}
-	return (1);
+	return (check_empty_andor(strs, len));
 }
 
 int	check_pipe_as_last(char *str)

@@ -48,9 +48,9 @@ int	check_open_quotes(const char *line)
 	doubles = 0;
 	while (line[i])
 	{
-		if (line[i] == 39)
+		if (line[i] == 39 && !ft_is_inside(line, i, '"'))
 			singles++;
-		if (line[i] == 34)
+		if (line[i] == 34 && !ft_is_inside(line, i, 39))
 			doubles++;
 		i++;
 	}
@@ -74,9 +74,9 @@ int	check_line_parenth_syntax(char *cmd_line)
 			&& !ft_is_inside(cmd_line, i, 39))
 		{
 			j = i - 1;
-			while (ft_isspace(cmd_line[j]))
+			while (ft_isspace(cmd_line[j]) && j >= 0)
 				j--;
-			if (cmd_line[j] != '&' && cmd_line[j] != '|')
+			if (cmd_line[j] != '&' && cmd_line[j] != '|' && j != 0)
 				return (ft_error("syntax error near unexpected token `(’"));
 		}
 		i++;

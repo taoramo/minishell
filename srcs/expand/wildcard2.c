@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:00:36 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 17:00:37 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/19 10:53:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,16 @@ int	is_wildcard_match(char *s, char *p)
 	init_i(&i);
 	while (i.sindex < ft_strlen(s))
 	{
-		if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex]
-			&& s[i.sindex] != '*')
+		if (p[i.pindex] == '\'' || p[i.pindex] == '\"')
+			i.pindex++;
+		else if (i.pindex < ft_strlen(p) && p[i.pindex] == s[i.sindex]
+			&& (p[i.pindex] != '*' || ft_is_inside_any(p, i.pindex)))
 		{
 			++i.pindex;
 			++i.sindex;
 		}
 		else if (i.pindex < ft_strlen(p) && p[i.pindex] == '*'
-			&& !ft_is_inside(p, i.pindex, '"')
-			&& !ft_is_inside(p, i.pindex, 39))
+			&& !ft_is_inside_any(p, i.pindex))
 			set_indeces_at_wc(&i);
 		else if (i.last_wildcard == -1)
 			return (0);

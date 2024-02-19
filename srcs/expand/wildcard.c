@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:10:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 17:10:30 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/19 10:04:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	expand_args(t_vec *dst, t_vec *argv, t_vec *newargv)
 	strs = (char **)argv->memory;
 	while (i < argv->len)
 	{
-		if (ft_strchr(strs[i], '*')
-			&& !ft_is_inside(strs[i], ft_strchr(strs[i], '*') - strs[i], '"')
-			&& !ft_is_inside(strs[i], ft_strchr(strs[i], '*') - strs[i], 39))
+		if (contains_unquoted(strs[i], 0, '*'))
 		{
 			if (push_expanded(dst, strs, i) < 0)
 				return (ft_error("minishell: error creating argv"));

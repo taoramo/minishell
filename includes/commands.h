@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 15:25:32 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:05:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int		prepare_command(t_command *command, char *command_str,
 int		prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i);
 int		split_command(t_vec *strs, char *str);
 int		isolate_redirects(t_vec *strs);
+void	close_redirect_files(void *param);
 int		split_expanded_command(t_vec *argv);
 int		extract_files(t_command *command, int heredoc_fd);
 char	*get_redirect_filename(char	*str);
@@ -72,13 +73,14 @@ pid_t	execute_command(t_vec argv, t_vec *env);
 
 int		run_builtin(t_command *command);
 int		run_builtin_pipe(t_command *command,
-			int pos, int pipe_fds[], int pipe2_fds[]);
+			int pipe_fds[], int pipe2_fds[], int pos);
 
 int		pipex(char *pipe_str, t_envinfo envinfo);
 int		count_commands(char **strs);
 int		pipe_commands(t_pipe *pipeinfo);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
-void	handle_parent(int pos, int pipe_fds[], int pipe2_fds[]);
+void	handle_parent(int pipe_fds[], int pipe2_fds[],
+			int pos, t_command *command);
 void	handle_child(t_command *command,
 			int pipe_fds[], int pipe2_fds[], int pos);
 int		save_stdfds(int stdfd_copy[]);

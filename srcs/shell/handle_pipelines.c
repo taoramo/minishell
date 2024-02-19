@@ -91,7 +91,7 @@ int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
 		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	vec_free(heredoc_fd_list);
+	free_heredoc_fd_list(heredoc_fd_list);
 	return (*envinfo.last_return);
 }
 

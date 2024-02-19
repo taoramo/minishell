@@ -12,33 +12,48 @@
 
 #include "minishell.h"
 
-int	add_to_env(t_vec *env, char *str)
+int	add_to_existing(t_vec *env, char *str)
 {
 	int		i;
 	size_t	j;
-	char	*new;
+	char	*newstr;
 
 	i = 0;
+	while (str[i] && str[i] != '=')
+		i++;
+	j = 0;
+	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j),
+			ft_strlen_member(*(char **)vec_get(env, j), '=')))
+		j++;
+	if (j == env->len)
+		return (-1);
+	if (j < env->len && contains_equals(*(char **)vec_get(env, j)))
+		i++;
+	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i]);
+	if (!newstr)
+		ft_error("minishell: export: malloc failed");
+	free(*(char **)vec_get(env, j));
+	vec_remove(env, j);
+	if (vec_insert(env, &newstr, j) < 0)
+		return (ft_error("minishell: export: malloc failed"));
+	return (0);
+}
+
+int	add_to_env(t_vec *env, char *str)
+{
 	if (!ft_isalpha(str[0]) && str[0] != '_')
 	{
 		ft_error("minishell: export: not a valid identifier");
 		return (-1);
 	}
-	while (str[i] && str[i] != '=')
-		i++;
-	if (str[i] == '=' && i > 1)
-		i = i - 2;
-	j = 0;
-	while (j < env->len && ft_strncmp(str, *(char **)vec_get(env, j), i))
-		j++;
-	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
-	if (!new)
-		ft_error("minishell: export: malloc failed");
-	free(*(char **)vec_get(env, j));
-	vec_remove(env, j);
-	if (vec_insert(env, &new, j) < 0)
-		return (ft_error("minishell: export: malloc failed"));
-	return (0);
+	if (env_entry_exists(str, env))
+	{
+		if (add_to_existing(env, str) < 0)
+			return (-1);
+	}
+	else if (add_new_from_plusequals(env, str) < 0)
+		return (-1);
+	return (1);
 }
 
 int	export_variable(t_vec *argv, t_vec *env, char **strs)

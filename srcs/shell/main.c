@@ -12,11 +12,25 @@
 
 #include "minishell.h"
 
+int	print_syntax_error(char c)
+{
+	write(2, "minishell: syntax error near unexpected token `", 47);
+	write(2, &c, 1);
+	write(2, "'\n", 2);
+	return (-1);
+}
+
 int	parse_line(const char *line, int *last_return, t_vec *env)
 {
 	t_vec	cmd_lines;
 
-	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0)
+	if (line[0] == '&' || line[0] == '|')
+	{
+		*last_return = 1;
+		return (print_syntax_error(line[0]));
+	}
+	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
+		|| check_consecutive_andor(line) < 0)
 	{
 		*last_return = 1;
 		return (-1);
@@ -58,8 +72,6 @@ int	interactive(int *last_return, t_vec *env)
 {
 	char	*line;
 
-	using_history();
-	read_history(0);
 	*last_return = 0;
 	while (*last_return != INT_MIN)
 	{
@@ -69,7 +81,6 @@ int	interactive(int *last_return, t_vec *env)
 		{
 			signal_non_interactive();
 			add_history(line);
-			write_history(0);
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
@@ -78,7 +89,7 @@ int	interactive(int *last_return, t_vec *env)
 	}
 	write(2, "exit\n", 5);
 	toggle_carret(1);
-	clear_history();
+	rl_clear_history();
 	return (0);
 }
 

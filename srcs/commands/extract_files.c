@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 14:03:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:23:33 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,8 @@ int	set_redirect(t_command *command, int original_fd,
 		new_fd = open(red_comm_file[1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (ft_strncmp(red_comm_file[0], "<", 1) == 0)
 		new_fd = open(red_comm_file[1], O_RDONLY);
-	if (new_fd < 0)
-	{
-		if (new_fd == -1)
-			minishell_error(red_comm_file[1], strerror(errno));
-		return (-1);
-	}
+	if (new_fd == -1)
+		return (minishell_error(red_comm_file[1], strerror(errno)));
 	redirect = malloc(sizeof(t_redirect));
 	if (redirect == 0)
 		return (-1);
@@ -54,6 +50,7 @@ int	set_redirect(t_command *command, int original_fd,
 	redirect->new_fd = new_fd;
 	if (vec_push(&command->redirects, redirect) < 0)
 		return (ft_error("minishell: malloc failed"));
+	free(redirect);
 	return (1);
 }
 
@@ -78,7 +75,7 @@ int	get_redirect_command_file(char *red_comm_file[], char *str)
 	return (1);
 }
 
-int	get_redirect_fd(char *str)
+int	get_origfd(char *str)
 {
 	int		i;
 
@@ -94,26 +91,24 @@ int	get_redirect_fd(char *str)
 	return (ft_atoi(str));
 }
 
-int	extract_files(t_command *command, int heredoc_fd)
+int	extract_files(t_command *command, int herefd)
 {
 	char	**strs;
 	size_t	i;
-	int		original_fd;
-	char	*red_comm_file[2];
+	char	*comm_file[2];
 	int		ret;
 
 	strs = *(char ***) &command->argv;
 	i = 0;
 	while (i < command->argv.len)
 	{
-		original_fd = get_redirect_fd(strs[i]);
-		if (original_fd >= 0)
+		if (get_origfd(strs[i]) >= 0)
 		{
-			if (get_redirect_command_file(red_comm_file, strs[i]) == -1)
+			if (get_redirect_command_file(comm_file, strs[i]) == -1)
 				return (-1);
-			ret = set_redirect(command, original_fd, red_comm_file, heredoc_fd);
-			free(red_comm_file[0]);
-			free(red_comm_file[1]);
+			ret = set_redirect(command, get_origfd(strs[i]), comm_file, herefd);
+			free(comm_file[0]);
+			free(comm_file[1]);
 			if (ret == -1)
 				return (-1);
 			free(*(char **)(vec_get(&command->argv, i)));

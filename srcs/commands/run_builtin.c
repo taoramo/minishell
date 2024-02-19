@@ -6,11 +6,33 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:02:50 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:46:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+int	compare_builtins(char *command, const char *builtin)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (command[i] && builtin[j] && command[i] == builtin[j])
+	{
+		i++;
+		j++;
+	}
+	if (command[i] && builtin[j])
+		return (-1);
+	while (command[i] && ft_isspace(command[i]))
+		i++;
+	if (!command[i] && !builtin[j])
+		return (1);
+	else
+		return (-1);
+}
 
 int	builtin_index(char *command)
 {
@@ -18,12 +40,12 @@ int	builtin_index(char *command)
 		"env", "unset", "export", "exit", NULL};
 	int					i;
 
-	if (strlen(command) == 0)
+	if (ft_strlen(command) == 0)
 		return (-1);
 	i = 0;
 	while (builtins[i] != 0)
 	{
-		if (ft_strncmp(command, builtins[i], ft_strlen(command)) == 0)
+		if (compare_builtins(command, builtins[i]) > 0)
 			return (i);
 		i++;
 	}
@@ -67,7 +89,7 @@ int	run_builtin(t_command *command)
 }
 
 int	run_builtin_pipe(t_command *command,
-		int pos, int pipe_fds[], int pipe2_fds[])
+		int pipe_fds[], int pipe2_fds[], int pos)
 {
 	int			stdfd_copy[3];
 
@@ -79,7 +101,7 @@ int	run_builtin_pipe(t_command *command,
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
 	run_builtin_command(command);
-	handle_parent(pos, pipe_fds, pipe2_fds);
+	handle_parent(pipe_fds, pipe2_fds, pos, command);
 	reset_stdfds(stdfd_copy);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/13 09:10:18 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:51:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	replace_vec_str(t_vec *str_vec, char *new, size_t i, size_t remove_len)
 	size_t	j;
 
 	j = 0;
-	while (j < remove_len)
+	while (i < str_vec->len && j < remove_len)
 	{
 		if (vec_remove(str_vec, i) == -1)
 			return (-1);
@@ -112,7 +112,7 @@ int	expand_envs(t_vec *argv, t_vec *env, int last_return)
 		if (ft_strchr(*str_ptr, '$') != 0)
 		{
 			if (vec_from(&str_vec, *str_ptr,
-					ft_strlen(*str_ptr), sizeof(char)) < 0)
+					ft_strlen(*str_ptr) + 1, sizeof(char)) < 0)
 				return (-1);
 			expand_str_envs(str_ptr, env, last_return, &str_vec);
 		}

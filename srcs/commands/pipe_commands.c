@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 10:18:19 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/16 16:45:47 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	run_single_pipe_command(t_command *command,
 	else if (process_id == 0)
 		handle_child(command, pipe_fds, pipe2_fds, pos);
 	else
-		handle_parent(pos, pipe_fds, pipe2_fds);
+		handle_parent(pipe_fds, pipe2_fds, pos, command);
 	return (process_id);
 }
 
@@ -38,13 +38,13 @@ int	first_pipe_commmand(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(0, pipeinfo->pipe_fds, 0);
+		handle_parent(pipeinfo->pipe_fds, 0, 0, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 0, pipeinfo->pipe_fds, 0));
+			return (run_builtin_pipe(&command, pipeinfo->pipe_fds, 0, 0));
 	}
 	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, 0, 0));
 }
@@ -57,13 +57,13 @@ int	last_pipe_command(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(1, pipeinfo->pipe_fds, 0);
+		handle_parent(pipeinfo->pipe_fds, 0, 1, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 1, pipeinfo->pipe_fds, 0));
+			return (run_builtin_pipe(&command, pipeinfo->pipe_fds, 0, 1));
 	}
 	return (run_single_pipe_command(&command, pipeinfo->pipe_fds, 0, 1));
 }
@@ -82,14 +82,14 @@ int	middle_pipe_command(t_pipe *pipeinfo, int i)
 	ret = prepare_pipe_command(&command, pipeinfo, i);
 	if (ret != 0)
 	{
-		handle_parent(2, pipeinfo->pipe_fds, pipe2_fds);
+		handle_parent(pipeinfo->pipe_fds, pipe2_fds, 2, &command);
 		return (ret);
 	}
 	if (command.argv.len != 0)
 	{
 		if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)
-			return (run_builtin_pipe(&command, 2,
-					pipeinfo->pipe_fds, pipe2_fds));
+			return (run_builtin_pipe(&command,
+					pipeinfo->pipe_fds, pipe2_fds, 2));
 	}
 	return (run_single_pipe_command(&command,
 			pipeinfo->pipe_fds, pipe2_fds, 2));

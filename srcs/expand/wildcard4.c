@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:13:54 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/16 09:13:57 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/19 10:09:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,14 +71,12 @@ int	add_redirect_str(t_vec *dst, char *arg)
 int	push_expanded(t_vec *dst, char **strs, int i)
 {
 	DIR				*ptr;
-	struct dirent	*ep;
 	int				redirect;
 	int				result;
 
 	ptr = opendir("./");
-	ep = readdir(ptr);
-	ep = readdir(ptr);
-	(void)ep;
+	readdir(ptr);
+	readdir(ptr);
 	if (!ptr)
 		return (exp_wc_err(dst, "error opening directory"));
 	redirect = is_rdrct(strs[i]);

@@ -22,6 +22,9 @@ TEST_DIR=./tests
 SRCS_DIR=./srcs
 OUTPUT_DIR=./tmp
 
+LEAKS_LOG=tmp/leaks.log
+TRASH_LOG=tmp/trash.log
+
 BASH_OUTPUT=$OUTPUT_DIR/bash.out
 MINISHELL_OUTPUT=$OUTPUT_DIR/mini.out
 
@@ -53,6 +56,18 @@ check_exit_code()
 	fi
 }
 
+check_leaks()
+{
+	EXPECTED_LINES=4
+	leaks --atExit -q -- $MINISHELL"\"$line_commented\"" 1>$LEAKS_LOG 2>$TRASH_LOG
+	LINES=$(sed -n '$=' $LEAKS_LOG)
+	if [ $LINES -eq $EXPECTED_LINES ]; then
+		echo -e ${GREEN}"leaks: [OK]"${NC}
+	else
+		echo -e ${RED}"leaks: [KO]"${NC}
+	fi
+}
+
 #------ BASIC ------#
 
 printf $HEADER_COLOR"\n#------ BASIC ------#\n\n"$NC
@@ -61,6 +76,7 @@ while read -r line; do
 	eval $line > $BASH_OUTPUT
 	eval $MINISHELL"\"$line\"" > $MINISHELL_OUTPUT
 	check_output
+	check_leaks
 done < $TEST_DIR/basic_tests.txt
 
 #------ BUILT-IN ------#
@@ -74,6 +90,7 @@ while read -r line; do
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
+	check_leaks
 done < $TEST_DIR/built_in_tests.txt
 
 #------ INPUT ------#
@@ -87,6 +104,7 @@ while read -r line; do
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
+	check_leaks
 done < $TEST_DIR/input_tests.txt
 
 # cases differ from actual bash because of limitations
@@ -96,6 +114,7 @@ line_commented=${line_commented//\"/\\\"}
 eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 echo $HOME'*' > $BASH_OUTPUT
 check_output
+check_leaks
 
 line="echo \"\$HOME*\""
 line_commented=${line//\$/\\\$}
@@ -103,6 +122,7 @@ line_commented=${line_commented//\"/\\\"}
 eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 echo $NOTEXIST > $BASH_OUTPUT
 check_output
+check_leaks
 
 rm -f infile1
 rm -f infile2
@@ -142,6 +162,7 @@ while read -r line; do
 	rm -f out9
 	rm -f out10
 	check_output
+	check_leaks
 done < $TEST_DIR/redirect_tests.txt
 
 #------ PIPES ------#
@@ -155,6 +176,7 @@ while read -r line; do
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
+	check_leaks
 done < $TEST_DIR/pipe_tests.txt
 
 #------ && AND || ------#
@@ -171,6 +193,7 @@ while read -r line; do
 	line_commented=${line_commented//\"/\\\"}
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
+	check_leaks
 done < $TEST_DIR/and_or_tests.txt
 
 #------ ERRORS ------#
@@ -194,6 +217,7 @@ while read -r line; do
 	MINISHELL_EXIT_CODE=$(echo $?)
 	check_output
 	check_exit_code
+	check_leaks
 done < $TEST_DIR/errors.txt
 
 rm -f tmp/noaccess

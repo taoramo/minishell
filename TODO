@@ -5,7 +5,7 @@ Features:
 	✔ Search and launch the right executable @done(24-01-30 13:47)
 		✔ based on the PATH variable @done(24-01-30 13:46)
 		✔ using a relative or an absolute path @done(24-01-30 13:47)
-	☐ Avoid using more than one global variable to indicate a received signal.
+	✔ Avoid using more than one global variable to indicate a received signal. @done(24-02-19 09:55)
 	✔ Not interpret unclosed quotes @done(24-01-30 14:15)
 	✔ Not interperet special characters which are not required by the subject such as \ (backslash) or ; (semicolon). @done(24-02-12 13:39)
 	✔ Handle ’ (single quote) which should prevent the shell from interpreting the metacharacters in the quoted sequence. @done(24-02-12 13:38)
@@ -18,7 +18,7 @@ Features:
 	✔ Implement pipes (| character). @done(24-01-30 13:52)
 	✔ Handle environment variables ($ followed by a sequence of characters) which should expand to their values. @done(24-02-12 11:42)
 	✔ Handle $? which should expand to the exit status of the most recently executed foreground pipeline. @done(24-02-12 11:42)
-	☐ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH (see fixes section)
+	✔ Handle ctrl-C, ctrl-D and ctrl-\ which should BEHAVE LIKE IN BASH (see fixes section) @done(24-02-19 09:47)
 		✔ ctrl-C displays a new prompt on a new line @done(24-01-30 13:55)
 		✔ ctrl-D exits the shell @done(24-01-30 13:55)
 		✔ ctrl-\ does nothing @done(24-01-30 13:56)
@@ -42,15 +42,9 @@ Bonus:
 
 Fixes:
 	☐ Error checks everywhere
-	☐ cat <infile<infile2 (should try open "infile")
-	☐ cat <"i"n'fil'e"<dfs>" (should try open "infile<dfs>")
 	☐ check heredoc closing (and other files as well..)
 
 Unsure:
-	☐ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING
-		currently works as bash does
-	☐ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ?
-		since pipe is forked, should run in subshell (random person on internet), so could use env instead of *env
 
 Tester:
 	✔ Figure out how to test in interactive mode for e.g. "cd" testing @done(24-02-12 11:59)
@@ -97,10 +91,14 @@ Archived fixes:
 	✔ cat | cat | cat @done(24-02-15 11:25)
 	✔ << operator input should be taken before anything else @done(24-02-15 11:25)
 	✔ "echo hello" (should try find command "echo hello") @done(24-02-15 12:18)
-	☐ cat <> hello (should not handle, error?)
-	☐ cat >< hello (error)
-	☐ cat < "hello" (should try open hello, not "hello")
-	☐ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc
-	☐ disable all error message printing while taking heredoc input
-	☐ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2)
-	☐ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands)
+	✔ cat <> hello (should not handle, error?) @done(24-02-19 09:46)
+	✔ cat >< hello (error) @done(24-02-19 09:46)
+	✔ cat < "hello" (should try open hello, not "hello") @done(24-02-19 09:46)
+	✔ ctrl-c and ctrl-d work in their special way during the input taking of the heredoc @done(24-02-19 09:46)
+	✔ disable all error message printing while taking heredoc input @done(24-02-19 09:46)
+	✔ < tester.sh > a > b > a >> b | < tester.sh > c && rm a && rm b && rm c (execve fails x2) @done(24-02-19 09:46)
+	✔ bash: syntax error near unexpected token `newline'\n (should be handled before running any commands) @done(24-02-19 09:46)
+	✔ cat <infile<infile2 (should try open "infile") @done(24-02-19 09:30)
+	✔ cat <"i"n'fil'e"<dfs>" (should try open "infile<dfs>") @done(24-02-19 09:30)
+	✔ << should read the input until a line CONTAINING the delimiter is seen, bash reads until a line ONLY CONTAINING @done(24-02-19 09:51)
+	✔ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ? @done(24-02-19 09:51)

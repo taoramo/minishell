@@ -16,7 +16,7 @@ int	add_to_existing(t_vec *env, char *str)
 {
 	int		i;
 	size_t	j;
-	char	*new;
+	char	*newstr;
 
 	i = 0;
 	while (str[i] && str[i] != '=')
@@ -30,12 +30,12 @@ int	add_to_existing(t_vec *env, char *str)
 		return (-1);
 	if (j < env->len && contains_equals(*(char **)vec_get(env, j)))
 		i++;
-	new = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
-	if (!new)
+	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i + 2]);
+	if (!newstr)
 		ft_error("minishell: export: malloc failed");
 	free(*(char **)vec_get(env, j));
 	vec_remove(env, j);
-	if (vec_insert(env, &new, j) < 0)
+	if (vec_insert(env, &newstr, j) < 0)
 		return (ft_error("minishell: export: malloc failed"));
 	return (0);
 }

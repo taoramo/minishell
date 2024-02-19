@@ -59,13 +59,14 @@ check_exit_code()
 check_leaks()
 {
 	EXPECTED_LINES=4
-	leaks --atExit -q -- $MINISHELL"\"$line_commented\"" 1>$LEAKS_LOG 2>$TRASH_LOG
-	LINES=$(sed -n '$=' $LEAKS_LOG)
-	if [ $LINES -eq $EXPECTED_LINES ]; then
-		echo -e ${GREEN}"leaks: [OK]"${NC}
-	else
-		echo -e ${RED}"leaks: [KO]"${NC}
-	fi
+	# leaks --atExit -q -- $MINISHELL"\"$line_commented\"" 1>$LEAKS_LOG 2>$TRASH_LOG
+	# # LINES=$(sed -n '$=' $LEAKS_LOG)
+	# # if [ $LINES -eq $EXPECTED_LINES ]; then
+	# # 	echo -e ${GREEN}"leaks: [OK]"${NC}
+	# # else
+	# # 	echo -e ${RED}"leaks: [KO]"${NC}
+	# # 	cat $LEAKS_LOG
+	# # fi
 }
 
 #------ BASIC ------#

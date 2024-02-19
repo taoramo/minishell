@@ -40,6 +40,7 @@ void	handle_parent(int pipe_fds[], int pipe2_fds[],
 		close(pipe2_fds[1]);
 		pipe_fds[0] = pipe2_fds[0];
 	}
+	vec_iter(&command->redirects, close_redirect_files);
 	free_split_vec(&command->argv);
 	vec_free(&command->redirects);
 }

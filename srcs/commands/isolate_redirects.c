@@ -6,11 +6,21 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 13:42:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:05:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
+
+void	close_redirect_files(void *param)
+{
+	int	fd;
+
+	fd = *(int *) param;
+	if (fd <= 2)
+		return ;
+	close(fd);
+}
 
 int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i, int skip)
 {

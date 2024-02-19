@@ -53,6 +53,7 @@ Fixes:
 	☐ heredoc not working...
 	☐ echo "'test"'
 	☐ echo $NOVAR hello (prints " hello", should print "hello")
+	☐ << stop cat (limiter is "stop cat" now...)
 
 Tester:
 	✔ Figure out how to test in interactive mode for e.g. "cd" testing @done(24-02-12 11:59)

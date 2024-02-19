@@ -34,3 +34,11 @@ echo wow > "infile<dfs>" && cat <"i"n'fil'e"<dfs>" && rm -f "infile<dfs>"
 echo hello|cat
 echo "wow>">out && cat out
 echo hello&&echo wow
+export spaces="    " && echo $spaces hello
+export tab="	" && echo $tab hello
+export spaces="    " && echo hello $spaces
+export tab="	" && echo hello $tab
+export spaces="    " && echo hello $spaces mom
+export tab="    " && echo hello $tab mom
+export z="  abc  " && echo hello $z mom
+export z="	abc	" && echo hello $z mom

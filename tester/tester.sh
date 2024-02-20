@@ -2,7 +2,7 @@
 
 cd ..
 make
-cd ./tester
+cd tester
 
 MINISHELL="../minishell -c "
 
@@ -58,15 +58,15 @@ check_exit_code()
 
 check_leaks()
 {
-	EXPECTED_LINES=4
+	a=a
 	# leaks --atExit -q -- $MINISHELL"\"$line_commented\"" 1>$LEAKS_LOG 2>$TRASH_LOG
-	# # LINES=$(sed -n '$=' $LEAKS_LOG)
-	# # if [ $LINES -eq $EXPECTED_LINES ]; then
-	# # 	echo -e ${GREEN}"leaks: [OK]"${NC}
-	# # else
-	# # 	echo -e ${RED}"leaks: [KO]"${NC}
-	# # 	cat $LEAKS_LOG
-	# # fi
+	# LEAKS=$( grep "total leaked bytes" $LEAKS_LOG | awk '{print $3}' )
+	# if [ $LEAKS -eq 0 ]; then
+	# 	echo -e ${GREEN}"leaks: [OK]"${NC}
+	# else
+	# 	echo -e ${RED}"leaks: [KO]"${NC}
+	# 	cat $LEAKS_LOG
+	# fi
 }
 
 #------ BASIC ------#
@@ -93,41 +93,6 @@ while read -r line; do
 	check_output
 	check_leaks
 done < $TEST_DIR/built_in_tests.txt
-
-#------ INPUT ------#
-
-printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
-
-while read -r line; do
-	eval $line > $BASH_OUTPUT
-	# comment out $ and " for -c input
-	line_commented=${line//\$/\\\$}
-	line_commented=${line_commented//\"/\\\"}
-	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
-	check_output
-	check_leaks
-	rm -f tmp/'*c'
-done < $TEST_DIR/input_tests.txt
-
-# cases differ from actual bash because of limitations
-line="echo \$HOME*"
-line_commented=${line//\$/\\\$}
-line_commented=${line_commented//\"/\\\"}
-eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
-echo $HOME'*' > $BASH_OUTPUT
-check_output
-check_leaks
-
-line="echo \"\$HOME*\""
-line_commented=${line//\$/\\\$}
-line_commented=${line_commented//\"/\\\"}
-eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
-eval echo $NOTEXIST > $BASH_OUTPUT
-check_output
-check_leaks
-
-rm -f infile1
-rm -f infile2
 
 #------ REDIRECT ------#
 
@@ -181,6 +146,23 @@ while read -r line; do
 	check_leaks
 done < $TEST_DIR/pipe_tests.txt
 
+#------ INPUT ------#
+
+printf $HEADER_COLOR"\n#------ INPUT ------#\n\n"$NC
+
+while read -r line; do
+	eval $line > $BASH_OUTPUT
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+	check_output
+	check_leaks
+done < $TEST_DIR/input_tests.txt
+
+rm -f infile1
+rm -f infile2
+
 #------ && AND || ------#
 
 printf $HEADER_COLOR"\n#------ && AND || ------#\n\n"$NC
@@ -231,6 +213,37 @@ touch $BASH_OUTPUT
 check_output
 check_leaks
 
+#------ WILDCARDS ------#
+
+printf $HEADER_COLOR"\n#------ WILDCARDS ------#\n\n"$NC
+
+while read -r line; do
+	eval $line > $BASH_OUTPUT
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+	check_output
+	check_leaks
+done < $TEST_DIR/wildcard_tests.txt
+
+# cases differ from actual bash because of limitations
+line="echo \$HOME*"
+line_commented=${line//\$/\\\$}
+line_commented=${line_commented//\"/\\\"}
+eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+echo $HOME'*' > $BASH_OUTPUT
+check_output
+check_leaks
+
+line="echo \"\$HOME*\""
+line_commented=${line//\$/\\\$}
+line_commented=${line_commented//\"/\\\"}
+eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+eval echo $NOTEXIST > $BASH_OUTPUT
+check_output
+check_leaks
+
 
 rm -f tmp/noaccess
 rm -f tmp/noread
@@ -239,7 +252,6 @@ rm -f tmp/nowrite
 rm -f a
 rm -f b
 rm -f c
-rm -f "outfile && echo hello > outfile && cat outfile"
 
 rm -f asd*
 

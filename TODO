@@ -41,7 +41,6 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	☐ ls > *.c (printing first command)
 	☐ insert redirect free substr on fail
 
 Archived fixes:
@@ -110,3 +109,4 @@ Archived fixes:
 	✔ << stop cat (limiter is "stop cat" now...) @done(24-02-20 09:49)
 	✔ echo $NOVAR hello (prints " hello", should print "hello") @done(24-02-20 10:49)
 	✔ echo hello&&echo wow @done(24-02-20 13:10)
+	✔ ls > *.c (printing first command) @done(24-02-20 14:28)

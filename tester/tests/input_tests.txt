@@ -1,4 +1,5 @@
 echo spaces      ignored
+echo a    b  c    d
 echo tabs		ignored
    echo hello
 echo hello "hello"
@@ -6,25 +7,17 @@ echo "hello" "hello"
 echo 'hello' 'hello'
 ec"ho" hello
 "echo" hello
-"ec"ho hello
-e"ch""o" he"llo""o"
+"ec"'h'o hello
+e''"ch""o" h''e"llo""o"
+(echo hello)
 echo $HOME
 echo $doesnotexist
-echo *$HOME
-echo '$HOME*'
 echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?
 echo $
 echo $ hello
-echo *
-echo **
-echo '*'*
-echo *'*'
-echo tes*
-echo *.sh
-echo "tes"*
-echo *".sh"
-touch tmp/'**' && touch tmp/'*' && touch tmp/'*abc' && touch tmp/'**abc' && touch tmp/'abc' && echo '*'*
+echo hello $
+echo hello$
 awk '{print $1}' infile
 awk '{print NR " - " $1 }' infile
 awk '{ if (length($0) > max) max = length($0) } END { print max }' infile

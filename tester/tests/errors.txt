@@ -7,6 +7,8 @@ cat < tmp/noread
 echo hello > tmp/nowrite
 cat < tmp/noread > tmp/nowrite
 cat > tmp/nowrite < tmp/noread
+cat -noarg < infile
+cat -noarg < nofile
 cd nodir
 nocommand | wc -l
 nocommand | ls ./
@@ -40,7 +42,6 @@ rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
 "echo hello > out" && cat out
 echo hello && echo (wow)
 export +=asdf
-touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf
 | echo hello
 echo hello | ""
 "" hello
@@ -49,4 +50,3 @@ echo hello && (echo wow || echo no) echo ok
 echo hello > >out
 echo hello > > out
 echo "test'"'
-ls > tmp/*c && cat 'tmp/*c'

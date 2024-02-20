@@ -41,23 +41,8 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	☐ echo hello && (echo wow || echo no) echo ok
-	☐ echo hello &&
-	☐ echo hello&&echo wow
-	☐ parse_parentheses.c line 124 free current?
-	☐ export pipe still exporting
-	☐ cd ../../../../../../../
-	☐ unset PATH && echo hello (segfault)
-	☐ echo hello > >test vs echo hello > > test
 	☐ ls > *.c (printing first command)
-	☐ heredoc not working...
-	☐ echo "'test"'
-	☐ echo $NOVAR hello (prints " hello", should print "hello")
-	☐ << stop cat (limiter is "stop cat" now...)
-
-Tester:
-	✔ Figure out how to test in interactive mode for e.g. "cd" testing @done(24-02-12 11:59)
-		just use && and ||
+	☐ insert redirect free substr on fail
 
 Archived fixes:
 	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
@@ -113,3 +98,15 @@ Archived fixes:
 	✔ export x='$y' | export y=z | echo $x should not change env variables ?? does pipe have own env ? @done(24-02-19 09:51)
 	✔ check heredoc closing (and other files as well..) @done(24-02-19 13:37)
 	✔ Error checks everywhere @done(24-02-19 13:37)
+	✔ echo hello && (echo wow || echo no) echo ok @done(24-02-20 09:21)
+	✔ echo hello && @done(24-02-20 09:21)
+	✔ unset PATH && echo hello (segfault) @done(24-02-20 09:22)
+	✔ echo hello > >test vs echo hello > > test @done(24-02-20 09:22)
+	✔ echo "'test"' @done(24-02-20 09:22)
+	✔ export pipe still exporting @done(24-02-20 09:22)
+	✔ cd ../../../../../../../ @done(24-02-20 09:23)
+	✔ parse_parentheses.c line 124 free current? @done(24-02-20 09:26)
+	✔ heredoc not working... @done(24-02-20 09:46)
+	✔ << stop cat (limiter is "stop cat" now...) @done(24-02-20 09:49)
+	✔ echo $NOVAR hello (prints " hello", should print "hello") @done(24-02-20 10:49)
+	✔ echo hello&&echo wow @done(24-02-20 13:10)

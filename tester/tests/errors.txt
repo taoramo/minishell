@@ -28,6 +28,14 @@ echo hello && echo wow &&& echo wow
 echo hello ||| echo wow
 echo ok | hello ||| echo wow
 echo hello && | echo wow
+echo hello | && echo wow
+echo hello &&| echo wow
+echo hello |&& echo wow
+|||| grep
+echo hello &&
+echo hello && 
+&& echo hello
+ && echo hello
 rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
 "echo hello > out" && cat out
 echo hello && echo (wow)
@@ -37,12 +45,8 @@ touch asdfasdfasdfsadf && echo "hello" > asdfasdfasdfad* && cat asdfasdfasdfadf
 echo hello | ""
 "" hello
 exp
-|||| grep
-echo hello &&
-echo hello && 
-&& echo hello
- && echo hello
 echo hello && (echo wow || echo no) echo ok
 echo hello > >out
 echo hello > > out
 echo "test'"'
+ls > tmp/*c && cat 'tmp/*c'

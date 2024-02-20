@@ -14,6 +14,8 @@ echo *$HOME
 echo '$HOME*'
 echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?
+echo $
+echo $ hello
 echo *
 echo **
 echo '*'*
@@ -33,6 +35,8 @@ echo wow > infile1 && echo ok > infile2 && cat <infile1<infile2 && rm -f infile1
 echo wow > "infile<dfs>" && cat <"i"n'fil'e"<dfs>" && rm -f "infile<dfs>"
 echo hello|cat
 echo "wow>">out && cat out
+echo hello&&echo wow
+echo hello &&echo wow
 echo hello&&echo wow
 export spaces="    " && echo $spaces hello
 export tab="	" && echo $tab hello

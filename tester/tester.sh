@@ -40,8 +40,8 @@ check_output()
 		cat $BASH_OUTPUT
 		echo -e ${YELLOW}"minishell:"${NC}
 		cat $MINISHELL_OUTPUT)
-	rm ${BASH_OUTPUT}
-	rm ${MINISHELL_OUTPUT}
+	rm -f ${BASH_OUTPUT}
+	rm -f ${MINISHELL_OUTPUT}
 }
 
 check_exit_code()
@@ -106,6 +106,7 @@ while read -r line; do
 	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
 	check_output
 	check_leaks
+	rm -f tmp/'*c'
 done < $TEST_DIR/input_tests.txt
 
 # cases differ from actual bash because of limitations
@@ -121,7 +122,7 @@ line="echo \"\$HOME*\""
 line_commented=${line//\$/\\\$}
 line_commented=${line_commented//\"/\\\"}
 eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
-echo $NOTEXIST > $BASH_OUTPUT
+eval echo $NOTEXIST > $BASH_OUTPUT
 check_output
 check_leaks
 
@@ -220,6 +221,16 @@ while read -r line; do
 	check_exit_code
 	check_leaks
 done < $TEST_DIR/errors.txt
+
+line="echo hello >\$HOME/out"
+line_commented=${line//\$/\\\$}
+line_commented=${line_commented//\"/\\\"}
+eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT
+eval echo >$NOTEXIST > $BASH_OUTPUT
+touch $BASH_OUTPUT
+check_output
+check_leaks
+
 
 rm -f tmp/noaccess
 rm -f tmp/noread

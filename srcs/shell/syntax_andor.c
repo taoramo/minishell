@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check3.c                                    :+:      :+:    :+:   */
+/*   syntax_andor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:28 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:48:30 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:45:16 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_consecutive_andor(const char *line)
@@ -38,26 +39,52 @@ int	check_consecutive_andor(const char *line)
 	return (0);
 }
 
-int	check_line_after_parenth(char *cmd_line)
+int	check_empty_andor(char **strs, size_t len)
 {
-	int	i;
-	int	j;
+	size_t	i;
+	size_t	j;
+	char	c;
 
 	i = 0;
-	j = 0;
-	while (cmd_line[i])
+	while (i < len)
 	{
-		if (i != 0 && cmd_line[i] == ')'
-			&& !ft_is_inside(cmd_line, i, '"')
-			&& !ft_is_inside(cmd_line, i, 39))
-		{
-			j = i + 1;
-			while (ft_isspace(cmd_line[j]) && j >= 0)
-				j++;
-			if (cmd_line[j] != '&' && cmd_line[j] != '|' && cmd_line[j] != 0)
-				return (ft_error("syntax error near unexpected token `)’"));
-		}
+		j = 0;
+		c = strs[i][0];
+		while (strs[i][j] == '&' || strs[i][j] == '|')
+			j++;
+		while (ft_isspace(strs[i][j]))
+			j++;
+		if (strs[i][j] == 0)
+			return (redirect_check_error(c));
 		i++;
 	}
 	return (0);
+}
+
+int	check_andor_syntax(char **strs, size_t len)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	while (i < len)
+	{
+		j = 0;
+		if (strs[i][0] == '&' || strs[i][0] == '|')
+		{
+			j = j + 2;
+			if (strs[i][2] == '|' || (strs[i][0] == '|' && strs[i][1] != '|'))
+				return (ft_error("syntax error near unexpected token `|’"));
+			if (strs[i][2] == '&')
+				return (ft_error("syntax error near unexpected token `&’"));
+			while (ft_isspace(strs[i][j]))
+				j++;
+			if (strs[i][j] == '|')
+				return (ft_error("syntax error near unexpected token `|’"));
+			if (strs[i][j] == '&')
+				return (ft_error("syntax error near unexpected token `&’"));
+		}
+		i++;
+	}
+	return (check_empty_andor(strs, len));
 }

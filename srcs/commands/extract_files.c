@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/20 09:40:03 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:38:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ char	*get_redirect_filename(char	*str)
 	while (ft_isspace(*str))
 		str++;
 	i = 0;
-	while (str[i] != 0 && (ft_is_inside_any(str, i) || (!ft_isspace(str[i])
-		&& str[i] != '<' && str[i] != '>' && str[i] != '|' && str[i] != '&')))
+	while (str[i] != 0 && (ft_is_inside_any(str, i)
+			|| (!ft_isspace(str[i]) && str[i] != '<' && str[i] != '>'
+				&& str[i] != '|' && str[i] != '&')))
 		i++;
 	filename = ft_substr(str, 0, i);
 	if (filename == 0 || (!ft_strchr(str, '\"') && !ft_strchr(str, '\'')))

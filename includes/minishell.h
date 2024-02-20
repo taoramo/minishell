@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 12:22:21 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:48:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int		check_parenthesis_count(const char *line);
 int		check_open_quotes(const char *line);
 int		check_parenth_syntax(t_vec *cmd_lines);
 void	remove_parentheses(char *cmd_line);
+int		redirect_check_error(char c);
 void	print_cmd_line(void *arg);
 int		ft_is_inside(const char *line, int i, int open_char);
 int		ft_is_inside_any(char *str, int i);

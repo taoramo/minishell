@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_parentheses.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:16:56 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:16:59 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/20 09:27:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ int	make_cmd_line_groups(t_vec *cmd_lines,
 		}
 		if (vec_push(cmd_lines, &current) < 0)
 		{
+			free(current);
 			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
 		}

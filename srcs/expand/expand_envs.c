@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 13:31:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:51:51 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 12:04:30 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,10 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 	char	*env_name;
 	char	*env_expanded;
 	int		ret;
+	char	*str;
 
-	if (*i + 1 >= str_vec->len)
+	str = (char *) vec_get(str_vec, 0);
+	if (*i + 1 >= str_vec->len || str[*i + 1] == 0 || ft_isspace(str[*i + 1]))
 		return (1);
 	if (*(char *)vec_get(str_vec, *i + 1) == '?')
 		return (expand_last_return(str_vec, last_return, i));

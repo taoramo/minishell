@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 10:26:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 12:23:00 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ int	next_cmd_line_action(char *cmd_line, t_envinfo envinfo)
 		if (handle_parentheses(cmd_line, envinfo.last_return, envinfo.env) < 0)
 			return (-1);
 	}
-	else if (check_cmd_line_syntax(cmd_line) < 0)
-		return (-1);
 	else
 	{
 		*envinfo.last_return = run_command(cmd_line, envinfo);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:28 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:48:30 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/20 12:21:56 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,29 +98,6 @@ int	check_parenth_syntax(t_vec *cmd_lines)
 		if (check_pipe_as_last(cmd_line) < 0)
 			return (-1);
 		k++;
-	}
-	return (1);
-}
-
-int	check_cmd_line_syntax(char *cmd_line)
-{
-	int	i;
-
-	i = 0;
-	while (cmd_line[i])
-	{
-		if ((cmd_line[0] == '&' && cmd_line[1] != '&')
-			|| (i != 0 && cmd_line[i] == '&'
-				&& ft_strncmp(&cmd_line[i - 1], " && ", 4)))
-			return (ft_error("syntax error near unexpected token `&’"));
-		if ((cmd_line[0] == '|' && cmd_line[1] == '|'
-				&& (cmd_line[2] == '|' || cmd_line[2] == '&')))
-			return (ft_error("syntax error near unexpected token `|’"));
-		if (!ft_strncmp(&cmd_line[i], "&&", 2)
-			|| !ft_strncmp(&cmd_line[i], "||", 2))
-			i = i + 2;
-		else
-			i++;
 	}
 	return (1);
 }

@@ -6,26 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 17:04:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 15:03:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "commands.h"
-
-void	strsfree(char **strs)
-{
-	int	i;
-
-	if (strs == 0)
-		return ;
-	i = 0;
-	while (strs[i] != 0)
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-}
 
 char	**strs_addstr(char **strs, char *str)
 {
@@ -68,7 +53,7 @@ char	**get_paths(t_vec *env)
 		return (0);
 	if (strs_addstr(paths, "/") == 0)
 	{
-		strsfree(paths);
+		ft_free_split(paths);
 		return (0);
 	}
 	return (paths);
@@ -110,12 +95,12 @@ int	add_path(char **command_ptr, t_vec *env)
 	{
 		if (check_path(paths[i], command_ptr))
 		{
-			strsfree(paths);
+			ft_free_split(paths);
 			return (1);
 		}
 		i++;
 	}
 	minishell_error(*command_ptr, "command not found");
-	strsfree(paths);
+	ft_free_split(paths);
 	return (-1);
 }

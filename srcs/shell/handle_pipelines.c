@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 12:23:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 12:43:11 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "|| ", 3))
+			&& ft_strncmp(curr_cmd_line, "||", 2))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];
@@ -32,7 +32,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "&& ", 3))
+			&& ft_strncmp(curr_cmd_line, "&&", 2))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];

@@ -34,7 +34,7 @@ int	expand_args(t_vec *dst, t_vec *argv, t_vec *newargv)
 		if (contains_unquoted(strs[i], 0, '*'))
 		{
 			if (push_expanded(dst, strs, i) < 0)
-				return (ft_error("minishell: error creating argv"));
+				return (-1);
 			if (vec_append(newargv, dst) < 0)
 				return (ft_error("minishell: error allocating memory"));
 			vec_clear(dst);

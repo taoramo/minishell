@@ -86,8 +86,8 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 	else
 		result = push_matches(dst, strs[i], ptr, redirect);
 	if (redirect && result == 1 && add_redirect_str(dst, strs[i]) < 0)
-		return (-1);
+		return (ft_error("minishell: memory error"));
 	if (redirect && result == 0 && vec_push(dst, &strs[i]) < 0)
-		return (-1);
-	return (0);
+		return (ft_error("minishell: memory error"));
+	return (result);
 }

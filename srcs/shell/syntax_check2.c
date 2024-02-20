@@ -18,10 +18,13 @@ int	redirect_check_error(char c)
 	{
 		write(2, "minishell: syntax error near unexpected token `", 47);
 		write(2, &c, 1);
+		write(2, "'\n", 2);
 	}
 	else
+	{
 		write(2, "minishell: syntax error", 23);
-	write(2, "'\n", 2);
+		write(2, "\n", 2);
+	}
 	return (-1);
 }
 

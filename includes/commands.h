@@ -6,18 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:05:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:55:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMANDS_H
 # define COMMANDS_H
 
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
-
-# include "libft.h"
 # include "minishell.h"
 
 typedef struct s_command

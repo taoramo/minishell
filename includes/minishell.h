@@ -6,29 +6,23 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 14:48:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:58:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
 # include <stdio.h>
 # include <termios.h>
 # include "readline/readline.h"
 # include "readline/history.h"
-# include <string.h>
-# include <unistd.h>
-# include <stdlib.h>
 # include <fcntl.h>
-# include <sys/wait.h>
 # include <signal.h>
-# include <sys/stat.h>
 # include <dirent.h>
 # include <errno.h>
-# include <sys/errno.h>
-# include <sys/ioctl.h>
 # include <sys/param.h>
-# include <curses.h>
+
 # include "libft.h"
 # include "commands.h"
 

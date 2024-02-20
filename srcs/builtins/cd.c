@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:00:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 17:00:25 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/20 12:58:00 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,11 @@ int	construct_path(t_vec *argv)
 {
 	t_vec	pathstrs;
 	char	*buffer;
+	int		r;
 
 	buffer = 0;
 	if (vec_new(&pathstrs, 32, sizeof(char *)) < 0)
-		return (0);
+		return (-1);
 	if (ft_strncmp(*(char **)vec_get(argv, 1), "/", 1))
 	{
 		buffer = getcwd(0, MAXPATHLEN);
@@ -56,9 +57,9 @@ int	construct_path(t_vec *argv)
 		free_split_vec(&pathstrs);
 		return (cd_error("memory_error"));
 	}
-	do_dir_change(&pathstrs);
+	r = do_dir_change(&pathstrs);
 	free_split_vec(&pathstrs);
-	return (0);
+	return (r);
 }
 
 void	change_directory(t_vec *argv, t_vec *env, int *r)
@@ -97,7 +98,7 @@ int	ft_cd(t_vec *argv, t_vec *env)
 		return (1);
 	}
 	change_directory(argv, env, &r);
-	if (r == -1)
+	if (r < 0)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		perror(strs[1]);

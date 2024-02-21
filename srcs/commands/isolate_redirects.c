@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:05:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 14:38:06 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i, int skip)
 		if (substr == 0)
 			return (-1);
 		if (vec_insert(strs, &substr, *i) == -1)
+		{
+			free(substr);
 			return (-1);
+		}
 		*i += 1;
 		str = &str[n];
 		return (n);
@@ -56,6 +59,7 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	int		r;
 	int		f;
 	char	*substr;
+	char	*original_str;
 
 	r = 1;
 	if (!ft_strncmp(&str[pre], ">>", 2) || !ft_strncmp(&str[pre], "<<", 2))
@@ -67,15 +71,28 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 		if (substr == 0)
 			return (-1);
 		if (vec_insert(strs, &substr, *i) == -1)
+		{
+			free(substr);
 			return (-1);
+		}
 	}
 	else
 	{
 		substr = ft_strjoin(str, *(char **)vec_get(strs, *i));
-		free(*(char **)vec_get(strs, *i));
-		if (substr == 0 || vec_remove(strs, *i) == -1
-			|| vec_insert(strs, &substr, *i) == -1)
+		if (substr == 0)
 			return (-1);
+		original_str = *(char **)vec_get(strs, *i);
+		if (vec_remove(strs, *i) == -1)
+		{
+			free(substr);
+			return (-1);
+		}
+		free(original_str);
+		if (vec_insert(strs, &substr, *i) == -1)
+		{
+			free(substr);
+			return (-1);
+		}
 	}
 	return (1);
 }
@@ -84,17 +101,21 @@ int	format_redirect(t_vec *strs, char *str, size_t *i, int skip)
 {
 	int	rem;
 	int	pre;
+	int ret;
 
 	rem = remove_invalid_prefix(strs, str, i, skip);
 	if (rem == -1)
+	{
+		free(str);
 		return (-1);
+	}
 	pre = 0;
 	while (str[rem + pre] != 0 && str[rem + pre] != '>'
 		&& str[rem + pre] != '<')
 		pre++;
-	if (insert_redirect(strs, &str[rem], pre, i) == -1)
-		return (-1);
-	return (1);
+	ret = insert_redirect(strs, &str[rem], pre, i);
+	free(str);
+	return (ret);
 }
 
 int	isolate_redirects(t_vec *strs)
@@ -114,7 +135,6 @@ int	isolate_redirects(t_vec *strs)
 				return (-1);
 			if (format_redirect(strs, str, &i, j) == -1)
 				return (-1);
-			free(str);
 			str = *(char **)vec_get(strs, i);
 			j = 1;
 			if (str[1] != 0 && (str[1] == '<' || str[1] == '>'))

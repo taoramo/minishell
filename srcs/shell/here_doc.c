@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:36:35 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:03:09 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,21 +53,33 @@ int	get_heredoc_fd(char *str)
 int	push_heredoc_fds_list(t_vec *heredoc_fds, t_vec *fds, char **strs)
 {
 	if (vec_push(heredoc_fds, fds) < 0)
+	{
+		vec_free(fds);
+		ft_free_split(strs);
 		return (-1);
+	}
 	ft_free_split(strs);
 	ft_bzero(fds, sizeof(t_vec));
 	return (0);
 }
 
-int	add_heredoc_fd(char *str, t_vec *fds)
+int	add_heredoc_fd(char **strs, int j, t_vec *fds)
 {
 	int	fd;
 
-	fd = get_heredoc_fd(str);
+	fd = get_heredoc_fd(strs[j]);
 	if (fd == -1)
+	{
+		vec_free(fds);
+		ft_free_split(strs);
 		return (-1);
+	}
 	if (vec_push(fds, &fd) < 0)
+	{
+		vec_free(fds);
+		ft_free_split(strs);
 		return (-1);
+	}
 	return (0);
 }
 
@@ -82,15 +94,18 @@ int	get_heredocs(t_vec *heredoc_fd_list, t_vec *cmd_lines, size_t i, int j)
 			return (-1);
 		strs = ft_split_pipe(*(char **)vec_get(cmd_lines, i), '|');
 		if (!strs)
+		{
+			vec_free(&fds);
 			return (-1);
+		}
 		j = 0;
 		while (strs[j] != 0)
 		{
-			if (add_heredoc_fd(strs[j], &fds) < 0)
+			if (add_heredoc_fd(strs, j, &fds) < 0)
 				return (-1);
 			j++;
 		}
-		if (push_heredoc_fds_list(heredoc_fd_list, &fds, strs))
+		if (push_heredoc_fds_list(heredoc_fd_list, &fds, strs) == -1)
 			return (-1);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 15:34:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:04:19 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <dirent.h>
 # include <errno.h>
 # include <sys/param.h>
+# include <sys/wait.h>
 
 # include "libft.h"
 # include "commands.h"

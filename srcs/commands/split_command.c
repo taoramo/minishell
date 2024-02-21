@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:52:19 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 10:41:54 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 13:32:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,10 @@ int	add_str(t_vec *strs, char *str, int i)
 	if (substr == 0)
 		return (-1);
 	if (vec_push(strs, &substr) == -1)
+	{
+		free(substr);
 		return (-1);
+	}
 	return (0);
 }
 

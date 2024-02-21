@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 12:39:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 09:56:16 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		return (-1);
 	}
 	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
-	{
-		free_split_vec(env);
 		return (ft_error("malloc"));
-	}
 	if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
 	{
 		*last_return = 1;

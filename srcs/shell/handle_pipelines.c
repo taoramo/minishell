@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/21 10:19:51 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 11:38:56 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,14 @@ int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
 		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	free_heredoc_fd_list(heredoc_fd_list);
 	return (*envinfo.last_return);
 }
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
-	char		**strs;
-	t_vec		heredoc_fd_list;
+	char	**strs;
+	t_vec	heredoc_fd_list;
+	int		ret;
 
 	strs = (char **)cmd_lines->memory;
 	if (check_andor_syntax(strs, cmd_lines->len) < 0
@@ -109,5 +109,7 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 		free_heredoc_fd_list(&heredoc_fd_list);
 		return (handle_pipelines_error(cmd_lines));
 	}
-	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
+	ret = handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return);
+	free_heredoc_fd_list(&heredoc_fd_list);
+	return (ret);
 }

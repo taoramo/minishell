@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 12:43:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/21 10:19:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,9 @@ int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
 		return (-1);
 	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
+	{
+		free_heredoc_fd_list(&heredoc_fd_list);
 		return (handle_pipelines_error(cmd_lines));
+	}
 	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
 }

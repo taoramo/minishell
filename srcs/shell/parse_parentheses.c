@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:16:56 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 10:01:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:13:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ int	next_length(const char *line, int index)
 int	make_cmd_line_groups(t_vec *cmd_lines,
 	const char *line, int *last_return, t_vec *env)
 {
-	int			i;
-	int			start;
-	int			length;
-	char		*current;
+	int		i;
+	int		start;
+	int		length;
+	char	*current;
 
 	i = 0;
 	while (line[i])

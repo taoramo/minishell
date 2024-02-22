@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 10:09:53 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/20 11:38:17 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 12:33:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ int	split_expanded_command(t_vec *argv)
 		if (vec_new(&split, 4, sizeof(char *)) == -1)
 			return (-1);
 		if (split_command(&split, *(char **) vec_get(argv, i)) == -1)
+		{
+			vec_free(&split);
 			return (-1);
+		}
 		if (handle_split_results(argv, split, i) == -1)
 			return (-1);
 		i++;

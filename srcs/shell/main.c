@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 09:36:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:57:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 		|| check_consecutive_andor(line) < 0)
 		*last_return = 1;
 	else if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
-		return (ft_error("malloc"));
+		return (ft_error("malloc error"));
 	else if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
 		*last_return = 1;
 	return (1);

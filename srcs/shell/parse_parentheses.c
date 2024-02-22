@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:16:56 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 09:27:05 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:01:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,10 @@ int	make_cmd_line_groups(t_vec *cmd_lines,
 		length = next_length(line, start);
 		current = ft_substr(line, start, length);
 		if (!current)
-		{
-			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
-		}
 		if (vec_push(cmd_lines, &current) < 0)
 		{
 			free(current);
-			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
 		}
 		i = start + length;

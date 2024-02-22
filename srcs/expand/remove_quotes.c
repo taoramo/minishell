@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 11:52:17 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/15 13:46:46 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 12:37:13 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	remove_quotes(t_vec *argv)
 		if (ft_strchr(*str_ptr, '\"') || ft_strchr(*str_ptr, '\''))
 		{
 			new_str = remove_outer_quotes(*str_ptr);
+			if (new_str == 0)
+				return (-1);
 			free(*str_ptr);
 			*str_ptr = new_str;
 		}

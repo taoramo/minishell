@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:13:54 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 12:00:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:34:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	add_redirect_str(t_vec *dst, char *arg)
 
 int	push_expanded(t_vec *dst, char **strs, int i)
 {
-	DIR				*ptr;
-	int				redirect;
-	int				result;
+	DIR		*ptr;
+	int		redirect;
+	int		result;
 
 	ptr = opendir("./");
 	readdir(ptr);

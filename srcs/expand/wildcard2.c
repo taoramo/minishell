@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:00:36 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/19 10:53:45 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:38:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ int	after_wildcard_pushing(t_vec *dst, char *arg, int j, int redirect)
 		if (!ptr)
 			return (-1);
 		if (vec_push(dst, &ptr) < 0)
+		{
+			free(ptr);
 			return (-1);
+		}
+		free(arg);
 	}
 	else if (!redirect)
 	{

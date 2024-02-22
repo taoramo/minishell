@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 11:01:34 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 14:45:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:37:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,28 +70,15 @@ int	check_redirect(t_vec *cmd_lines)
 	return (0);
 }
 
-int	check_pipe_as_last(char *str)
+int	is_empty_line(const char *line)
 {
-	char	*ptr;
-	int		i;
-
-	ptr = ft_strrchr(str, '|');
-	i = ptr - str;
-	while (ptr != ft_strrchr(ptr, '|') && ptr > str
-		&& !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
+	while (*line != 0)
 	{
-		ptr = ft_strrchr(str, '|');
-		i = ptr - str;
+		if (!ft_isspace(*line))
+			return (0);
+		line++;
 	}
-	if (ptr > str)
-	{
-		i++;
-		while (str[i] && ft_isspace(str[i]))
-			i++;
-		if (!str[i])
-			return (ft_error("syntax error near ynexpected token `|'"));
-	}
-	return (0);
+	return (1);
 }
 
 int	check_open_quotes(const char *line)

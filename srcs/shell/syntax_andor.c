@@ -6,11 +6,35 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:28 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 14:45:16 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:35:00 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_pipe_as_last(char *str)
+{
+	char	*ptr;
+	int		i;
+
+	ptr = ft_strrchr(str, '|');
+	i = ptr - str;
+	while (ptr != ft_strrchr(ptr, '|') && ptr > str
+		&& !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
+	{
+		ptr = ft_strrchr(str, '|');
+		i = ptr - str;
+	}
+	if (ptr > str)
+	{
+		i++;
+		while (str[i] && ft_isspace(str[i]))
+			i++;
+		if (!str[i])
+			return (ft_error("syntax error near ynexpected token `|'"));
+	}
+	return (0);
+}
 
 int	check_consecutive_andor(const char *line)
 {

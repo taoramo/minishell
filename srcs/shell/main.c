@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/21 09:56:16 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:36:27 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,24 +24,20 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 {
 	t_vec	cmd_lines;
 
-	if (line[0] == '&' || line[0] == '|')
+	if (is_empty_line(line))
+		*last_return = 0;
+	else if (line[0] == '&' || line[0] == '|')
 	{
 		*last_return = 1;
 		return (print_syntax_error(line[0]));
 	}
-	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
+	else if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
 		|| check_consecutive_andor(line) < 0)
-	{
 		*last_return = 1;
-		return (-1);
-	}
-	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
+	else if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
 		return (ft_error("malloc"));
-	if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
-	{
+	else if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
 		*last_return = 1;
-		return (-1);
-	}
 	return (1);
 }
 

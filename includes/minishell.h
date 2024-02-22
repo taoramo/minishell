@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/21 10:18:15 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:36:20 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int		parse_line(const char *line, int *last_return, t_vec *env);
 int		make_cmd_line_groups(t_vec *cmd_lines,
 			const char *line, int *last_return, t_vec *env);
 int		handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env);
+int		is_empty_line(const char *line);
 int		check_parenthesis_count(const char *line);
 int		check_open_quotes(const char *line);
 int		check_parenth_syntax(t_vec *cmd_lines);

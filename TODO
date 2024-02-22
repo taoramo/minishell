@@ -41,9 +41,6 @@ Bonus:
 	✔ Wildcards * should work for the current working directory. @done(24-02-08 16:29)
 
 Fixes:
-	☐ insert redirect free substr on fail
-	☐ just spaces for input: syntax error near unexpected token ` ' (should this error happen?)
-	☐ freeing in handle_parent might be a problem for failed prepare command
 
 Archived fixes:
 	✔ ctrl-C should not print "^C" - have not found a way other than to run "stty -echoctl" to stop the terminal emulator from printing control characters @done(24-02-05 09:54)
@@ -112,3 +109,6 @@ Archived fixes:
 	✔ echo $NOVAR hello (prints " hello", should print "hello") @done(24-02-20 10:49)
 	✔ echo hello&&echo wow @done(24-02-20 13:10)
 	✔ ls > *.c (printing first command) @done(24-02-20 14:28)
+	✔ just spaces for input: syntax error near unexpected token ` ' (should not occur) @done(24-02-22 15:03)
+	✔ insert redirect free substr on fail @done(24-02-22 15:03)
+	✔ freeing in handle_parent might be a problem for failed prepare command @done(24-02-22 15:50)

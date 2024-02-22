@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/20 14:38:01 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 12:24:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	set_redirect(t_command *command, int original_fd,
 {
 	int			new_fd;
 	t_redirect	*redirect;
+	int			ret;
 
 	new_fd = -1;
 	if (ft_strncmp(red_comm_file[0], ">>", 2) == 0)
@@ -55,10 +56,9 @@ int	set_redirect(t_command *command, int original_fd,
 		return (-1);
 	redirect->origial_fd = original_fd;
 	redirect->new_fd = new_fd;
-	if (vec_push(&command->redirects, redirect) < 0)
-		return (ft_error("minishell: malloc failed"));
+	ret = vec_push(&command->redirects, redirect);
 	free(redirect);
-	return (1);
+	return (ret);
 }
 
 int	get_redirect_command_file(char *red_comm_file[], char *str)
@@ -104,6 +104,7 @@ int	extract_files(t_command *command, int herefd)
 	size_t	i;
 	char	*comm_file[2];
 	int		ret;
+	char	*orig_str;
 
 	strs = *(char ***) &command->argv;
 	i = 0;
@@ -118,8 +119,10 @@ int	extract_files(t_command *command, int herefd)
 			free(comm_file[1]);
 			if (ret == -1)
 				return (-1);
-			free(*(char **)(vec_get(&command->argv, i)));
-			vec_remove(&command->argv, i);
+			orig_str = *(char **)vec_get(&command->argv, i);
+			if (vec_remove(&command->argv, i) == -1)
+				return (-1);
+			free(orig_str);
 			i--;
 		}
 		i++;

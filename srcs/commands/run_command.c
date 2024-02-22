@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:14:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:30:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	run_command(char *str, t_envinfo envinfo)
 	}
 	if (run_single_command(&command) == -1)
 	{
-		ret = run_builtin(&command);
+		ret = 1;
 		return (free_run_command(&command, ret));
 	}
 	free_run_command(&command, ret);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:15:37 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:45:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 16:11:20 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	run_single_pipe_command(t_command *command,
 	process_id = fork();
 	if (process_id < 0)
 	{
+		handle_parent(pipe_fds, pipe2_fds, pos, command);
 		perror("fork failed");
 		return (-1);
 	}

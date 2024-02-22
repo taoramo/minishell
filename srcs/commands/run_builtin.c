@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 16:47:27 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 16:07:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,25 @@ int	run_builtin_pipe(t_command *command,
 {
 	int		stdfd_copy[3];
 	t_vec	sub_env;
+	int		ret;
 
-	if (copy_split_vec(&sub_env, command->env) == -1)
+	if (save_stdfds(stdfd_copy) == -1
+		|| copy_split_vec(&sub_env, command->env) == -1)
+	{
+		handle_parent(pipe_fds, pipe2_fds, pos, command);
 		return (-1);
+	}
 	command->env = &sub_env;
-	save_stdfds(stdfd_copy);
 	if (pos == 0)
 		apply_pipe_redirect(command, 0, pipe_fds[1]);
 	else if (pos == 1)
 		apply_pipe_redirect(command, pipe_fds[0], 1);
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
-	run_builtin_command(command);
+	ret = run_builtin_command(command);
 	handle_parent(pipe_fds, pipe2_fds, pos, command);
-	reset_stdfds(stdfd_copy);
 	free_split_vec(command->env);
+	if (reset_stdfds(stdfd_copy) == -1 || ret == -1)
+		return (-1);
 	return (0);
 }

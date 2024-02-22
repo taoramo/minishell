@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 12:56:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:17:22 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ int	add_to_existing(t_vec *env, char *str)
 	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i]);
 	if (!newstr)
 		ft_error("minishell: export: malloc failed");
-	free(*(char **)vec_get(env, j));
-	vec_remove(env, j);
-	if (vec_insert(env, &newstr, j) < 0)
+	if (vec_remove_str(env, j) < 0 || vec_insert(env, &newstr, j) < 0)
+	{
+		free(newstr);
 		return (ft_error("minishell: export: malloc failed"));
+	}
 	return (0);
 }
 

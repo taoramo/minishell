@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:04:39 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/14 11:04:40 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:15:08 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	remove_entry(char *str, t_vec *env)
 	{
 		if (!ft_strncmp(str, entries[i], ft_strlen_member(str, '=')))
 		{
-			vec_remove(env, i);
+			vec_remove_str(env, i);
 			return (1);
 		}
 		i++;

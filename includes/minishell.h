@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 09:36:20 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:08:57 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int		handle_pipelines_error(t_vec *cmd_lines);
 void	print_quit_signal(int signal);
 int		print_syntax_error(char c);
 
+int		vec_remove_str(t_vec *vec, size_t i);
 int		vec_sort_strncmp(void *one, void *two);
 int		copy_split_vec(t_vec *dst, t_vec *src);
 void	free_heredoc_fd_list(t_vec *heredoc_fd_list);

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:00:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/20 12:58:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 14:59:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ int	construct_path(t_vec *argv)
 	if (ft_strncmp(*(char **)vec_get(argv, 1), "/", 1))
 	{
 		buffer = getcwd(0, MAXPATHLEN);
-		if (!buffer)
+		if (!buffer || vec_split(&pathstrs, buffer, '/') < 0)
+		{
+			vec_free(&pathstrs);
 			return (cd_error("memory_error"));
-		if (vec_split(&pathstrs, buffer, '/') < 0)
-			return (cd_error("memory_error"));
+		}
 		free(buffer);
 	}
 	if (vec_split(&pathstrs, *(char **)vec_get(argv, 1), '/') < 0)
@@ -69,18 +70,17 @@ void	change_directory(t_vec *argv, t_vec *env, int *r)
 
 	strs = (char **)argv->memory;
 	if (strs[1] && ft_strlen(strs[1]))
-	{
 		*r = construct_path(argv);
-	}
 	else
 	{
 		path = ft_getenv("HOME", env);
 		if (!path)
 		{
 			ft_putstr_fd("minishell: cd: error\n", 2);
-			*r = chdir(path);
-			free(path);
+			return ;
 		}
+		*r = chdir(path);
+		free(path);
 	}
 }
 

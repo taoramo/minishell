@@ -3,29 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_vec_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:14:46 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:14:48 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/22 14:41:24 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	contains_supergroup(void *arg)
+int	vec_remove_str(t_vec *vec, size_t i)
 {
-	char		*ptr;
-	int			i;
+	char *str;
 
-	ptr = arg;
-	i = 0;
-	while (ptr[i])
-	{
-		if (ptr[i] == '(')
-			return (1);
-		i++;
-	}
-	return (0);
+	str = *(char **) vec_get(vec, i);
+	if (vec_remove(vec, i) == -1)
+		return (-1);
+	free(str);
+	return (1);
 }
 
 int	vec_sort_strncmp(void *one, void *two)

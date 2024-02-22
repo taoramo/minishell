@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 15:15:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/21 11:03:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:22:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ int	get_heredoc_from_limiter(char *str, int fd)
 		return (-1);
 	fd = heredoc_input(limiter);
 	free(limiter);
-	if (fd == -1)
-		return (-1);
 	return (fd);
 }
 

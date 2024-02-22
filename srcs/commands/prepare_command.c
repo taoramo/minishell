@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 09:58:30 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 15:30:47 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 12:10:43 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,10 @@ int	prepare_argv(t_command *command, char *command_str)
 int	prepare_redirects(t_command *command, int heredoc_fd)
 {
 	if (vec_new(&command->redirects, 4, sizeof(t_redirect)) == -1)
-	{
-		free_split_vec(&command->argv);
 		return (-1);
-	}
 	if (extract_files(command, heredoc_fd) == -1)
 	{
-		free_split_vec(&command->argv);
+		vec_free(&command->redirects);
 		return (-1);
 	}
 	return (1);

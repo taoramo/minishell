@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 15:08:57 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/23 09:24:20 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,5 +102,7 @@ int		vec_remove_str(t_vec *vec, size_t i);
 int		vec_sort_strncmp(void *one, void *two);
 int		copy_split_vec(t_vec *dst, t_vec *src);
 void	free_heredoc_fd_list(t_vec *heredoc_fd_list);
+int		vec_insert_substr(t_vec *strs, int i, char *str, int len);
+int		vec_remove_insert_str(t_vec *strs, int i, char *str);
 
 #endif

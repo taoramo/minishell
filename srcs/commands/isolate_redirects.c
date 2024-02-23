@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 08:00:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/21 14:38:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/23 09:26:40 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	close_redirect_files(void *param)
 int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i, int skip)
 {
 	int		n;
-	char	*substr;
 	int		is_digit;
 
 	is_digit = 1;
@@ -39,14 +38,8 @@ int	remove_invalid_prefix(t_vec *strs, char *str, size_t *i, int skip)
 	}
 	if (!is_digit)
 	{
-		substr = ft_substr(str, 0, n);
-		if (substr == 0)
+		if (vec_insert_substr(strs, *i, str, n) == -1)
 			return (-1);
-		if (vec_insert(strs, &substr, *i) == -1)
-		{
-			free(substr);
-			return (-1);
-		}
 		*i += 1;
 		str = &str[n];
 		return (n);
@@ -59,7 +52,6 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	int		r;
 	int		f;
 	char	*substr;
-	char	*original_str;
 
 	r = 1;
 	if (!ft_strncmp(&str[pre], ">>", 2) || !ft_strncmp(&str[pre], "<<", 2))
@@ -67,28 +59,15 @@ int	insert_redirect(t_vec *strs, char *str, int pre, size_t *i)
 	f = ft_strlen(&str[pre + r]);
 	if (f > 0)
 	{
-		substr = ft_strdup(str);
-		if (substr == 0)
+		if (vec_insert_substr(strs, *i, str, ft_strlen(str)) == -1)
 			return (-1);
-		if (vec_insert(strs, &substr, *i) == -1)
-		{
-			free(substr);
-			return (-1);
-		}
 	}
 	else
 	{
 		substr = ft_strjoin(str, *(char **)vec_get(strs, *i));
 		if (substr == 0)
 			return (-1);
-		original_str = *(char **)vec_get(strs, *i);
-		if (vec_remove(strs, *i) == -1)
-		{
-			free(substr);
-			return (-1);
-		}
-		free(original_str);
-		if (vec_insert(strs, &substr, *i) == -1)
+		if (vec_remove_insert_str(strs, *i, substr) == -1)
 		{
 			free(substr);
 			return (-1);
@@ -101,7 +80,7 @@ int	format_redirect(t_vec *strs, char *str, size_t *i, int skip)
 {
 	int	rem;
 	int	pre;
-	int ret;
+	int	ret;
 
 	rem = remove_invalid_prefix(strs, str, i, skip);
 	if (rem == -1)

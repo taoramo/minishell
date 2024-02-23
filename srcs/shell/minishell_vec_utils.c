@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:14:46 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 14:41:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/23 08:56:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	vec_remove_str(t_vec *vec, size_t i)
 {
-	char *str;
+	char	*str;
 
 	str = *(char **) vec_get(vec, i);
 	if (vec_remove(vec, i) == -1)

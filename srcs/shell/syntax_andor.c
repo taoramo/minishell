@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:28 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 09:35:00 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/23 08:41:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_pipe_as_last(char *str)
 		while (str[i] && ft_isspace(str[i]))
 			i++;
 		if (!str[i])
-			return (ft_error("syntax error near ynexpected token `|'"));
+			return (ft_error("syntax error near unexpected token `|'"));
 	}
 	return (0);
 }

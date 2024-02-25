@@ -22,7 +22,6 @@ int	ft_pwd(t_vec *argv)
 	if (!check)
 	{
 		ft_putstr_fd("minishell: pwd:", 2);
-		ft_putstr_fd(str, 2);
 		perror(0);
 		return (-1);
 	}

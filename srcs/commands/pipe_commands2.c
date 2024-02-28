@@ -18,11 +18,13 @@ void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd)
 	{
 		if (dup2(in_fd, 0) == -1)
 			perror("dup failed");
+		close(in_fd);
 	}
 	if (out_fd != 1)
 	{
 		if (dup2(out_fd, 1) == -1)
 			perror("dup failed");
+		close(out_fd);
 	}
 	vec_iter(&command->redirects, apply_redirect);
 }

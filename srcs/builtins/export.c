@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 15:17:22 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 09:08:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ int	add_to_env(t_vec *env, char *str)
 	return (1);
 }
 
-int	export_variable(t_vec *argv, t_vec *env, char **strs)
+int	export_variable(size_t len, t_vec *env, char **strs)
 {
 	char	*str;
 	size_t	i;
 
 	i = 1;
-	while (i < argv->len)
+	while (i < len)
 	{
 		if (contains_plusequals(strs[i]) && add_to_env(env, strs[i]) < 0)
 			return (-1);
@@ -137,7 +137,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 		vec_clear(&sorted);
 		return (0);
 	}
-	else if (export_variable(argv, env, arguments) < 0)
+	else if (export_variable(argv->len, env, arguments) < 0)
 		return (1);
 	return (0);
 }

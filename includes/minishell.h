@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/23 09:24:20 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 09:08:10 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int		contains_equals(const char *str);
 int		contains_plusequals(char *str);
 int		add_new_from_plusequals(t_vec *env, char *str);
 int		ft_export(t_vec *argv, t_vec *env);
+int		export_variable(size_t len, t_vec *env, char **strs);
 int		ft_unset(t_vec *argv, t_vec *env);
 char	*ft_getenv(char *arg, t_vec *env);
 int		builtin_index(char *command);

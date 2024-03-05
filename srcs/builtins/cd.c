@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 17:00:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/03/05 09:44:36 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 09:51:45 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,17 @@
 
 void	update_export_pwd(t_vec *env)
 {
-	char	*strs[2];
-	char	*oldpath;
 	char	*path;
 
-	oldpath = ft_getenv("PWD", env);
-	if (oldpath == 0)
+	path = ft_getenv("PWD", env);
+	if (path == 0)
 		return ;
-	strs[0] = "export";
-	strs[1] = ft_calloc(7 + ft_strlen(oldpath) + 1, sizeof(char));
-	if (strs[1] == 0)
-	{
-		free(oldpath);
-		return ;
-	}
-	ft_memcpy(strs[1], "OLDPWD=", 7);
-	ft_memcpy(&strs[1][7], oldpath, ft_strlen(oldpath));
-	export_variable(2, env, strs);
-	free(strs[1]);
-	free(oldpath);
-
+	manual_export("OLDPWD=", path, env);
+	free(path);
 	path = getcwd(0, MAXPATHLEN);
 	if (path == 0)
 		return ;
-	strs[1] = ft_calloc(4 + ft_strlen(path) + 1, sizeof(char));
-	if (strs[1] == 0)
-	{
-		free(path);
-		return ;
-	}
-	ft_memcpy(strs[1], "PWD=", 4);
-	ft_memcpy(&strs[1][4], path, ft_strlen(path));
-	export_variable(2, env, strs);
-	free(strs[1]);
+	manual_export("PWD=", path, env);
 	free(path);
 }
 

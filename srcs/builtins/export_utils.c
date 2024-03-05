@@ -6,11 +6,25 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 11:04:39 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 15:15:08 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 09:51:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	manual_export(char *var, char *value, t_vec *env)
+{
+	char	*strs[2];
+
+	strs[0] = "export";
+	strs[1] = ft_calloc(ft_strlen(var) + ft_strlen(value) + 1, sizeof(char));
+	if (strs[1] == 0)
+		return ;
+	ft_memcpy(strs[1], var, ft_strlen(var));
+	ft_memcpy(&strs[1][ft_strlen(var)], value, ft_strlen(value));
+	export_variable(2, env, strs);
+	free(strs[1]);
+}
 
 int	env_entry_exists(char *str, t_vec *env)
 {

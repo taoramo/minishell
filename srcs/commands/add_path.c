@@ -85,12 +85,12 @@ int	add_path(char **command_ptr, t_vec *env)
 		return (minishell_error(*command_ptr, "command not found"));
 	if (builtin_index(*command_ptr) != -1)
 		return (1);
+	if (access(*command_ptr, X_OK) != -1)
+		return (1);
 	paths = get_paths(env);
 	if (paths == 0)
 		return (-1);
 	i = 0;
-	if (access(*command_ptr, X_OK) != -1)
-		return (1);
 	while (paths[i] != 0)
 	{
 		if (check_path(paths[i], command_ptr))

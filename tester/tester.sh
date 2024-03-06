@@ -96,22 +96,22 @@ done < $TEST_DIR/built_in_tests.txt
 
 line="exit"
 eval $MINISHELL $line
-BASH_EXIT_CODE=0
 MINISHELL_EXIT_CODE=$( echo $? )
+BASH_EXIT_CODE=0
 echo $line
 check_exit_code
 
 line="exit 42"
 eval $MINISHELL $line
-BASH_EXIT_CODE=42
 MINISHELL_EXIT_CODE=$( echo $? )
+BASH_EXIT_CODE=42
 echo $line
 check_exit_code
 
 line="exit asd"
 eval $MINISHELL $line
-BASH_EXIT_CODE=255
 MINISHELL_EXIT_CODE=$( echo $? )
+BASH_EXIT_CODE=255
 echo $line
 check_exit_code
 

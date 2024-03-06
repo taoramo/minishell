@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+int	too_many_arguments(void)
+{
+	const char	str[] = "minishell: exit: too many arguments\n";
+
+	write(2, str, ft_strlen(str));
+	return (255);
+}
+
 int	calculate_exit(t_vec *argv)
 {
 	int		i;
@@ -7,6 +15,8 @@ int	calculate_exit(t_vec *argv)
 
 	arg = *(char **)vec_get(argv, 1);
 	i = 0;
+	if (argv->len > 2)
+		return (too_many_arguments());
 	while (arg[i])
 	{
 		if (i == 0 && arg[i] == '-')

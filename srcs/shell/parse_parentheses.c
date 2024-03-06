@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_parentheses.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:16:56 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:16:59 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:13:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,10 @@ int	next_length(const char *line, int index)
 int	make_cmd_line_groups(t_vec *cmd_lines,
 	const char *line, int *last_return, t_vec *env)
 {
-	int			i;
-	int			start;
-	int			length;
-	char		*current;
+	int		i;
+	int		start;
+	int		length;
+	char	*current;
 
 	i = 0;
 	while (line[i])
@@ -117,13 +117,10 @@ int	make_cmd_line_groups(t_vec *cmd_lines,
 		length = next_length(line, start);
 		current = ft_substr(line, start, length);
 		if (!current)
-		{
-			free_split_vec(env);
 			return (cmd_line_error(cmd_lines));
-		}
 		if (vec_push(cmd_lines, &current) < 0)
 		{
-			free_split_vec(env);
+			free(current);
 			return (cmd_line_error(cmd_lines));
 		}
 		i = start + length;

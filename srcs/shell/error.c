@@ -39,12 +39,12 @@ int	minishell_error(char *str, char *message)
 	return (-1);
 }
 
-char	*cd_error(char *str)
+int	cd_error(char *str)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
 	ft_putstr_fd(str, 2);
 	write(2, "\n", 1);
-	return (0);
+	return (-1);
 }
 
 int	handle_pipelines_error(t_vec *cmd_lines)

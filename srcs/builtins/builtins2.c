@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:44:45 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 16:44:47 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/22 14:47:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	ft_pwd(t_vec *argv)
 	if (!check)
 	{
 		ft_putstr_fd("minishell: pwd:", 2);
-		ft_putstr_fd(str, 2);
 		perror(0);
 		return (-1);
 	}
@@ -63,7 +62,7 @@ int	ft_env(t_vec *env)
 	return (0);
 }
 
-void	unset_variable(t_vec *env, char *arg)
+int	unset_variable(t_vec *env, char *arg)
 {
 	size_t	i;
 	int		j;
@@ -78,12 +77,13 @@ void	unset_variable(t_vec *env, char *arg)
 			j++;
 		if (!ft_strncmp(arg, strs[i], j))
 		{
-			free(strs[i]);
-			vec_remove(env, i);
+			if (vec_remove_str(env, i) == -1)
+				return (-1);
 		}
 		j = 0;
 		i++;
 	}
+	return (1);
 }
 
 int	ft_unset(t_vec *argv, t_vec *env)
@@ -97,7 +97,8 @@ int	ft_unset(t_vec *argv, t_vec *env)
 		return (0);
 	while (i < argv->len)
 	{
-		unset_variable(env, args[i]);
+		if (unset_variable(env, args[i]) == -1)
+			return (-1);
 		i++;
 	}
 	return (0);

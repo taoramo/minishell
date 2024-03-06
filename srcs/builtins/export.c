@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 16:31:29 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 12:56:24 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/05 09:08:07 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ int	add_to_existing(t_vec *env, char *str)
 	newstr = ft_strjoin(*(char **)vec_get(env, j), &str[i]);
 	if (!newstr)
 		ft_error("minishell: export: malloc failed");
-	free(*(char **)vec_get(env, j));
-	vec_remove(env, j);
-	if (vec_insert(env, &newstr, j) < 0)
+	if (vec_remove_str(env, j) < 0 || vec_insert(env, &newstr, j) < 0)
+	{
+		free(newstr);
 		return (ft_error("minishell: export: malloc failed"));
+	}
 	return (0);
 }
 
@@ -56,13 +57,13 @@ int	add_to_env(t_vec *env, char *str)
 	return (1);
 }
 
-int	export_variable(t_vec *argv, t_vec *env, char **strs)
+int	export_variable(size_t len, t_vec *env, char **strs)
 {
 	char	*str;
 	size_t	i;
 
 	i = 1;
-	while (i < argv->len)
+	while (i < len)
 	{
 		if (contains_plusequals(strs[i]) && add_to_env(env, strs[i]) < 0)
 			return (-1);
@@ -136,7 +137,7 @@ int	ft_export(t_vec *argv, t_vec *env)
 		vec_clear(&sorted);
 		return (0);
 	}
-	else if (export_variable(argv, env, arguments) < 0)
+	else if (export_variable(argv->len, env, arguments) < 0)
 		return (1);
 	return (0);
 }

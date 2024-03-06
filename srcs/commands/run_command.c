@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:14:09 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/28 08:39:14 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	apply_redirect(void	*param)
 	redirect = *(t_redirect *) param;
 	if (dup2(redirect.new_fd, redirect.origial_fd) == -1)
 		perror("dup failed");
+	close(redirect.new_fd);
 }
 
 int	run_single_command(t_command *command)
@@ -85,7 +86,7 @@ int	run_command(char *str, t_envinfo envinfo)
 	}
 	if (run_single_command(&command) == -1)
 	{
-		ret = run_builtin(&command);
+		ret = 1;
 		return (free_run_command(&command, ret));
 	}
 	free_run_command(&command, ret);

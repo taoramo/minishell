@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 12:39:11 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:57:58 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,27 +24,20 @@ int	parse_line(const char *line, int *last_return, t_vec *env)
 {
 	t_vec	cmd_lines;
 
-	if (line[0] == '&' || line[0] == '|')
+	if (is_empty_line(line))
+		*last_return = 0;
+	else if (line[0] == '&' || line[0] == '|')
 	{
 		*last_return = 1;
 		return (print_syntax_error(line[0]));
 	}
-	if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
+	else if (check_parenthesis_count(line) < 0 || check_open_quotes(line) < 0
 		|| check_consecutive_andor(line) < 0)
-	{
 		*last_return = 1;
-		return (-1);
-	}
-	if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
-	{
-		free_split_vec(env);
-		return (ft_error("malloc"));
-	}
-	if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
-	{
+	else if (vec_new(&cmd_lines, 16, sizeof(char *)) < 0)
+		return (ft_error("malloc error"));
+	else if (make_cmd_line_groups(&cmd_lines, line, last_return, env) == -1)
 		*last_return = 1;
-		return (-1);
-	}
 	return (1);
 }
 
@@ -72,8 +65,6 @@ int	interactive(int *last_return, t_vec *env)
 {
 	char	*line;
 
-	using_history();
-	read_history(0);
 	*last_return = 0;
 	while (*last_return != INT_MIN)
 	{
@@ -83,7 +74,6 @@ int	interactive(int *last_return, t_vec *env)
 		{
 			signal_non_interactive();
 			add_history(line);
-			write_history(0);
 			parse_line(line, last_return, env);
 		}
 		else if (!line)
@@ -92,7 +82,7 @@ int	interactive(int *last_return, t_vec *env)
 	}
 	write(2, "exit\n", 5);
 	toggle_carret(1);
-	clear_history();
+	rl_clear_history();
 	return (0);
 }
 

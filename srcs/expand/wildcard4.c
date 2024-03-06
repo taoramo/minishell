@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 09:13:54 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/19 10:09:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:34:44 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	push_matches(t_vec *dst, char *arg, DIR *ptr, int redirect)
 		}
 		ep = readdir(ptr);
 	}
-	closedir(ptr);
 	return (after_wildcard_pushing(dst, arg, j, redirect));
 }
 
@@ -70,9 +69,9 @@ int	add_redirect_str(t_vec *dst, char *arg)
 
 int	push_expanded(t_vec *dst, char **strs, int i)
 {
-	DIR				*ptr;
-	int				redirect;
-	int				result;
+	DIR		*ptr;
+	int		redirect;
+	int		result;
 
 	ptr = opendir("./");
 	readdir(ptr);
@@ -85,9 +84,10 @@ int	push_expanded(t_vec *dst, char **strs, int i)
 				&strs[i][skip_redirect(strs[i])], ptr, redirect);
 	else
 		result = push_matches(dst, strs[i], ptr, redirect);
+	closedir(ptr);
 	if (redirect && result == 1 && add_redirect_str(dst, strs[i]) < 0)
-		return (-1);
+		return (ft_error("minishell: memory error"));
 	if (redirect && result == 0 && vec_push(dst, &strs[i]) < 0)
-		return (-1);
-	return (0);
+		return (ft_error("minishell: memory error"));
+	return (result);
 }

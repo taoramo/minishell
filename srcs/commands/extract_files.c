@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/25 09:13:49 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:23:33 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/23 08:51:26 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,22 @@
 
 char	*get_redirect_filename(char	*str)
 {
+	char	*filename;
 	char	*no_quotes;
+	int		i;
 
 	while (ft_isspace(*str))
 		str++;
-	if (!ft_strchr(str, '\"') && !ft_strchr(str, '\''))
-		return (ft_strdup(str));
-	no_quotes = remove_outer_quotes(str);
-	if (no_quotes == 0)
-		return (0);
+	i = 0;
+	while (str[i] != 0 && (ft_is_inside_any(str, i)
+			|| (!ft_isspace(str[i]) && str[i] != '<' && str[i] != '>'
+				&& str[i] != '|' && str[i] != '&')))
+		i++;
+	filename = ft_substr(str, 0, i);
+	if (filename == 0 || (!ft_strchr(str, '\"') && !ft_strchr(str, '\'')))
+		return (filename);
+	no_quotes = remove_outer_quotes(filename);
+	free(filename);
 	return (no_quotes);
 }
 
@@ -31,6 +38,7 @@ int	set_redirect(t_command *command, int original_fd,
 {
 	int			new_fd;
 	t_redirect	*redirect;
+	int			ret;
 
 	new_fd = -1;
 	if (ft_strncmp(red_comm_file[0], ">>", 2) == 0)
@@ -48,10 +56,9 @@ int	set_redirect(t_command *command, int original_fd,
 		return (-1);
 	redirect->origial_fd = original_fd;
 	redirect->new_fd = new_fd;
-	if (vec_push(&command->redirects, redirect) < 0)
-		return (ft_error("minishell: malloc failed"));
+	ret = vec_push(&command->redirects, redirect);
 	free(redirect);
-	return (1);
+	return (ret);
 }
 
 int	get_redirect_command_file(char *red_comm_file[], char *str)
@@ -111,8 +118,8 @@ int	extract_files(t_command *command, int herefd)
 			free(comm_file[1]);
 			if (ret == -1)
 				return (-1);
-			free(*(char **)(vec_get(&command->argv, i)));
-			vec_remove(&command->argv, i);
+			if (vec_remove_str(&command->argv, i) == -1)
+				return (-1);
 			i--;
 		}
 		i++;

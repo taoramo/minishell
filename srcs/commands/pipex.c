@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 15:13:47 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 15:32:33 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 15:44:36 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	pipex(char *pipe_str, t_envinfo envinfo)
 	t_pipe	pipeinfo;
 	int		ret;
 
-	if (pipe_str[0] == '|')
-		return (ft_error("minishell: syntax error near unexpected token `|'"));
 	if (initialize_pipe(&pipeinfo, pipe_str, envinfo) == -1)
 		return (-1);
 	if (pipe_commands(&pipeinfo) == -1)

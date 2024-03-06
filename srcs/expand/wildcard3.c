@@ -46,7 +46,9 @@ int	ambiguous_wildcard(char *arg)
 	i = 0;
 	while (arg[i] && (arg[i] == '<' || arg[i] == '>' || ft_isspace(arg[i])))
 		i++;
-	ft_printf("minishell: %s: ambiguous wildcard\n", &arg[i]);
+	write(2, "minishell: ", 11);
+	write(2, &arg[i], 1);
+	write(2, ": ambiguous redirect\n", 21);
 	return (-1);
 }
 

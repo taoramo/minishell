@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:25:39 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/16 16:46:06 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 16:07:04 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	builtin_index(char *command)
 	return (-1);
 }
 
-int	run_builtin_command(t_command *command)
+int	run_builtin_command(t_command *command, int is_pipe)
 {
 	int	command_index;
 
@@ -69,8 +69,10 @@ int	run_builtin_command(t_command *command)
 		return (ft_unset(&command->argv, command->env));
 	if (command_index == 5)
 		return (ft_export(&command->argv, command->env));
-	if (command_index == 6)
+	if (command_index == 6 && is_pipe == 0)
 		return (INT_MIN);
+	if (command_index == 6 && is_pipe == 1)
+		return (0);
 	return (1);
 }
 
@@ -82,7 +84,7 @@ int	run_builtin(t_command *command)
 	if (save_stdfds(stdfd_copy) == -1)
 		return (1);
 	vec_iter(&command->redirects, apply_redirect);
-	ret = run_builtin_command(command);
+	ret = run_builtin_command(command, 0);
 	if (reset_stdfds(stdfd_copy) == -1)
 		return (1);
 	return (ret);
@@ -91,17 +93,27 @@ int	run_builtin(t_command *command)
 int	run_builtin_pipe(t_command *command,
 		int pipe_fds[], int pipe2_fds[], int pos)
 {
-	int			stdfd_copy[3];
+	int		stdfd_copy[3];
+	t_vec	sub_env;
+	int		ret;
 
-	save_stdfds(stdfd_copy);
+	if (save_stdfds(stdfd_copy) == -1
+		|| copy_split_vec(&sub_env, command->env) == -1)
+	{
+		handle_parent(pipe_fds, pipe2_fds, pos, command);
+		return (-1);
+	}
+	command->env = &sub_env;
 	if (pos == 0)
 		apply_pipe_redirect(command, 0, pipe_fds[1]);
 	else if (pos == 1)
 		apply_pipe_redirect(command, pipe_fds[0], 1);
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
-	run_builtin_command(command);
+	ret = run_builtin_command(command, 1);
 	handle_parent(pipe_fds, pipe2_fds, pos, command);
-	reset_stdfds(stdfd_copy);
-	return (0);
+	free_split_vec(command->env);
+	if (reset_stdfds(stdfd_copy) == -1 || ret == -1)
+		return (-1);
+	return (ret);
 }

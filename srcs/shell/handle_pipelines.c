@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:20 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/15 10:26:13 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/22 10:15:18 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "|| ", 3))
+			&& ft_strncmp(curr_cmd_line, "||", 2))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];
@@ -32,7 +32,7 @@ void	next_cmd_line(t_vec *cmd_lines, size_t *i, int *last_return)
 	{
 		curr_cmd_line = strs[*i];
 		while (*i < cmd_lines->len
-			&& ft_strncmp(curr_cmd_line, "&& ", 3))
+			&& ft_strncmp(curr_cmd_line, "&&", 2))
 		{
 			*i = *i + 1;
 			curr_cmd_line = strs[*i];
@@ -56,8 +56,6 @@ int	next_cmd_line_action(char *cmd_line, t_envinfo envinfo)
 		if (handle_parentheses(cmd_line, envinfo.last_return, envinfo.env) < 0)
 			return (-1);
 	}
-	else if (check_cmd_line_syntax(cmd_line) < 0)
-		return (-1);
 	else
 	{
 		*envinfo.last_return = run_command(cmd_line, envinfo);
@@ -91,22 +89,27 @@ int	handle_cmd_lines(t_vec *cmd_lines, t_vec *env,
 		next_cmd_line(cmd_lines, &i, envinfo.last_return);
 	}
 	free_split_vec(cmd_lines);
-	free_heredoc_fd_list(heredoc_fd_list);
 	return (*envinfo.last_return);
 }
 
 int	handle_pipelines(t_vec *cmd_lines, int *last_return, t_vec *env)
 {
-	char		**strs;
-	t_vec		heredoc_fd_list;
+	char	**strs;
+	t_vec	heredoc_fd_list;
+	int		ret;
 
 	strs = (char **)cmd_lines->memory;
 	if (check_andor_syntax(strs, cmd_lines->len) < 0
 		|| check_parenth_syntax(cmd_lines) < 0 || check_redirect(cmd_lines) < 0)
 		return (handle_pipelines_error(cmd_lines));
 	if (vec_new(&heredoc_fd_list, cmd_lines->len, sizeof(t_vec)) == -1)
-		return (-1);
-	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
 		return (handle_pipelines_error(cmd_lines));
-	return (handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return));
+	if (get_heredocs(&heredoc_fd_list, cmd_lines, 0, 0) < 0)
+	{
+		free_heredoc_fd_list(&heredoc_fd_list);
+		return (handle_pipelines_error(cmd_lines));
+	}
+	ret = handle_cmd_lines(cmd_lines, env, &heredoc_fd_list, last_return);
+	free_heredoc_fd_list(&heredoc_fd_list);
+	return (ret);
 }

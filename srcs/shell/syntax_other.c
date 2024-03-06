@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check2.c                                    :+:      :+:    :+:   */
+/*   syntax_other.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 11:01:34 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/16 11:01:36 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/22 09:37:35 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,17 @@
 
 int	redirect_check_error(char c)
 {
-	write(2, "minishell: syntax error near unexpected token `", 47);
-	write(2, &c, 1);
-	write(2, "'\n", 2);
+	if (c != 0)
+	{
+		write(2, "minishell: syntax error near unexpected token `", 47);
+		write(2, &c, 1);
+		write(2, "'\n", 2);
+	}
+	else
+	{
+		write(2, "minishell: syntax error", 23);
+		write(2, "\n", 2);
+	}
 	return (-1);
 }
 
@@ -40,7 +48,7 @@ int	check_redirect_cmdline(char *s)
 			while (ft_isspace(s[i]))
 				i++;
 			if (!s[i] || s[i] == '|' || s[i] == '&'
-				|| s[i] == '(' || s[i] == ')')
+				|| s[i] == '(' || s[i] == ')' || s[i] == '>' || s[i] == '<')
 				return (redirect_check_error(c));
 		}
 		i++;
@@ -62,54 +70,36 @@ int	check_redirect(t_vec *cmd_lines)
 	return (0);
 }
 
-int	check_andor_syntax(char **strs, size_t len)
+int	is_empty_line(const char *line)
 {
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (i < len)
+	while (*line != 0)
 	{
-		j = 0;
-		if (strs[i][0] == '&' || strs[i][0] == '|')
-		{
-			j = j + 2;
-			if (strs[i][2] == '|' || (strs[i][0] == '|' && strs[i][1] != '|'))
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][2] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-			while (ft_isspace(strs[i][j]))
-				j++;
-			if (strs[i][j] == '|')
-				return (ft_error("syntax error near unexpected token `|’"));
-			if (strs[i][j] == '&')
-				return (ft_error("syntax error near unexpected token `&’"));
-		}
-		i++;
+		if (!ft_isspace(*line))
+			return (0);
+		line++;
 	}
 	return (1);
 }
 
-int	check_pipe_as_last(char *str)
+int	check_open_quotes(const char *line)
 {
-	char	*ptr;
-	int		i;
+	int				i;
+	unsigned int	singles;
+	unsigned int	doubles;
 
-	ptr = ft_strrchr(str, '|');
-	i = ptr - str;
-	while (ptr != ft_strrchr(ptr, '|') && ptr > str
-		&& !(!ft_is_inside(str, i, '"') && !ft_is_inside(str, i, 39)))
+	i = 0;
+	singles = 0;
+	doubles = 0;
+	while (line[i])
 	{
-		ptr = ft_strrchr(str, '|');
-		i = ptr - str;
-	}
-	if (ptr > str)
-	{
+		if (line[i] == '\'' && doubles % 2 == 0)
+			singles++;
+		if (line[i] == '\"' && singles % 2 == 0)
+			doubles++;
 		i++;
-		while (str[i] && ft_isspace(str[i]))
-			i++;
-		if (!str[i])
-			return (ft_error("syntax error near ynexpected token `|'"));
 	}
-	return (0);
+	if (singles % 2 || doubles % 2)
+		return (ft_error("syntax error: unclosed quotes"));
+	else
+		return (0);
 }

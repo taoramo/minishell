@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   syntax_check.c                                     :+:      :+:    :+:   */
+/*   syntax_parenth.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:48:28 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/09 15:48:30 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/20 14:46:01 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,6 @@ int	check_parenthesis_count(const char *line)
 		return (open_parentheses);
 }
 
-int	check_open_quotes(const char *line)
-{
-	int				i;
-	unsigned int	singles;
-	unsigned int	doubles;
-
-	i = 0;
-	singles = 0;
-	doubles = 0;
-	while (line[i])
-	{
-		if (line[i] == 39)
-			singles++;
-		if (line[i] == 34)
-			doubles++;
-		i++;
-	}
-	if (singles % 2 || doubles % 2)
-		return (ft_error("syntax error: unclosed quotes"));
-	else
-		return (0);
-}
-
 int	check_line_parenth_syntax(char *cmd_line)
 {
 	int	i;
@@ -74,9 +51,9 @@ int	check_line_parenth_syntax(char *cmd_line)
 			&& !ft_is_inside(cmd_line, i, 39))
 		{
 			j = i - 1;
-			while (ft_isspace(cmd_line[j]))
+			while (ft_isspace(cmd_line[j]) && j >= 0)
 				j--;
-			if (cmd_line[j] != '&' && cmd_line[j] != '|')
+			if (cmd_line[j] != '&' && cmd_line[j] != '|' && j != 0)
 				return (ft_error("syntax error near unexpected token `(’"));
 		}
 		i++;
@@ -102,25 +79,26 @@ int	check_parenth_syntax(t_vec *cmd_lines)
 	return (1);
 }
 
-int	check_cmd_line_syntax(char *cmd_line)
+int	check_line_after_parenth(char *cmd_line)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	while (cmd_line[i])
 	{
-		if ((cmd_line[0] == '&' && cmd_line[1] != '&')
-			|| (i != 0 && cmd_line[i] == '&'
-				&& ft_strncmp(&cmd_line[i - 1], " && ", 4)))
-			return (ft_error("syntax error near unexpected token `&’"));
-		if ((cmd_line[0] == '|' && cmd_line[1] == '|'
-				&& (cmd_line[2] == '|' || cmd_line[2] == '&')))
-			return (ft_error("syntax error near unexpected token `|’"));
-		if (!ft_strncmp(&cmd_line[i], "&&", 2)
-			|| !ft_strncmp(&cmd_line[i], "||", 2))
-			i = i + 2;
-		else
-			i++;
+		if (i != 0 && cmd_line[i] == ')'
+			&& !ft_is_inside(cmd_line, i, '"')
+			&& !ft_is_inside(cmd_line, i, 39))
+		{
+			j = i + 1;
+			while (ft_isspace(cmd_line[j]) && j >= 0)
+				j++;
+			if (cmd_line[j] != '&' && cmd_line[j] != '|' && cmd_line[j] != 0)
+				return (ft_error("syntax error near unexpected token `)’"));
+		}
+		i++;
 	}
-	return (1);
+	return (0);
 }

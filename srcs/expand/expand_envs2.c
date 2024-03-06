@@ -31,3 +31,15 @@ char	*get_env_name(t_vec *str_vec, size_t start)
 	}
 	return (ft_substr((char *) str_vec->memory, start, i));
 }
+
+int	finish_expand_str_envs(char **str_ptr, t_vec *str_vec)
+{
+	char	n;
+
+	n = 0;
+	free(*str_ptr);
+	if (vec_push(str_vec, &n) < 0)
+		return (-1);
+	*str_ptr = (char *) str_vec->memory;
+	return (1);
+}

@@ -6,18 +6,13 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 16:09:06 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/19 11:05:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/02/20 15:07:05 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COMMANDS_H
 # define COMMANDS_H
 
-# include <stdio.h>
-# include <sys/wait.h>
-# include <fcntl.h>
-
-# include "libft.h"
 # include "minishell.h"
 
 typedef struct s_command
@@ -52,12 +47,9 @@ typedef struct s_envinfo
 	t_vec	*heredoc_fds;
 }	t_envinfo;
 
-int		ft_isspace(int c);
-int		quote_length(char *str);
-int		redirect_length(char *str);
-
 int		prepare_command(t_command *command, char *command_str,
 			t_envinfo envinfo, int i);
+int		quote_length(char *str);
 int		prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i);
 int		split_command(t_vec *strs, char *str);
 int		isolate_redirects(t_vec *strs);
@@ -76,7 +68,6 @@ int		run_builtin_pipe(t_command *command,
 			int pipe_fds[], int pipe2_fds[], int pos);
 
 int		pipex(char *pipe_str, t_envinfo envinfo);
-int		count_commands(char **strs);
 int		pipe_commands(t_pipe *pipeinfo);
 void	apply_pipe_redirect(t_command *command, int in_fd, int out_fd);
 void	handle_parent(int pipe_fds[], int pipe2_fds[],

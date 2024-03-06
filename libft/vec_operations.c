@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec_operations.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toramo <toramo.student@hive.fi>            +#+  +:+       +#+        */
+/*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/02 10:49:33 by toramo            #+#    #+#             */
-/*   Updated: 2024/01/02 10:49:34 by toramo           ###   ########.fr       */
+/*   Updated: 2024/02/19 11:55:51 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	vec_remove(t_vec *src, size_t index)
 	}
 	ft_memmove(vec_get(src, index),
 		&src->memory[src->elem_size * (index + 1)],
-		(src->len - index) * src->elem_size);
+		(src->len - index - 1) * src->elem_size);
 	ft_bzero(vec_get(src, src->len - 1), src->elem_size);
 	src->len--;
 	return (src->len);

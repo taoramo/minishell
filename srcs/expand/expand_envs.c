@@ -75,16 +75,16 @@ int	expand_substr_env(t_vec *str_vec, size_t *i, t_vec *env, int last_return)
 int	expand_str_envs(char **str_ptr, t_vec *env, int last_return, t_vec *str_vec)
 {
 	size_t	i;
-	char	n;
 
-	n = 0;
 	i = 0;
 	while (i < str_vec->len)
 	{
-		if (*(char *)vec_get(str_vec, i) == '\'')
+		if (*(char *)vec_get(str_vec, i) == '\''
+			&& !ft_is_inside((char *)str_vec->memory, i, '"'))
 		{
 			i++;
-			while (i < str_vec->len && *(char *)vec_get(str_vec, i) != '\'')
+			while (i < str_vec->len && !(*(char *)vec_get(str_vec, i) == '\''
+					&& !ft_is_inside((char *)str_vec->memory, i, '"')))
 				i++;
 		}
 		if (i < str_vec->len && *(char *)vec_get(str_vec, i) == '$')
@@ -94,11 +94,7 @@ int	expand_str_envs(char **str_ptr, t_vec *env, int last_return, t_vec *str_vec)
 		}
 		i++;
 	}
-	free(*str_ptr);
-	if (vec_push(str_vec, &n) < 0)
-		return (-1);
-	*str_ptr = (char *) str_vec->memory;
-	return (1);
+	return (finish_expand_str_envs(str_ptr, str_vec));
 }
 
 int	expand_envs(t_vec *argv, t_vec *env, int last_return)

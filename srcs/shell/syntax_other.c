@@ -92,9 +92,9 @@ int	check_open_quotes(const char *line)
 	doubles = 0;
 	while (line[i])
 	{
-		if (line[i] == 39 && !ft_is_inside(line, i, '"'))
+		if (line[i] == '\'' && doubles % 2 == 0)
 			singles++;
-		if (line[i] == 34 && !ft_is_inside(line, i, 39))
+		if (line[i] == '\"' && singles % 2 == 0)
 			doubles++;
 		i++;
 	}

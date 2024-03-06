@@ -72,6 +72,7 @@ char	*ft_getenv(char *arg, t_vec *env);
 int		builtin_index(char *command);
 
 int		expand_envs(t_vec *argv, t_vec *env, int last_return);
+int		finish_expand_str_envs(char **str_ptr, t_vec *str_vec);
 char	*get_env_name(t_vec *str_vec, size_t start);
 int		expand_star(t_vec *argv);
 int		is_wildcard_match(char *string, char *pattern);

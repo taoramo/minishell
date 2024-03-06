@@ -52,7 +52,7 @@ int	builtin_index(char *command)
 	return (-1);
 }
 
-int	run_builtin_command(t_command *command)
+int	run_builtin_command(t_command *command, int is_pipe)
 {
 	int	command_index;
 
@@ -69,8 +69,10 @@ int	run_builtin_command(t_command *command)
 		return (ft_unset(&command->argv, command->env));
 	if (command_index == 5)
 		return (ft_export(&command->argv, command->env));
-	if (command_index == 6)
+	if (command_index == 6 && is_pipe == 0)
 		return (INT_MIN);
+	if (command_index == 6 && is_pipe == 1)
+		return (0);
 	return (1);
 }
 
@@ -82,7 +84,7 @@ int	run_builtin(t_command *command)
 	if (save_stdfds(stdfd_copy) == -1)
 		return (1);
 	vec_iter(&command->redirects, apply_redirect);
-	ret = run_builtin_command(command);
+	ret = run_builtin_command(command, 0);
 	if (reset_stdfds(stdfd_copy) == -1)
 		return (1);
 	return (ret);
@@ -108,10 +110,10 @@ int	run_builtin_pipe(t_command *command,
 		apply_pipe_redirect(command, pipe_fds[0], 1);
 	else
 		apply_pipe_redirect(command, pipe_fds[0], pipe2_fds[1]);
-	ret = run_builtin_command(command);
+	ret = run_builtin_command(command, 1);
 	handle_parent(pipe_fds, pipe2_fds, pos, command);
 	free_split_vec(command->env);
 	if (reset_stdfds(stdfd_copy) == -1 || ret == -1)
 		return (-1);
-	return (0);
+	return (ret);
 }

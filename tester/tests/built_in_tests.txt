@@ -13,3 +13,4 @@ export foo=bar && echo $foo && unset foo && echo $foo
 cd tests && ls && cd ..
 export foo bar asdf
 export foo && export foo+=asdf && export | head -10
+export x=1 && export y=2 && unset x y && echo $x $y

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/03/06 11:50:16 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/06 12:24:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,6 @@ int	set_shell_level(t_vec	*env)
 	free(shell_lvl);
 	return (1);
 }
-
 
 int	main(int argc, char **argv, char **envp)
 {

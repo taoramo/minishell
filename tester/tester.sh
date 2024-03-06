@@ -52,7 +52,7 @@ check_exit_code()
 	else
 		echo -e ${YELLOW}"Exit code: [KO]"
 		echo -e "bash: ${BASH_EXIT_CODE}"
-		echo -e "minishell: ${EXMINISHELL_EXIT_CODEIT_CODE}"${NC}
+		echo -e "minishell: ${MINISHELL_EXIT_CODE}"${NC}
 	fi
 }
 
@@ -93,6 +93,27 @@ while read -r line; do
 	check_output
 	check_leaks
 done < $TEST_DIR/built_in_tests.txt
+
+line="exit"
+eval $MINISHELL $line
+BASH_EXIT_CODE=0
+MINISHELL_EXIT_CODE=$( echo $? )
+echo $line
+check_exit_code
+
+line="exit 42"
+eval $MINISHELL $line
+BASH_EXIT_CODE=42
+MINISHELL_EXIT_CODE=$( echo $? )
+echo $line
+check_exit_code
+
+line="exit asd"
+eval $MINISHELL $line
+BASH_EXIT_CODE=255
+MINISHELL_EXIT_CODE=$( echo $? )
+echo $line
+check_exit_code
 
 #------ REDIRECT ------#
 

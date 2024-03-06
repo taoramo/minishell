@@ -4,8 +4,9 @@ int	too_many_arguments(void)
 {
 	const char	str[] = "minishell: exit: too many arguments\n";
 
+	write(2, "exit\n", 5);
 	write(2, str, ft_strlen(str));
-	return (255);
+	return (1);
 }
 
 int	calculate_exit(t_vec *argv)
@@ -13,6 +14,8 @@ int	calculate_exit(t_vec *argv)
 	int		i;
 	char	*arg;
 
+	if (argv->len == 1)
+		return (INT_MIN);
 	arg = *(char **)vec_get(argv, 1);
 	i = 0;
 	if (argv->len > 2)
@@ -26,7 +29,7 @@ int	calculate_exit(t_vec *argv)
 			write(2, "minishell: exit: ", 17);
 			write(2, arg, ft_strlen(arg));
 			write(2, ": numeric argument required\n", 28);
-			return (255);
+			return (INT_MIN + 255);
 		}
 		i++;
 	}

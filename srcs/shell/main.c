@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/03/06 10:29:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/06 12:24:50 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	interactive(int *last_return, t_vec *env)
 	char	*line;
 
 	*last_return = 0;
-	while (*last_return != INT_MIN)
+	while (*last_return > INT_MIN + 255)
 	{
 		signal_interactive();
 		line = readline("minishell> ");
@@ -119,8 +119,5 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 1)
 		interactive(&last_return, &env);
 	free_split_vec(&env);
-	if (last_return != INT_MIN)
-		return (last_return);
-	else
-		return (0);
+	return (last_return & 255);
 }

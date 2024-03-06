@@ -70,7 +70,7 @@ int	run_builtin_command(t_command *command, int is_pipe)
 	if (command_index == 5)
 		return (ft_export(&command->argv, command->env));
 	if (command_index == 6 && is_pipe == 0)
-		return (INT_MIN);
+		return (calculate_exit(&command->argv));
 	if (command_index == 6 && is_pipe == 1)
 		return (0);
 	return (1);

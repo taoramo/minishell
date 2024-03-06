@@ -1,0 +1,61 @@
+nocommand
+cat nofile
+cat < nofile
+bash < nofile
+cat < tmp/noaccess
+cat < tmp/noread
+echo hello > tmp/nowrite
+cat < tmp/noread > tmp/nowrite
+cat > tmp/nowrite < tmp/noread
+cat -noarg < infile
+cat -noarg < nofile
+cd nodir
+nocommand | wc -l
+nocommand | ls ./
+cat infile | nocommand
+nocommand1 | nocommand2
+wc --noargs | wc
+cat infile | wc --noargs
+wc --noargs | wc --noargs
+cat < nofile | wc -l
+cat nofile | wc -l
+cat infile | wc -l < nofile
+cat nofile | wc -l < nofile
+cat adfadsf | cat infile | wc -l < nofile | nocommand | wc -asdfasdf < nofile2 | nocommad2
+cd /aasdfas/dfasdfasd/fasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsdfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsdfaasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsdfdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfsdf
+echo (wow)
+echo $HOME(wow)
+echo hello &&& echo wow
+echo hello && echo wow &&& echo wow
+echo hello ||| echo wow
+echo ok | hello ||| echo wow
+echo hello && | echo wow
+echo hello | && echo wow
+echo hello &&| echo wow
+echo hello |&& echo wow
+|||| grep
+echo hello &&
+echo hello && 
+&& echo hello
+ && echo hello
+rm -f outfile && export x="echo hello > outfile" && $x && cat outfile
+"echo hello > out" && cat out
+echo hello && echo (wow)
+export +=asdf
+| echo hello
+echo hello | ""
+"" hello
+exp
+echo hello && (echo wow || echo no) echo ok
+echo hello > >out
+echo hello > > out
+echo "test
+echo 'test
+echo test"
+echo test'
+echo te"st
+echo te'st
+echo te"st'
+echo te'st"
+echo "'test"'
+echo "test'"'

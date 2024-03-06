@@ -1,0 +1,20 @@
+echo *
+echo '*'
+echo "*"
+echo "'*'"
+echo '"*"'
+echo **
+echo '*'*
+echo *'*'
+echo tes*
+echo *.sh
+echo "tes"*
+echo *".sh"
+echo "*.sh"
+echo '*.sh'
+echo *$HOME
+echo '$HOME*'
+echo *doesnotexist
+export x=* && echo $x
+touch asdf && echo "hello" > asd* && cat asdf
+cd tmp && ls > *c && cat '*c' && cd .. || cd ..

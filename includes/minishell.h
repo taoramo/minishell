@@ -70,6 +70,7 @@ void	manual_export(char *var, char *value, t_vec *env);
 int		ft_unset(t_vec *argv, t_vec *env);
 char	*ft_getenv(char *arg, t_vec *env);
 int		builtin_index(char *command);
+int		calculate_exit(t_vec *argv);
 
 int		expand_envs(t_vec *argv, t_vec *env, int last_return);
 int		finish_expand_str_envs(char **str_ptr, t_vec *str_vec);

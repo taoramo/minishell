@@ -66,7 +66,7 @@ int	interactive(int *last_return, t_vec *env)
 	char	*line;
 
 	*last_return = 0;
-	while (*last_return != INT_MIN)
+	while (*last_return > INT_MIN + 255)
 	{
 		signal_interactive();
 		line = readline("minishell> ");
@@ -102,8 +102,5 @@ int	main(int argc, char **argv, char **envp)
 	if (argc == 1)
 		interactive(&last_return, &env);
 	free_split_vec(&env);
-	if (last_return != INT_MIN)
-		return (last_return);
-	else
-		return (0);
+	return (last_return & 255);
 }

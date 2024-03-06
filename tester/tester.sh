@@ -163,6 +163,20 @@ done < $TEST_DIR/input_tests.txt
 rm -f infile1
 rm -f infile2
 
+#------ RETURN VALUE ------#
+
+printf $HEADER_COLOR"\n#------ RETURN VALUE ------#\n\n"$NC
+
+while read -r line; do
+	eval $line > $BASH_OUTPUT 2> $TRASH_LOG
+	# comment out $ and " for -c input
+	line_commented=${line//\$/\\\$}
+	line_commented=${line_commented//\"/\\\"}
+	eval $MINISHELL"\"$line_commented\"" > $MINISHELL_OUTPUT 2> $TRASH_LOG
+	check_output
+	check_leaks
+done < $TEST_DIR/return_value_tests.txt
+
 #------ && AND || ------#
 
 printf $HEADER_COLOR"\n#------ && AND || ------#\n\n"$NC

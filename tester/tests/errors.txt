@@ -49,4 +49,13 @@ exp
 echo hello && (echo wow || echo no) echo ok
 echo hello > >out
 echo hello > > out
+echo "test
+echo 'test
+echo test"
+echo test'
+echo te"st
+echo te'st
+echo te"st'
+echo te'st"
+echo "'test"'
 echo "test'"'

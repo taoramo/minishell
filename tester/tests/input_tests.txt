@@ -11,6 +11,8 @@ ec"ho" hello
 e''"ch""o" h''e"llo""o"
 (echo hello)
 echo $HOME
+echo '$HOME'
+echo "$HOME"
 echo $doesnotexist
 echo $HOME"$HOME"'$HOME'"$HO"ME$HOME$HO"ME"
 echo $?

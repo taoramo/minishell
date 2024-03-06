@@ -6,19 +6,11 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:09:12 by toramo            #+#    #+#             */
-/*   Updated: 2024/02/22 09:57:58 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/06 11:50:16 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	print_syntax_error(char c)
-{
-	write(2, "minishell: syntax error near unexpected token `", 47);
-	write(2, &c, 1);
-	write(2, "'\n", 2);
-	return (-1);
-}
 
 int	parse_line(const char *line, int *last_return, t_vec *env)
 {
@@ -86,6 +78,26 @@ int	interactive(int *last_return, t_vec *env)
 	return (0);
 }
 
+int	set_shell_level(t_vec	*env)
+{
+	char	*shell_lvl;
+	int		lvl_int;
+
+	shell_lvl = ft_getenv("SHLVL", env);
+	if (shell_lvl == 0)
+		return (-1);
+	lvl_int = ft_atoi(shell_lvl);
+	lvl_int++;
+	free(shell_lvl);
+	shell_lvl = ft_itoa(lvl_int);
+	if (shell_lvl == 0)
+		return (-1);
+	manual_export("SHLVL=", shell_lvl, env);
+	free(shell_lvl);
+	return (1);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	int		last_return;
@@ -94,7 +106,13 @@ int	main(int argc, char **argv, char **envp)
 	if (copy_env(&env, envp) < 0)
 	{
 		ft_error("error allocating memory\n");
-		return (-1);
+		return (1);
+	}
+	if (set_shell_level(&env) == -1)
+	{
+		ft_error("error setting shell level\n");
+		free_split_vec(&env);
+		return (1);
 	}
 	last_return = 0;
 	if (argc == 3 && !ft_strncmp(argv[1], "-c", 3))

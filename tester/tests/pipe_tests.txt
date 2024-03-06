@@ -1,0 +1,20 @@
+cat infile | wc
+echo wow | cat
+wc infile | grep 3
+grep 3 infile | wc
+ls -la | grep tester.sh
+/bin/cat infile | /usr/bin/wc
+cat < infile | wc
+echo wow dude wow | awk '{print $2}' | sort -u
+cat /dev/random | head -3 | wc -l | grep hi | tr -d 0123456789
+< infile cat | wc
+cat < infile | wc
+./true 1 | echo $?
+./false 1 | echo $?
+./true 1 || echo fail && ./false 2 | echo $?
+./false 1 && echo fail || ./true 2 | echo $?
+./false 1 && echo fail || echo $? | cat
+./false 1 | ./false 2 && echo fail || echo $?
+./false 1 | ./true 2 || echo fail && echo $?
+echo hi > a | grep h > b > a > c < a && cat a && cat b && cat c
+echo hello "| cat" | wc

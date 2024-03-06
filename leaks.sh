@@ -48,6 +48,8 @@ run_command
 line="export x=wow && echo \$x && export x=123 && echo \$x && export x+=mom && echo \$x"
 run_command
 
+line="/bin/ls"
+run_command
 
 line="pwd && cd .. && pwd && cd && pwd"
 run_command

@@ -95,24 +95,31 @@ while read -r line; do
 done < $TEST_DIR/built_in_tests.txt
 
 line="exit"
-eval $MINISHELL $line
-MINISHELL_EXIT_CODE=$( echo $? )
-BASH_EXIT_CODE=0
 echo $line
+../minishell -c "exit" > $MINISHELL_OUTPUT 2>$TRASH_LOG
+MINISHELL_EXIT_CODE=$(echo $?)
+BASH_EXIT_CODE=0
 check_exit_code
 
 line="exit 42"
-eval $MINISHELL $line
-MINISHELL_EXIT_CODE=$( echo $? )
-BASH_EXIT_CODE=42
 echo $line
+../minishell -c "exit 42" > $MINISHELL_OUTPUT 2>$TRASH_LOG
+MINISHELL_EXIT_CODE=$(echo $?)
+BASH_EXIT_CODE=42
 check_exit_code
 
 line="exit asd"
-eval $MINISHELL $line
-MINISHELL_EXIT_CODE=$( echo $? )
-BASH_EXIT_CODE=255
 echo $line
+../minishell -c "exit asd" > $MINISHELL_OUTPUT 2>$TRASH_LOG
+MINISHELL_EXIT_CODE=$(echo $?)
+BASH_EXIT_CODE=255
+check_exit_code
+
+line="exit 100 200"
+echo $line
+../minishell -c "exit 100 200" > $MINISHELL_OUTPUT 2>$TRASH_LOG
+MINISHELL_EXIT_CODE=$(echo $?)
+BASH_EXIT_CODE=1
 check_exit_code
 
 #------ REDIRECT ------#

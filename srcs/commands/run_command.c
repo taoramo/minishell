@@ -76,7 +76,7 @@ int	run_command(char *str, t_envinfo envinfo)
 		return (pipex(str, envinfo));
 	ret = prepare_command(&command, str, envinfo, 0);
 	if (ret != 0)
-		return (ret);
+		return (free_run_command(&command, ret));
 	if (command.argv.len == 0)
 		return (ret);
 	if (builtin_index(*(char **)vec_get(&command.argv, 0)) != -1)

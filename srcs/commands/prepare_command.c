@@ -63,6 +63,22 @@ int	expand_command(t_command *command, t_envinfo envinfo, int i)
 	return (1);
 }
 
+int	check_access(char *path)
+{
+	DIR	*dir;
+
+	dir = opendir(path);
+	if (dir != 0)
+	{
+		closedir(dir);
+		write(2, "minishell: ", 11);
+		write(2, path, ft_strlen(path));
+		write(2, ": is a directory\n", 17);
+		return (126);
+	}
+	return (0);
+}
+
 int	prepare_command(t_command *command,
 	char *command_str, t_envinfo envinfo, int i)
 {
@@ -74,14 +90,14 @@ int	prepare_command(t_command *command,
 		return (1);
 	}
 	if (command->argv.len != 0
-		&& add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1)
+		&& (add_path((char **) vec_get(&command->argv, 0), envinfo.env) == -1))
 	{
 		free_split_vec(&command->argv);
 		vec_free(&command->redirects);
 		return (127);
 	}
 	command->env = envinfo.env;
-	return (0);
+	return (check_access(*(char **)vec_get(&command->argv, 0)));
 }
 
 int	prepare_pipe_command(t_command *command, t_pipe *pipeinfo, int i)

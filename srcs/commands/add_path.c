@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/08 10:57:52 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:03:02 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	check_local(char **command_ptr)
 		*command_ptr = path_command;
 		return (1);
 	}
-	minishell_error(*command_ptr, "command not found");
+	minishell_error(*command_ptr, "No such file or directory");
 	return (-1);
 }
 

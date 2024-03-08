@@ -226,12 +226,14 @@ done < $TEST_DIR/and_or_tests.txt
 
 printf $HEADER_COLOR"\n#------ ERRORS ------#\n\n"$NC
 
-touch tmp/noaccess
+echo "echo hello" > tmp/noaccess
 chmod -rwx tmp/noaccess
-touch tmp/noread
+echo "echo hello" > tmp/noread
 chmod -r tmp/noread
-touch tmp/nowrite
+echo "echo hello" >  tmp/nowrite
 chmod -w tmp/nowrite
+echo "echo hello" >  tmp/noexec
+chmod -x tmp/noexec
 
 while read -r line; do
 	eval $line > $BASH_OUTPUT
@@ -254,6 +256,8 @@ eval echo >$NOTEXIST > $BASH_OUTPUT
 touch $BASH_OUTPUT
 check_output
 check_leaks
+
+rm -f ls
 
 #------ WILDCARDS ------#
 
@@ -290,6 +294,7 @@ check_leaks
 rm -f tmp/noaccess
 rm -f tmp/noread
 rm -f tmp/nowrite
+rm -f tmp/noexec
 
 rm -f a
 rm -f b

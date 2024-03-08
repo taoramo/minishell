@@ -1,4 +1,15 @@
 nocommand
+./nocommand
+tests
+tests/
+./tests/
+echo "echo hello" > ls && ./ls && rm -rf ls || rm -rf ls
+echo "echo hello" > ls && ls && rm -rf ls || rm -rf ls
+tmp/noaccess
+tmp/noread
+tmp/nowrite
+tmp/noexec
+touch noaccess.sh && chmod -w noaccess.sh && ./noaccess.sh || chmod +w noaccess.sh
 cat nofile
 cat < nofile
 bash < nofile

@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/08 13:03:02 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:20:29 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,15 @@ int	check_local(char **command_ptr)
 
 	path_command = ft_strjoin("./", *command_ptr);
 	if (path_command == 0)
-		return (0);
+		return (-1);
 	if (access(path_command, X_OK) != -1)
 	{
 		free(*command_ptr);
 		*command_ptr = path_command;
-		return (1);
+		return (0);
 	}
 	minishell_error(*command_ptr, "No such file or directory");
-	return (-1);
+	return (127);
 }
 
 int	add_path(char **command_ptr, t_vec *env)
@@ -109,11 +109,11 @@ int	add_path(char **command_ptr, t_vec *env)
 		if (check_path(paths[i], command_ptr))
 		{
 			ft_free_split(paths);
-			return (1);
+			return (0);
 		}
 		i++;
 	}
 	minishell_error(*command_ptr, "command not found");
 	ft_free_split(paths);
-	return (-1);
+	return (127);
 }

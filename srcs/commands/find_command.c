@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/08 09:21:50 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/03/08 10:36:17 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 13:14:21 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,5 @@ int	find_command(char **command_ptr, t_vec *env)
 		return (0);
 	if (ft_strchr(*command_ptr, '/'))
 		return (check_command_with_path(*command_ptr));
-	else if (add_path(command_ptr, env) == -1)
-		return (127);
-	return (0);
+	return (add_path(command_ptr, env));
 }

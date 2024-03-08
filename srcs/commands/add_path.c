@@ -89,6 +89,7 @@ int	check_local(char **command_ptr)
 		*command_ptr = path_command;
 		return (0);
 	}
+	free(path_command);
 	minishell_error(*command_ptr, "No such file or directory");
 	return (127);
 }
@@ -102,7 +103,10 @@ int	add_path(char **command_ptr, t_vec *env)
 	if (paths == 0)
 		return (-1);
 	if (paths[0] == 0)
+	{
+		ft_free_split(paths);
 		return (check_local(command_ptr));
+	}
 	i = 0;
 	while (paths[i] != 0)
 	{

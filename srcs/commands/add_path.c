@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:16:04 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/20 15:03:19 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 10:57:52 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,33 @@ int	check_path(char *path, char **command_ptr)
 	return (0);
 }
 
+int	check_local(char **command_ptr)
+{
+	char	*path_command;
+
+	path_command = ft_strjoin("./", *command_ptr);
+	if (path_command == 0)
+		return (0);
+	if (access(path_command, X_OK) != -1)
+	{
+		free(*command_ptr);
+		*command_ptr = path_command;
+		return (1);
+	}
+	minishell_error(*command_ptr, "command not found");
+	return (-1);
+}
+
 int	add_path(char **command_ptr, t_vec *env)
 {
 	char	**paths;
 	int		i;
 
-	if (ft_strlen(*command_ptr) == 0)
-		return (minishell_error(*command_ptr, "command not found"));
-	if (builtin_index(*command_ptr) != -1)
-		return (1);
-	if (access(*command_ptr, X_OK) != -1)
-		return (1);
 	paths = get_paths(env);
 	if (paths == 0)
 		return (-1);
+	if (paths[0] == 0)
+		return (check_local(command_ptr));
 	i = 0;
 	while (paths[i] != 0)
 	{

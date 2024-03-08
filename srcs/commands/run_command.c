@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 11:24:55 by hpatsi            #+#    #+#             */
-/*   Updated: 2024/02/28 08:39:14 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 10:59:39 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ pid_t	execute_command(t_vec argv, t_vec *env)
 	strs = (char **) argv.memory;
 	envp = (char **) env->memory;
 	execve(strs[0], strs, envp);
-	ft_putstr_fd("execve failed\n", 2);
+	ft_putstr_fd("minishell: execve failed to run ", 2);
+	ft_putstr_fd(strs[0], 2);
+	ft_putstr_fd("\n", 2);
 	exit(1);
 }
 

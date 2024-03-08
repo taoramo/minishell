@@ -6,7 +6,7 @@
 /*   By: hpatsi <hpatsi@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:10:23 by toramo            #+#    #+#             */
-/*   Updated: 2024/03/05 09:52:03 by hpatsi           ###   ########.fr       */
+/*   Updated: 2024/03/08 09:55:37 by hpatsi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,8 @@ int		cmd_line_error(t_vec *cmd_lines);
 int		handle_pipelines_error(t_vec *cmd_lines);
 void	print_quit_signal(int signal);
 int		print_syntax_error(char c);
+int		command_not_found_error(char *cmd);
+int		access_error(char *cmd);
 
 int		vec_remove_str(t_vec *vec, size_t i);
 int		vec_sort_strncmp(void *one, void *two);
